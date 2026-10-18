@@ -1,0 +1,245 @@
+
+<div class="dashboard">
+
+  <!-- Bienvenue -->
+  <section class="welcome-panel">
+    <div class="welcome-content">
+      <span class="welcome-eyebrow">
+        <i class="bi bi-stars"></i>
+        VOTRE ESPACE DE PILOTAGE
+      </span>
+
+      <h2>Bienvenue dans votre espace Enseignant</h2>
+
+      <p>
+        Suivez votre activité d'encadrement et consultez les candidatures
+        liées à vos sujets de projets tutorés.
+      </p>
+
+      <a routerLink="/enseignant/sujets" class="welcome-button">
+        <i class="bi bi-plus-lg"></i>
+        Proposer un sujet
+      </a>
+    </div>
+
+    <div class="welcome-decoration">
+      <i class="bi bi-mortarboard"></i>
+    </div>
+  </section>
+
+  <!-- Statistiques globales -->
+  <section class="stats-section">
+    <div class="section-heading">
+      <div>
+        <h3>Vue d'ensemble</h3>
+        <p>Les indicateurs de votre activité</p>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card">
+          <div class="stat-top">
+            <span class="stat-label">Sujets proposés</span>
+            <div class="stat-icon icon-green">
+              <i class="bi bi-journal-text"></i>
+            </div>
+          </div>
+          <div class="stat-value">{{ totalSujets }}</div>
+          <div class="stat-description">
+            {{ sujetsDisponibles }} disponible(s)
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card">
+          <div class="stat-top">
+            <span class="stat-label">Capacité totale</span>
+            <div class="stat-icon icon-blue">
+              <i class="bi bi-people"></i>
+            </div>
+          </div>
+          <div class="stat-value">{{ capaciteTotale }}</div>
+          <div class="stat-description">
+            Places prévues sur vos sujets
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card">
+          <div class="stat-top">
+            <span class="stat-label">Candidatures reçues</span>
+            <div class="stat-icon icon-purple">
+              <i class="bi bi-inbox"></i>
+            </div>
+          </div>
+          <div class="stat-value">{{ totalCandidatures }}</div>
+          <div class="stat-description">
+            Toutes les candidatures associées
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card">
+          <div class="stat-top">
+            <span class="stat-label">À examiner</span>
+            <div class="stat-icon icon-orange">
+              <i class="bi bi-hourglass-split"></i>
+            </div>
+          </div>
+          <div class="stat-value">{{ candidaturesEnAttente }}</div>
+          <div class="stat-description">
+            En attente de traitement
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Activité récente -->
+  <section class="activity-panel">
+    <div class="panel-header">
+      <div>
+        <h3>Activité récente</h3>
+        <p>Les dernières candidatures associées à vos sujets.</p>
+      </div>
+
+      <a routerLink="/enseignant/candidatures" class="panel-link">
+        Toutes les candidatures
+        <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table activity-table">
+        <thead>
+          <tr>
+            <th>CANDIDATURE</th>
+            <th>SUJET ASSOCIÉ</th>
+            <th>DATE</th>
+            <th>STATUT</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (element of candidaturesRecentes; track element.candidature.id) {
+            <tr>
+              <td>
+                <div class="activity-identity">
+                  <div class="activity-avatar">
+                    <i class="bi bi-person"></i>
+                  </div>
+                  <div>
+                    <strong>
+                      Candidature #{{ element.candidature.id }}
+                    </strong>
+                    <span>
+                      Priorité {{ element.candidature.priorite }}
+                    </span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="activity-subject">
+                  {{ element.titreSujet }}
+                </span>
+              </td>
+
+              <td>
+                <span class="activity-date">
+                  {{ element.candidature.dateCandidature | date:'dd/MM/yyyy' }}
+                </span>
+              </td>
+
+              <td>
+                <span
+                  class="status-badge"
+                  [class.status-pending]="element.candidature.statut === 'EN_ATTENTE'"
+                  [class.status-accepted]="element.candidature.statut === 'ACCEPTEE'"
+                  [class.status-rejected]="element.candidature.statut === 'REJETEE'"
+                >
+                  {{ libelleStatut(element.candidature.statut) }}
+                </span>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="4">
+                <div class="empty-state">
+                  <i class="bi bi-inbox"></i>
+                  <h4>Aucune activité récente</h4>
+                  <p>
+                    Les candidatures apparaîtront ici dès que des données
+                    seront disponibles.
+                  </p>
+                  <a
+                    routerLink="/enseignant/candidatures"
+                    class="empty-link"
+                  >
+                    Accéder aux candidatures
+                  </a>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Raccourcis -->
+  <section class="shortcuts-section">
+    <div class="section-heading">
+      <div>
+        <h3>Accès rapides</h3>
+        <p>Accédez directement aux principales fonctionnalités.</p>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-12 col-md-4">
+        <a routerLink="/enseignant/sujets" class="shortcut-card">
+          <div class="shortcut-icon icon-green">
+            <i class="bi bi-pencil-square"></i>
+          </div>
+          <div class="shortcut-text">
+            <strong>Mes sujets proposés</strong>
+            <span>Gérer mes propositions</span>
+          </div>
+          <i class="bi bi-chevron-right shortcut-arrow"></i>
+        </a>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <a routerLink="/enseignant/candidatures" class="shortcut-card">
+          <div class="shortcut-icon icon-purple">
+            <i class="bi bi-clipboard-check"></i>
+          </div>
+          <div class="shortcut-text">
+            <strong>Candidatures reçues</strong>
+            <span>Consulter les demandes</span>
+          </div>
+          <i class="bi bi-chevron-right shortcut-arrow"></i>
+        </a>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <a routerLink="/enseignant/catalogue" class="shortcut-card">
+          <div class="shortcut-icon icon-blue">
+            <i class="bi bi-journal-bookmark"></i>
+          </div>
+          <div class="shortcut-text">
+            <strong>Catalogue des sujets</strong>
+            <span>Explorer les propositions</span>
+          </div>
+          <i class="bi bi-chevron-right shortcut-arrow"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</div>

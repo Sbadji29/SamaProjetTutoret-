@@ -1,0 +1,196 @@
+
+<div class="container-fluid py-4">
+  <div class="page-header mb-4">
+    <div>
+      <h2 class="page-title">Candidatures reçues</h2>
+      <p class="page-subtitle">
+        Consultez les candidatures associées à vos sujets d'encadrement.
+      </p>
+    </div>
+    <div class="header-icon">
+      <i class="bi bi-inbox"></i>
+    </div>
+  </div>
+
+  <!-- Statistiques -->
+  <div class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-xl-4">
+      <div class="stat-card">
+        <div>
+          <p class="stat-label">Total des candidatures</p>
+          <h3 class="stat-value">{{ candidatures.length }}</h3>
+        </div>
+        <div class="stat-icon total-icon">
+          <i class="bi bi-file-earmark-text"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-4">
+      <div class="stat-card">
+        <div>
+          <p class="stat-label">En attente</p>
+          <h3 class="stat-value">
+            {{ compterParStatut('EN_ATTENTE') }}
+          </h3>
+        </div>
+        <div class="stat-icon pending-icon">
+          <i class="bi bi-hourglass-split"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-4">
+      <div class="stat-card">
+        <div>
+          <p class="stat-label">Acceptées</p>
+          <h3 class="stat-value">
+            {{ compterParStatut('ACCEPTEE') }}
+          </h3>
+        </div>
+        <div class="stat-icon accepted-icon">
+          <i class="bi bi-check-circle"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tableau -->
+  <div class="content-card">
+    <div class="card-heading">
+      <div>
+        <h5>Liste des candidatures</h5>
+        <p>Retrouvez les informations principales de chaque candidature.</p>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table candidature-table align-middle">
+        <thead>
+          <tr>
+            <th>Identifiant</th>
+            <th>Date</th>
+            <th>Priorité</th>
+            <th>Statut</th>
+            <th>Motivation</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (candidature of candidatures; track candidature.id) {
+            <tr>
+              <td class="fw-semibold">
+                #{{ candidature.id }}
+              </td>
+
+              <td>
+                {{ candidature.dateCandidature | date:'dd/MM/yyyy' }}
+              </td>
+
+              <td>
+                <span class="priority-badge">
+                  {{ candidature.priorite }}
+                </span>
+              </td>
+
+              <td>
+                <span
+                  class="status-badge"
+                  [class.status-pending]="candidature.statut === 'EN_ATTENTE'"
+                  [class.status-accepted]="candidature.statut === 'ACCEPTEE'"
+                  [class.status-rejected]="candidature.statut === 'REJETEE'"
+                >
+                  {{ libelleStatut(candidature.statut) }}
+                </span>
+              </td>
+
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-sm"
+                  (click)="consulter(candidature)"
+                >
+                  <i class="bi bi-eye me-1"></i>
+                  Consulter
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5">
+                <div class="empty-state">
+                  <i class="bi bi-inbox"></i>
+                  <h6>Aucune candidature disponible</h6>
+                  <p>Les candidatures apparaîtront ici lorsqu'elles seront chargées.</p>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Détails de la candidature sélectionnée -->
+  @if (candidatureSelectionnee; as candidature) {
+    <div class="content-card details-card mt-4">
+      <div class="card-heading">
+        <div>
+          <h5>Détails de la candidature #{{ candidature.id }}</h5>
+          <p>Informations enregistrées pour cette candidature.</p>
+        </div>
+
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Fermer"
+          (click)="fermerDetails()"
+        ></button>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-12 col-md-4">
+          <p class="detail-label">Date de candidature</p>
+          <p class="detail-value">
+            {{ candidature.dateCandidature | date:'dd/MM/yyyy à HH:mm' }}
+          </p>
+        </div>
+
+        <div class="col-12 col-md-4">
+          <p class="detail-label">Priorité</p>
+          <p class="detail-value">{{ candidature.priorite }}</p>
+        </div>
+
+        <div class="col-12 col-md-4">
+          <p class="detail-label">Statut</p>
+          <p class="detail-value">
+            {{ libelleStatut(candidature.statut) }}
+          </p>
+        </div>
+
+        <div class="col-12">
+          <p class="detail-label">Motivation</p>
+          <div class="detail-text">
+            {{ candidature.motivation || 'Aucune motivation renseignée.' }}
+          </div>
+        </div>
+
+        <div class="col-12">
+          <p class="detail-label">Avis de l'encadrant</p>
+          <div class="detail-text">
+            {{ candidature.avisEncadrant || 'Aucun avis renseigné.' }}
+          </div>
+        </div>
+
+        @if (candidature.commentaireDecision) {
+          <div class="col-12">
+            <p class="detail-label">Commentaire de décision</p>
+            <div class="detail-text">
+              {{ candidature.commentaireDecision }}
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

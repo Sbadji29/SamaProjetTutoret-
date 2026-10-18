@@ -1,0 +1,247 @@
+
+<div class="affectations-page">
+
+  <section class="page-intro">
+    <div>
+      <span class="eyebrow">
+        <i class="bi bi-people-fill"></i>
+        SUIVI DES PROJETS TUTORÉS
+      </span>
+      <h2>Gestion des affectations</h2>
+      <p>
+        Consultez les affectations des étudiants et leur statut.
+      </p>
+    </div>
+  </section>
+
+  <section class="stats-grid">
+    <article class="stat-card">
+      <div class="stat-icon purple">
+        <i class="bi bi-diagram-3-fill"></i>
+      </div>
+      <div>
+        <span class="stat-label">Total des affectations</span>
+        <strong>{{ totalAffectations }}</strong>
+      </div>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-icon green">
+        <i class="bi bi-check-circle-fill"></i>
+      </div>
+      <div>
+        <span class="stat-label">Affectations actives</span>
+        <strong>{{ totalActives }}</strong>
+      </div>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-icon red">
+        <i class="bi bi-x-circle-fill"></i>
+      </div>
+      <div>
+        <span class="stat-label">Affectations annulées</span>
+        <strong>{{ totalAnnulees }}</strong>
+      </div>
+    </article>
+  </section>
+
+  <section class="list-panel">
+    <div class="panel-heading">
+      <div>
+        <h3>Liste des affectations</h3>
+        <p>Recherchez une affectation par référence, étudiant ou sujet.</p>
+      </div>
+
+      <span class="result-count">
+        {{ affectationsFiltrees.length }} résultat(s)
+      </span>
+    </div>
+
+    <div class="filters">
+      <div class="search-field">
+        <i class="bi bi-search"></i>
+        <input
+          type="text"
+          [(ngModel)]="recherche"
+          placeholder="Référence, étudiant ou sujet..."
+          aria-label="Rechercher une affectation"
+        />
+        @if (recherche) {
+          <button
+            type="button"
+            (click)="recherche = ''"
+            aria-label="Effacer la recherche"
+          >
+            <i class="bi bi-x-circle"></i>
+          </button>
+        }
+      </div>
+
+      <div class="status-filter">
+        <label for="filtreStatut">Statut</label>
+        <select id="filtreStatut" [(ngModel)]="filtreStatut">
+          <option value="TOUS">Tous les statuts</option>
+          <option value="ACTIVE">Active</option>
+          <option value="ANNULEE">Annulée</option>
+        </select>
+      </div>
+    </div>
+
+    @if (affectationsFiltrees.length > 0) {
+      <div class="table-responsive">
+        <table class="table affectation-table align-middle">
+          <thead>
+            <tr>
+              <th>Référence</th>
+              <th>Étudiant</th>
+              <th>Sujet attribué</th>
+              <th>Date d'affectation</th>
+              <th>Statut</th>
+              <th class="text-end">Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (affectation of affectationsFiltrees; track affectation.id) {
+              <tr>
+                <td>
+                  <strong>AFF-{{ affectation.id }}</strong>
+                </td>
+
+                <td>
+                  <span class="student-reference">
+                    <i class="bi bi-person-circle"></i>
+                    Étudiant #{{ affectation.etudiantId }}
+                  </span>
+                </td>
+
+                <td>
+                  <div class="subject-cell">
+                    <span class="subject-icon">
+                      <i class="bi bi-journal-text"></i>
+                    </span>
+                    <span>{{ obtenirTitreSujet(affectation.sujetId) }}</span>
+                  </div>
+                </td>
+
+                <td>
+                  {{ affectation.dateAffectation | date:'dd/MM/yyyy' }}
+                </td>
+
+                <td>
+                  <span
+                    class="status-badge"
+                    [ngClass]="classeStatut(affectation.statut)"
+                  >
+                    {{ libelleStatut(affectation.statut) }}
+                  </span>
+                </td>
+
+                <td class="text-end">
+                  <button
+                    type="button"
+                    class="details-button"
+                    (click)="consulter(affectation)"
+                  >
+                    <i class="bi bi-eye"></i>
+                    Détails
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="bi bi-people"></i>
+        </div>
+
+        @if (totalAffectations === 0) {
+          <h4>Aucune affectation enregistrée</h4>
+          <p>
+            Les affectations apparaîtront ici lorsqu'elles seront disponibles
+            dans le service.
+          </p>
+        } @else {
+          <h4>Aucun résultat</h4>
+          <p>
+            Aucune affectation ne correspond à tes critères de recherche.
+          </p>
+          <button
+            type="button"
+            class="reset-button"
+            (click)="recherche = ''; filtreStatut = 'TOUS'"
+          >
+            Réinitialiser les filtres
+          </button>
+        }
+      </div>
+    }
+  </section>
+
+  @if (affectationSelectionnee; as affectation) {
+    <div class="detail-overlay" (click)="fermerDetails()">
+      <section
+        class="detail-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="affectationDetailTitle"
+        (click)="$event.stopPropagation()"
+      >
+        <header class="detail-header">
+          <div>
+            <span class="detail-eyebrow">DÉTAIL DE L'AFFECTATION</span>
+            <h3 id="affectationDetailTitle">
+              AFF-{{ affectation.id }}
+            </h3>
+          </div>
+
+          <button
+            type="button"
+            class="close-button"
+            (click)="fermerDetails()"
+            aria-label="Fermer les détails"
+          >
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </header>
+
+        <div class="detail-body">
+          <div class="detail-status">
+            <span
+              class="status-badge"
+              [ngClass]="classeStatut(affectation.statut)"
+            >
+              {{ libelleStatut(affectation.statut) }}
+            </span>
+            <span class="detail-date">
+              Affectée le
+              {{ affectation.dateAffectation | date:'dd/MM/yyyy' }}
+            </span>
+          </div>
+
+          <section class="detail-section">
+            <h4><i class="bi bi-person-circle"></i> Étudiant</h4>
+            <p>Identifiant : {{ affectation.etudiantId }}</p>
+          </section>
+
+          <section class="detail-section">
+            <h4><i class="bi bi-journal-bookmark"></i> Sujet attribué</h4>
+            <p class="subject-title">
+              {{ obtenirTitreSujet(affectation.sujetId) }}
+            </p>
+          </section>
+
+          <section class="detail-section">
+            <h4><i class="bi bi-file-earmark-text"></i> Candidature associée</h4>
+            <p>Référence : CAN-{{ affectation.candidatureId }}</p>
+          </section>
+        </div>
+      </section>
+    </div>
+  }
+
+</div>

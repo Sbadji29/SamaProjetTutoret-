@@ -1,0 +1,99 @@
+
+<div class="application">
+
+  <aside class="sidebar">
+
+    <!-- Identité de l'application -->
+    <a class="brand" routerLink="/enseignant/dashboard">
+      <div class="brand-logo">U</div>
+      <div class="brand-text">
+        <h2>UniProjet</h2>
+        <span>PORTAIL UNIVERSITAIRE</span>
+      </div>
+    </a>
+
+    <!-- Navigation -->
+    <nav class="navigation">
+      <p class="menu-title">ESPACE ENSEIGNANT</p>
+
+      <a
+        routerLink="/enseignant/dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="nav-link"
+      >
+        <i class="bi bi-grid-1x2"></i>
+        <span>Tableau de bord</span>
+      </a>
+
+      <a
+        routerLink="/enseignant/sujets"
+        routerLinkActive="active"
+        class="nav-link"
+      >
+        <i class="bi bi-journal-text"></i>
+        <span>Mes sujets proposés</span>
+      </a>
+
+      <a
+        routerLink="/enseignant/candidatures"
+        routerLinkActive="active"
+        class="nav-link"
+      >
+        <i class="bi bi-inbox"></i>
+        <span>Candidatures reçues</span>
+      </a>
+
+      <p class="menu-title">CONSULTATION</p>
+
+      <a
+        routerLink="/enseignant/catalogue"
+        routerLinkActive="active"
+        class="nav-link"
+      >
+        <i class="bi bi-journal-bookmark"></i>
+        <span>Catalogue des sujets</span>
+      </a>
+    </nav>
+
+    <!-- Profil temporaire -->
+    <div class="user-profile">
+      <div class="avatar">MB</div>
+      <div class="profile-info">
+        <strong>Enseignant</strong>
+        <small>Master 2 GDIL</small>
+      </div>
+      <i class="bi bi-person-check profile-icon"></i>
+    </div>
+
+  </aside>
+
+  <!-- Contenu principal -->
+  <main class="main-content">
+
+    <header class="topbar">
+      <div class="topbar-heading">
+        <span class="breadcrumb">UniProjet / Enseignant</span>
+        <h1>{{ titrePage }}</h1>
+      </div>
+
+      <div class="topbar-user">
+        <div class="session-info">
+          <i class="bi bi-calendar3"></i>
+          <span>Session universitaire</span>
+        </div>
+        <div class="avatar">MB</div>
+      </div>
+    </header>
+
+    <section class="page-content">
+      <router-outlet />
+    </section>
+
+    <footer class="app-footer">
+      UniProjet · Gestion des projets tutorés
+    </footer>
+
+  </main>
+
+</div>

@@ -1,0 +1,225 @@
+
+<div class="container-fluid py-4">
+
+  <!-- En-tête -->
+  <div class="page-header mb-4">
+    <div>
+      <h2 class="page-title">Catalogue des sujets</h2>
+      <p class="page-subtitle">
+        Découvrez les sujets proposés pour les projets tutorés de Master 2.
+      </p>
+    </div>
+
+    <div class="header-icon">
+      <i class="bi bi-journal-bookmark"></i>
+    </div>
+  </div>
+
+  <!-- Statistiques -->
+  <div class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-xl-4">
+      <div class="stat-card">
+        <div>
+          <p class="stat-label">Total des sujets</p>
+          <h3 class="stat-value">{{ totalSujets }}</h3>
+        </div>
+        <div class="stat-icon total-icon">
+          <i class="bi bi-collection"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-4">
+      <div class="stat-card">
+        <div>
+          <p class="stat-label">Sujets disponibles</p>
+          <h3 class="stat-value">{{ totalDisponibles }}</h3>
+        </div>
+        <div class="stat-icon available-icon">
+          <i class="bi bi-check-circle"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-4">
+      <div class="stat-card">
+        <div>
+          <p class="stat-label">Sujets indisponibles</p>
+          <h3 class="stat-value">{{ totalIndisponibles }}</h3>
+        </div>
+        <div class="stat-icon unavailable-icon">
+          <i class="bi bi-lock"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recherche et filtres -->
+  <div class="content-card mb-4">
+    <div class="filters-container">
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Rechercher par titre, référence ou objectif..."
+          [(ngModel)]="recherche"
+        />
+      </div>
+
+     <select
+  class="form-select filter-select"
+  [(ngModel)]="niveauFiltre"
+>
+  <option value="TOUS">Tous les niveaux</option>
+  <option value="Master 1">Master 1</option>
+  <option value="Master 2">Master 2</option>
+</select>
+
+
+      <select
+        class="form-select filter-select"
+        [(ngModel)]="disponibiliteFiltre"
+      >
+        <option value="TOUS">Toutes les disponibilités</option>
+        <option value="DISPONIBLES">Disponibles</option>
+        <option value="INDISPONIBLES">Indisponibles</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Liste des sujets -->
+  <div class="section-heading mb-3">
+    <div>
+      <h5>Les sujets proposés</h5>
+      <p>{{ sujetsFiltres.length }} résultat(s)</p>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    @for (sujet of sujetsFiltres; track sujet.id) {
+      <div class="col-12 col-md-6 col-xl-4">
+        <div class="subject-card">
+
+          <div class="subject-card-top">
+            <span class="subject-reference">{{ sujet.reference }}</span>
+
+            <span
+              class="availability-badge"
+              [class.available]="sujet.disponible"
+              [class.unavailable]="!sujet.disponible"
+            >
+              <i
+                class="bi"
+                [class.bi-check-circle]="sujet.disponible"
+                [class.bi-lock]="!sujet.disponible"
+              ></i>
+              {{ sujet.disponible ? 'Disponible' : 'Indisponible' }}
+            </span>
+          </div>
+
+          <h5 class="subject-title">{{ sujet.titre }}</h5>
+
+          <p class="subject-description">
+            {{ sujet.description }}
+          </p>
+
+          <div class="subject-metadata">
+            <span>
+              <i class="bi bi-mortarboard"></i>
+              {{ sujet.niveau }}
+            </span>
+
+            <span>
+              <i class="bi bi-people"></i>
+              Capacité : {{ sujet.capaciteMax }}
+            </span>
+          </div>
+
+          <div class="subject-card-footer">
+            <button
+              type="button"
+              class="btn btn-outline-primary btn-sm"
+              (click)="consulter(sujet)"
+            >
+              <i class="bi bi-eye me-1"></i>
+              Voir les détails
+            </button>
+          </div>
+        </div>
+      </div>
+    } @empty {
+      <div class="col-12">
+        <div class="empty-state">
+          <i class="bi bi-search"></i>
+          <h6>Aucun sujet trouvé</h6>
+          <p>Essayez de modifier votre recherche ou vos filtres.</p>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Détails d'un sujet -->
+  @if (sujetSelectionne; as sujet) {
+    <div class="details-overlay" (click)="fermerDetails()">
+      <section
+        class="details-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="details-title"
+        (click)="$event.stopPropagation()"
+      >
+        <div class="details-header">
+          <div>
+            <span class="subject-reference">{{ sujet.reference }}</span>
+            <h4 id="details-title">{{ sujet.titre }}</h4>
+          </div>
+
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Fermer"
+            (click)="fermerDetails()"
+          ></button>
+        </div>
+
+        <div class="details-body">
+          <div class="detail-item">
+            <span class="detail-label">Niveau</span>
+            <strong>{{ sujet.niveau }}</strong>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Capacité maximale</span>
+            <strong>{{ sujet.capaciteMax }} étudiant(s)</strong>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Disponibilité</span>
+            <strong>{{ sujet.disponible ? 'Disponible' : 'Indisponible' }}</strong>
+          </div>
+
+          <div class="details-section">
+            <h6>Description</h6>
+            <p>{{ sujet.description || 'Aucune description renseignée.' }}</p>
+          </div>
+
+          <div class="details-section">
+            <h6>Objectifs</h6>
+            <p>{{ sujet.objectifs || 'Aucun objectif renseigné.' }}</p>
+          </div>
+        </div>
+
+        <div class="details-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="fermerDetails()"
+          >
+            Fermer
+          </button>
+        </div>
+      </section>
+    </div>
+  }
+</div>
