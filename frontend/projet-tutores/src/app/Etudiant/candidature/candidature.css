@@ -5,12 +5,10 @@
   display: block;
 }
 
-/* Fond général */
 .bg-page {
   background-color: #f8fafc;
 }
 
-/* En-tête & Fil d'Ariane */
 .session-tag {
   color: var(--theme-green);
 }
@@ -25,14 +23,12 @@
   cursor: pointer;
 }
 
-/* Titre principal */
 .page-title {
   color: var(--theme-navy);
   font-size: 1.65rem;
   letter-spacing: -0.02em;
 }
 
-/* Onglets filtres (Pills) */
 .filter-tabs-container {
   background-color: #edf2f7;
   gap: 4px;
@@ -76,7 +72,6 @@
   color: #ffffff;
 }
 
-/* Tableau */
 .table-header-custom th {
   background-color: #f8fafc;
   color: #64748b;
@@ -102,7 +97,6 @@
   color: #0f172a;
 }
 
-/* Badges de technologies */
 .badge-tech {
   background-color: #f1f5f9;
   color: #475569;
@@ -112,7 +106,6 @@
   border-radius: 6px;
 }
 
-/* Avatars enseignants */
 .teacher-avatar {
   width: 36px;
   height: 36px;
@@ -138,7 +131,6 @@
   font-size: 0.74rem;
 }
 
-/* Pastilles de statut */
 .status-pill {
   padding: 0.3rem 0.7rem;
   border-radius: 20px;
@@ -178,7 +170,6 @@
   background-color: #dc2626;
 }
 
-/* Bouton action */
 .action-btn {
   color: #334155;
   font-size: 0.88rem;

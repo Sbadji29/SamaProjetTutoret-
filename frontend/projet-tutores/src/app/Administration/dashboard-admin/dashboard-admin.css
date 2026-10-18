@@ -5,19 +5,16 @@
   display: block;
 }
 
-/* Fond général */
 .bg-page {
   background-color: #f8fafc;
 }
 
-/* Titre principal */
 .page-title {
   color: var(--theme-navy);
   font-size: 1.65rem;
   letter-spacing: -0.02em;
 }
 
-/* Boutons d'action */
 .btn-outline-custom {
   background: #ffffff;
   border: 1px solid #e2e8f0;
@@ -41,7 +38,6 @@
   transform: translateY(-1px);
 }
 
-/* Titre de section */
 .section-title {
   font-size: 1.25rem;
   color: var(--theme-navy);
@@ -57,7 +53,6 @@
   border-radius: 6px;
 }
 
-/* Cartes Modules */
 .module-card {
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }

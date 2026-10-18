@@ -5,12 +5,10 @@
   display: block;
 }
 
-/* Fond de la zone principale */
 .bg-page {
   background-color: #f8fafc;
 }
 
-/* Header & Avatar */
 .session-tag {
   color: var(--theme-green);
 }
@@ -25,14 +23,12 @@
   cursor: pointer;
 }
 
-/* Titre principal */
 .page-title {
   color: var(--theme-navy);
   font-size: 1.65rem;
   letter-spacing: -0.02em;
 }
 
-/* Bannière compte à rebours / date limite */
 .deadline-banner {
   background-color: var(--theme-green-dark);
   box-shadow: 0 4px 14px rgba(20, 83, 45, 0.18);
@@ -56,7 +52,6 @@
   letter-spacing: -0.01em;
 }
 
-/* Barre de recherche */
 .search-input-group {
   border: 1px solid #e2e8f0;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;

@@ -1,11 +1,11 @@
 <div class="layout-wrapper d-flex flex-column flex-lg-row min-vh-100">
-  <!-- Barre latérale en mode Admin -->
+  
   <app-sidebar role="admin"></app-sidebar>
 
-  <!-- Contenu Principal -->
+  
   <main class="main-content flex-grow-1 bg-page p-3 p-lg-4 overflow-x-hidden">
 
-    <!-- En-tête global -->
+    
     <app-header
       filiere="Administration"
       module="Gestion globale"
@@ -13,7 +13,7 @@
       userName="Marc Le Gall">
     </app-header>
 
-    <!-- Titre et actions -->
+    
     <section class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-4">
       <div>
         <h1 class="page-title fw-bold mb-1">
@@ -37,7 +37,7 @@
       </div>
     </section>
 
-    <!-- Grille des 4 KPIs réutilisables -->
+    
     <section class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 g-3 mb-4">
       <div class="col">
         <app-kpi-card
@@ -85,10 +85,10 @@
       </div>
     </section>
 
-    <!-- Barre de Recherche & Filtres -->
+    
     <div class="card border-0 shadow-sm rounded-4 p-3 bg-white mb-4">
       <div class="row g-2 align-items-center">
-        <!-- Recherche par nom / prénom / numéro -->
+        
         <div class="col-12 col-md-5 col-lg-5">
           <div class="input-group search-filter-group rounded-3">
             <span class="input-group-text bg-light border-0 ps-3 text-muted">
@@ -103,7 +103,7 @@
           </div>
         </div>
 
-        <!-- Filtre Parcours -->
+        
         <div class="col-6 col-md-3 col-lg-3">
           <select class="form-select bg-light border-0 py-2 shadow-none select-filter" [(ngModel)]="selectedParcours">
             @for (p of parcoursList; track p) {
@@ -112,7 +112,7 @@
           </select>
         </div>
 
-        <!-- Filtre Statut -->
+        
         <div class="col-6 col-md-4 col-lg-2">
           <select class="form-select bg-light border-0 py-2 shadow-none select-filter" [(ngModel)]="selectedStatut">
             @for (st of statutsList; track st) {
@@ -121,7 +121,7 @@
           </select>
         </div>
 
-        <!-- Badge compteur total -->
+        
         <div class="col-12 col-lg-2 text-lg-end mt-2 mt-lg-0">
           <span class="badge-total-students d-inline-flex align-items-center gap-2 py-2 px-3 rounded-3 small">
             <i class="bi bi-mortarboard text-secondary"></i>
@@ -131,7 +131,7 @@
       </div>
     </div>
 
-    <!-- Tableau des Étudiants -->
+    
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mb-4">
       <div class="table-responsive">
         <table class="table align-middle mb-0 students-table">
@@ -148,7 +148,7 @@
           <tbody>
             @for (etu of filteredEtudiants; track etu.id) {
               <tr class="student-row-hover">
-                <!-- Nom & Numéro Étudiant -->
+                
                 <td class="ps-4 py-3">
                   <div class="d-flex align-items-center gap-3">
                     <div class="student-avatar-circle {{ etu.avatarClass }} rounded-circle d-flex align-items-center justify-content-center fw-bold">
@@ -161,17 +161,17 @@
                   </div>
                 </td>
 
-                <!-- Email universitaire -->
+                
                 <td class="py-3">
                   <span class="email-text text-secondary">{{ etu.email }}</span>
                 </td>
 
-                <!-- Parcours / Promotion -->
+                
                 <td class="py-3">
                   <span class="badge-parcours">{{ etu.parcours }}</span>
                 </td>
 
-                <!-- Candidatures / Statut -->
+                
                 <td class="py-3">
                   @if (etu.statut === 'AFFECTE') {
                     <span class="status-pill-student status-success d-inline-flex align-items-center gap-1">
@@ -193,7 +193,7 @@
                   }
                 </td>
 
-                <!-- Compte ENT -->
+                
                 <td class="py-3">
                   <span class="badge-ent-active d-inline-flex align-items-center gap-1">
                     <i class="bi bi-check-lg"></i>
@@ -201,7 +201,7 @@
                   </span>
                 </td>
 
-                <!-- Actions -->
+                
                 <td class="pe-4 py-3 text-end">
                   <div class="d-inline-flex align-items-center gap-1">
                     <button type="button" class="btn btn-sm btn-action-icon rounded-circle" title="Consulter le dossier">
@@ -227,13 +227,13 @@
         </table>
       </div>
 
-      <!-- Pied de tableau & Pagination -->
+      
       <div class="table-footer bg-white border-top border-light-subtle py-3 px-4 d-flex flex-column flex-sm-row align-items-center justify-content-between gap-2">
         <span class="text-muted small">
           Affichage de <strong>1</strong> à <strong>{{ filteredEtudiants.length }}</strong> sur <strong>142</strong> étudiants
         </span>
 
-        <!-- Pagination -->
+        
         <nav aria-label="Pagination étudiants">
           <ul class="pagination pagination-sm mb-0 gap-1">
             <li class="page-item disabled">

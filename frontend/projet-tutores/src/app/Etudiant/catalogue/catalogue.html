@@ -1,14 +1,14 @@
 <div class="layout-wrapper d-flex flex-column flex-lg-row min-vh-100">
-  <!-- Barre latérale -->
+  
   <app-sidebar></app-sidebar>
 
-  <!-- Contenu Principal -->
+  
   <main class="main-content flex-grow-1 bg-page p-3 p-lg-4 overflow-x-hidden">
     
-    <!-- En-tête supérieur : Fil d'Ariane & Actions utilisateur -->
+    
     <app-header></app-header>
 
-    <!-- Section Titre + Bannière Date Limite -->
+    
     <section class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-4">
       <div>
         <h1 class="page-title fw-bold mb-1">
@@ -19,7 +19,7 @@
         </p>
       </div>
 
-      <!-- Bloc Clôture des vœux -->
+      
       <div class="deadline-banner d-inline-flex align-items-center gap-3 px-3 py-2 rounded-3 text-white">
         <div class="deadline-icon-box d-flex align-items-center justify-content-center rounded-2">
           <i class="bi bi-stopwatch fs-5"></i>
@@ -31,7 +31,7 @@
       </div>
     </section>
 
-    <!-- Barre de Recherche -->
+    
     <div class="search-wrapper mb-4">
       <div class="input-group search-input-group shadow-sm bg-white rounded-3">
         <span class="input-group-text bg-white border-0 ps-3 text-muted">
@@ -56,7 +56,7 @@
       </div>
     </div>
 
-    <!-- Grille des Sujets -->
+    
     <section>
       <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
         @for (item of filteredSujets; track item.id) {
@@ -66,7 +66,7 @@
         }
       </div>
 
-      <!-- État vide si aucune correspondance -->
+      
       @if (filteredSujets.length === 0) {
         <div class="text-center py-5 bg-white rounded-4 shadow-sm my-4">
           <i class="bi bi-search text-muted fs-1 mb-2 d-block"></i>

@@ -3,14 +3,12 @@
   --primary-green-hover: #154e2d;
 }
 
-/* Boîte Logo */
 .logo-box {
   width: 44px;
   height: 44px;
   background-color: var(--primary-green);
 }
 
-/* Bouton vert principal */
 .btn-custom-green {
   background-color: var(--primary-green);
   border-color: var(--primary-green);
@@ -25,7 +23,6 @@
   color: #ffffff;
 }
 
-/* Liens personnalisés */
 .custom-link {
   color: var(--primary-green);
 }
@@ -35,14 +32,12 @@
   text-decoration: underline !important;
 }
 
-/* Focus sur les inputs */
 .form-control:focus,
 .form-select:focus {
   border-color: var(--primary-green);
   box-shadow: 0 0 0 0.2rem rgba(27, 99, 56, 0.15);
 }
 
-/* Style de la checkbox cochée */
 .custom-checkbox:checked {
   background-color: var(--primary-green);
   border-color: var(--primary-green);

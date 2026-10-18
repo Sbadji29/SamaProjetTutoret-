@@ -108,7 +108,7 @@ export class Enseignants {
 
   get filteredEnseignants(): EnseignantItem[] {
     return this.enseignants.filter((ens) => {
-      // Filtre texte
+      
       const q = this.searchQuery.toLowerCase().trim();
       const matchQuery =
         !q ||
@@ -117,12 +117,12 @@ export class Enseignants {
         ens.departement.toLowerCase().includes(q) ||
         ens.laboratoire.toLowerCase().includes(q);
 
-      // Filtre laboratoire
+      
       const matchLab =
         this.selectedLab === 'Tous les laboratoires' ||
         ens.laboratoire.includes(this.selectedLab);
 
-      // Filtre statut
+      
       let matchStatut = true;
       if (this.selectedStatut === 'Complet') {
         matchStatut = ens.etudiantsAssignes === ens.quotaMax;

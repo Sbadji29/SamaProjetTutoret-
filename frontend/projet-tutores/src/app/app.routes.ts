@@ -17,7 +17,7 @@ export const routes: Routes = [
   { path: 'candidatures', component: Candidature },
   { path: 'candidature', component: Candidature },
 
-  // Administration
+  
   { path: 'admin/tableau-de-bord', component: DashboardAdmin },
   { path: 'admin/dashboard', component: DashboardAdmin },
   { path: 'admin/etudiants', component: Etudiants },
@@ -28,7 +28,7 @@ export const routes: Routes = [
   { path: 'gestion-enseignants', component: Enseignants },
   { path: 'suivi-affectations', component: Affectations },
 
-  // Auth
+  
   { path: 'connexion', component: Connexion },
   { path: 'inscription', component: Inscription },
   { path: '**', redirectTo: 'tableau-de-bord' },

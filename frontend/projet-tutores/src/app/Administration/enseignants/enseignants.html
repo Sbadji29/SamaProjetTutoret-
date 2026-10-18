@@ -1,11 +1,11 @@
 <div class="layout-wrapper d-flex flex-column flex-lg-row min-vh-100">
-  <!-- Barre latérale en mode Admin -->
+  
   <app-sidebar role="admin"></app-sidebar>
 
-  <!-- Contenu Principal -->
+  
   <main class="main-content flex-grow-1 bg-page p-3 p-lg-4 overflow-x-hidden">
 
-    <!-- En-tête global -->
+    
     <app-header
       filiere="Administration"
       module="Gestion globale"
@@ -13,7 +13,7 @@
       userName="Marc Le Gall">
     </app-header>
 
-    <!-- En-tête de page & actions -->
+    
     <section class="mb-4">
       <div class="category-tag text-uppercase fw-semibold mb-1">
         PERSONNEL PÉDAGOGIQUE &amp; ENCADREMENT <span class="dot-green mx-1">●</span> Session 2024 - 2025
@@ -43,7 +43,7 @@
       </div>
     </section>
 
-    <!-- 4 Cartes KPIs réutilisables -->
+    
     <section class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 g-3 mb-4">
       <div class="col">
         <app-kpi-card
@@ -95,10 +95,10 @@
       </div>
     </section>
 
-    <!-- Barre de Recherche & Filtres -->
+    
     <div class="card border-0 shadow-sm rounded-4 p-3 bg-white mb-4">
       <div class="row g-2 align-items-center">
-        <!-- Recherche par nom / labo / email -->
+        
         <div class="col-12 col-md-5 col-lg-6">
           <div class="input-group search-filter-group rounded-3">
             <span class="input-group-text bg-light border-0 ps-3 text-muted">
@@ -113,7 +113,7 @@
           </div>
         </div>
 
-        <!-- Filtre Laboratoire -->
+        
         <div class="col-6 col-md-3 col-lg-3">
           <select class="form-select bg-light border-0 py-2 shadow-none select-filter" [(ngModel)]="selectedLab">
             @for (lab of laboratoires; track lab) {
@@ -122,7 +122,7 @@
           </select>
         </div>
 
-        <!-- Filtre Statut -->
+        
         <div class="col-6 col-md-4 col-lg-3">
           <select class="form-select bg-light border-0 py-2 shadow-none select-filter" [(ngModel)]="selectedStatut">
             @for (st of statuts; track st) {
@@ -133,7 +133,7 @@
       </div>
     </div>
 
-    <!-- Tableau des Enseignants & Encadrants -->
+    
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mb-4">
       <div class="table-responsive">
         <table class="table align-middle mb-0 teachers-table">
@@ -150,7 +150,7 @@
           <tbody>
             @for (ens of filteredEnseignants; track ens.id) {
               <tr class="teacher-row-hover">
-                <!-- Enseignant & Titre -->
+                
                 <td class="ps-4 py-3">
                   <div class="d-flex align-items-center gap-3">
                     <div class="teacher-avatar-circle {{ ens.avatarClass }} rounded-circle d-flex align-items-center justify-content-center fw-bold">
@@ -163,18 +163,18 @@
                   </div>
                 </td>
 
-                <!-- Email -->
+                
                 <td class="py-3">
                   <span class="email-text text-secondary">{{ ens.email }}</span>
                 </td>
 
-                <!-- Département / Laboratoire -->
+                
                 <td class="py-3">
                   <div class="fw-semibold text-dark small">{{ ens.departement }}</div>
                   <small class="text-muted text-xs d-block">{{ ens.laboratoire }}</small>
                 </td>
 
-                <!-- Sujets proposés -->
+                
                 <td class="py-3">
                   @if (ens.nbSujets > 0) {
                     <span class="badge-subject-blue d-inline-flex align-items-center gap-1">
@@ -189,7 +189,7 @@
                   }
                 </td>
 
-                <!-- Quota d'encadrement -->
+                
                 <td class="py-3" style="min-width: 170px;">
                   <div class="d-flex align-items-center justify-content-between mb-1">
                     <small class="fw-semibold text-dark">
@@ -216,7 +216,7 @@
                   </div>
                 </td>
 
-                <!-- Actions -->
+                
                 <td class="pe-4 py-3 text-end">
                   <div class="d-inline-flex align-items-center gap-1">
                     <button type="button" class="btn btn-sm btn-action-icon rounded-circle" title="Contacter">
@@ -242,13 +242,13 @@
         </table>
       </div>
 
-      <!-- Pied de tableau & Pagination -->
+      
       <div class="table-footer bg-white border-top border-light-subtle py-3 px-4 d-flex flex-column flex-sm-row align-items-center justify-content-between gap-2">
         <span class="text-muted small">
           Affichage de <strong>1</strong> à <strong>{{ filteredEnseignants.length }}</strong> sur <strong>24</strong> enseignants
         </span>
 
-        <!-- Pagination -->
+        
         <nav aria-label="Pagination enseignants">
           <ul class="pagination pagination-sm mb-0 gap-1">
             <li class="page-item disabled">

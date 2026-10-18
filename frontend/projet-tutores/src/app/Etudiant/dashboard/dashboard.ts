@@ -30,7 +30,7 @@ interface RecentCandidature {
 export class Dashboard {
   userName: string = 'Camille';
 
-  // Sujets récents
+  
   recentSujets: RecentSujet[] = [
     {
       id: 1,
@@ -55,7 +55,7 @@ export class Dashboard {
     },
   ];
 
-  // Dernières candidatures
+  
   recentCandidatures: RecentCandidature[] = [
     {
       id: 1,

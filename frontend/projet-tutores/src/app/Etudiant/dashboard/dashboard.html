@@ -1,14 +1,14 @@
 <div class="layout-wrapper d-flex flex-column flex-lg-row min-vh-100">
-  <!-- Barre latérale -->
+  
   <app-sidebar></app-sidebar>
 
-  <!-- Contenu Principal -->
+  
   <main class="main-content flex-grow-1 bg-page p-3 p-lg-4 overflow-x-hidden">
 
-    <!-- En-tête global réutilisable -->
+    
     <app-header></app-header>
 
-    <!-- En-tête de bienvenue & Action principale -->
+    
     <section class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
       <div>
         <h1 class="welcome-title fw-bold mb-0">Bonjour, {{ userName }} </h1>
@@ -23,7 +23,7 @@
       </div>
     </section>
 
-    <!-- Grille des KPIs -->
+    
     <section class="row row-cols-1 row-cols-md-3 g-3 g-lg-4 mb-4 pb-2">
       <div class="col">
         <app-kpi-card label="Sujets disponibles" [value]="24" icon="bi-book" iconBgClass="icon-green">
@@ -42,7 +42,7 @@
       </div>
     </section>
 
-    <!-- Section 1 : Sujets récemment proposés -->
+    
     <section class="mb-5">
       <div class="d-flex align-items-center justify-content-between mb-3">
         <div class="d-flex align-items-center gap-2">
@@ -81,7 +81,7 @@
       </div>
     </section>
 
-    <!-- Section 2 : Mes dernières candidatures -->
+    
     <section class="mb-4">
       <div class="d-flex align-items-center justify-content-between mb-3">
         <div class="d-flex align-items-center gap-2">
