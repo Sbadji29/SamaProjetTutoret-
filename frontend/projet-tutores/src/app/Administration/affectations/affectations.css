@@ -1,0 +1,234 @@
+:host {
+  --theme-navy: #0e2038;
+  --theme-green: #1b6338;
+  --theme-green-dark: #14532d;
+  display: block;
+}
+
+/* Fond général */
+.bg-page {
+  background-color: #f8fafc;
+}
+
+/* Titre principal */
+.page-title {
+  color: var(--theme-navy);
+  font-size: 1.65rem;
+  letter-spacing: -0.02em;
+}
+
+/* Boutons d'action */
+.btn-outline-custom {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  transition: all 0.15s ease;
+}
+
+.btn-outline-custom:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.btn-generate-pv {
+  background-color: var(--theme-green-dark);
+  border: none;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.btn-generate-pv:hover {
+  background-color: #0f3d21;
+  transform: translateY(-1px);
+}
+
+/* Filtres & Légende */
+.search-filter-input::placeholder {
+  color: #94a3b8;
+  font-size: 0.88rem;
+}
+
+.select-filter {
+  font-size: 0.88rem;
+  color: #334155;
+}
+
+.legend-title {
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.legend-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-green {
+  background-color: #16a34a;
+}
+
+.dot-orange {
+  background-color: #f59e0b;
+}
+
+.dot-gray {
+  background-color: #64748b;
+}
+
+/* En-tête de section du tableau */
+.table-section-header {
+  background-color: #ffffff;
+}
+
+.table-title {
+  font-size: 1.05rem;
+}
+
+.badge-recenses {
+  background-color: #eff6ff;
+  color: #2563eb;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.28rem 0.6rem;
+  border-radius: 12px;
+}
+
+/* Tableau */
+.table-header-custom th {
+  background-color: #f8fafc;
+  color: #64748b;
+  font-size: 0.71rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #e2e8f0;
+  padding-top: 0.9rem;
+  padding-bottom: 0.9rem;
+}
+
+.affectations-table td {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.aff-row-hover:hover {
+  background-color: #fafbfc;
+}
+
+.student-name {
+  font-size: 0.92rem;
+  color: #0f172a;
+}
+
+.project-title {
+  font-size: 0.88rem;
+  line-height: 1.35;
+}
+
+.text-xs {
+  font-size: 0.74rem;
+}
+
+/* Avatars */
+.student-avatar-circle {
+  width: 32px;
+  height: 32px;
+  font-size: 0.78rem;
+  flex-shrink: 0;
+}
+
+.avatar-green {
+  background-color: #14532d;
+  color: #ffffff;
+}
+
+.avatar-dark {
+  background-color: #334155;
+  color: #ffffff;
+}
+
+.avatar-yellow {
+  background-color: #fef08a;
+  color: #854d0e;
+}
+
+/* Pastilles de statut */
+.status-pill-aff {
+  padding: 0.28rem 0.65rem;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.dot-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-valide {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+.status-valide .dot-indicator {
+  background-color: #16a34a;
+}
+
+.status-arbitrage {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+.status-arbitrage .dot-indicator {
+  background-color: #d97706;
+}
+
+.status-vacant {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+.status-vacant .dot-indicator {
+  background-color: #16a34a;
+}
+
+/* Pastilles de capacité */
+.capacity-pill {
+  padding: 0.28rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.capacity-full {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.capacity-one {
+  background-color: #fef9c3;
+  color: #a16207;
+}
+
+.capacity-available {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.capacity-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Badges divers & pagination */
+.badge-orange-pill {
+  color: #d97706;
+  background-color: #fef3c7;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.bg-dark-green {
+  background-color: var(--theme-green-dark) !important;
+}

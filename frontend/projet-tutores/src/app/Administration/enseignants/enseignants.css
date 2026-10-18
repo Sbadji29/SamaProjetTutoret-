@@ -1,0 +1,198 @@
+:host {
+  --theme-navy: #0e2038;
+  --theme-green: #1b6338;
+  --theme-green-dark: #14532d;
+  display: block;
+}
+
+/* Fond général */
+.bg-page {
+  background-color: #f8fafc;
+}
+
+/* Catégorie & En-tête */
+.category-tag {
+  font-size: 0.72rem;
+  color: #64748b;
+  letter-spacing: 0.05em;
+}
+
+.dot-green {
+  color: #16a34a;
+}
+
+.page-title {
+  color: var(--theme-navy);
+  font-size: 1.65rem;
+  letter-spacing: -0.02em;
+}
+
+/* Boutons d'action */
+.btn-outline-custom {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  transition: all 0.15s ease;
+}
+
+.btn-outline-custom:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.btn-add-teacher {
+  background-color: var(--theme-green-dark);
+  border: none;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.btn-add-teacher:hover {
+  background-color: #0f3d21;
+  transform: translateY(-1px);
+}
+
+/* Filtres */
+.search-filter-input::placeholder {
+  color: #94a3b8;
+  font-size: 0.88rem;
+}
+
+.select-filter {
+  font-size: 0.88rem;
+  color: #334155;
+}
+
+/* Tableau */
+.table-header-custom th {
+  background-color: #f8fafc;
+  color: #64748b;
+  font-size: 0.71rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #e2e8f0;
+  padding-top: 0.9rem;
+  padding-bottom: 0.9rem;
+}
+
+.teachers-table td {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.teacher-row-hover:hover {
+  background-color: #fafbfc;
+}
+
+.teacher-name {
+  font-size: 0.92rem;
+  color: #0f172a;
+}
+
+.teacher-title {
+  font-size: 0.75rem;
+}
+
+.email-text {
+  font-size: 0.84rem;
+  color: #475569 !important;
+}
+
+.text-xs {
+  font-size: 0.74rem;
+}
+
+/* Avatars personnalisés */
+.teacher-avatar-circle {
+  width: 38px;
+  height: 38px;
+  font-size: 0.82rem;
+  flex-shrink: 0;
+}
+
+.avatar-navy {
+  background-color: #14532d;
+  color: #ffffff;
+}
+
+.avatar-blue {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.avatar-green {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.avatar-cyan {
+  background-color: #e0f2fe;
+  color: #0284c7;
+}
+
+.avatar-dark {
+  background-color: #334155;
+  color: #ffffff;
+}
+
+/* Badges de sujets proposés */
+.badge-subject-blue {
+  background-color: #eff6ff;
+  color: #1e40af;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+}
+
+.badge-dot-blue {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #2563eb;
+  display: inline-block;
+}
+
+.badge-subject-red {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+}
+
+.badge-dot-red {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #dc2626;
+  display: inline-block;
+}
+
+/* Barre de progression du quota */
+.quota-progress-bar {
+  height: 6px;
+  border-radius: 4px;
+  background-color: #e2e8f0;
+}
+
+.bg-dark-green {
+  background-color: var(--theme-green-dark) !important;
+}
+
+/* Boutons d'action */
+.btn-action-icon {
+  color: #64748b;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  transition: all 0.15s ease;
+}
+
+.btn-action-icon:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}

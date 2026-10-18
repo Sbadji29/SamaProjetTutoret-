@@ -1,0 +1,83 @@
+<div class="layout-wrapper d-flex flex-column flex-lg-row min-vh-100">
+  <!-- Barre latérale -->
+  <app-sidebar></app-sidebar>
+
+  <!-- Contenu Principal -->
+  <main class="main-content flex-grow-1 bg-page p-3 p-lg-4 overflow-x-hidden">
+    
+    <!-- En-tête supérieur : Fil d'Ariane & Actions utilisateur -->
+    <app-header></app-header>
+
+    <!-- Section Titre + Bannière Date Limite -->
+    <section class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-4">
+      <div>
+        <h1 class="page-title fw-bold mb-1">
+          Catalogue des sujets de projets tutorés
+        </h1>
+        <p class="text-secondary small mb-0">
+          Explorez les projets proposés par le corps enseignant et candidatez avant la date limite.
+        </p>
+      </div>
+
+      <!-- Bloc Clôture des vœux -->
+      <div class="deadline-banner d-inline-flex align-items-center gap-3 px-3 py-2 rounded-3 text-white">
+        <div class="deadline-icon-box d-flex align-items-center justify-content-center rounded-2">
+          <i class="bi bi-stopwatch fs-5"></i>
+        </div>
+        <div class="lh-sm">
+          <div class="deadline-title text-uppercase fw-semibold">CLÔTURE DES VŒUX</div>
+          <div class="deadline-datetime fw-bold">15 Nov 2024 • 23h59</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Barre de Recherche -->
+    <div class="search-wrapper mb-4">
+      <div class="input-group search-input-group shadow-sm bg-white rounded-3">
+        <span class="input-group-text bg-white border-0 ps-3 text-muted">
+          <i class="bi bi-search"></i>
+        </span>
+        <input
+          type="text"
+          class="form-control border-0 py-2 ps-2 shadow-none search-input"
+          placeholder="Rechercher un sujet de projet..."
+          [(ngModel)]="searchQuery"
+          aria-label="Rechercher un sujet"
+        />
+        @if (searchQuery) {
+          <button
+            class="btn btn-link text-muted border-0 pe-3 text-decoration-none"
+            type="button"
+            (click)="searchQuery = ''"
+            title="Effacer la recherche">
+            <i class="bi bi-x-circle-fill"></i>
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Grille des Sujets -->
+    <section>
+      <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+        @for (item of filteredSujets; track item.id) {
+          <div class="col">
+            <app-sujet [data]="item"></app-sujet>
+          </div>
+        }
+      </div>
+
+      <!-- État vide si aucune correspondance -->
+      @if (filteredSujets.length === 0) {
+        <div class="text-center py-5 bg-white rounded-4 shadow-sm my-4">
+          <i class="bi bi-search text-muted fs-1 mb-2 d-block"></i>
+          <h5 class="fw-bold text-dark">Aucun sujet trouvé</h5>
+          <p class="text-secondary small mb-3">Aucun projet ne correspond à votre recherche "{{ searchQuery }}".</p>
+          <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" (click)="searchQuery = ''">
+            Réinitialiser la recherche
+          </button>
+        </div>
+      }
+    </section>
+
+  </main>
+</div>

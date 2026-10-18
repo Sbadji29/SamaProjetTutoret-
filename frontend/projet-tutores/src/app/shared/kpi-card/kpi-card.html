@@ -1,0 +1,41 @@
+<div class="card kpi-card border-0 shadow-sm rounded-4 p-3 h-100 bg-white">
+  <div class="card-body d-flex flex-column justify-content-between p-1 h-100">
+
+    <!-- Ligne haute : Libellé + Icône -->
+    <div class="d-flex align-items-center justify-content-between mb-2">
+      <div class="text-secondary kpi-label">{{ label }}</div>
+      <div class="kpi-icon-wrapper rounded-3 d-flex align-items-center justify-content-center" [ngClass]="iconBgClass">
+        <i class="bi" [ngClass]="icon"></i>
+      </div>
+    </div>
+
+    <!-- Ligne valeur & badge -->
+    <div class="d-flex align-items-baseline gap-2 mb-1">
+      <div class="kpi-value fw-bold lh-1" [ngClass]="valueClass">{{ value }}</div>
+      @if (badgeText) {
+        <small class="kpi-badge small" [ngClass]="badgeClass">{{ badgeText }}</small>
+      }
+    </div>
+
+    <!-- Barre de progression facultative -->
+    @if (progress !== undefined) {
+      <div class="progress my-2" style="height: 6px; border-radius: 4px;">
+        <div
+          class="progress-bar"
+          [ngClass]="progressClass"
+          role="progressbar"
+          [style.width.%]="progress"
+          [attr.aria-valuenow]="progress"
+          aria-valuemin="0"
+          aria-valuemax="100">
+        </div>
+      </div>
+    }
+
+    <!-- Texte de bas de carte facultatif -->
+    @if (footerText) {
+      <div class="text-muted kpi-footer-text mt-auto pt-1">{{ footerText }}</div>
+    }
+
+  </div>
+</div>

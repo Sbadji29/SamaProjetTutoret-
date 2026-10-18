@@ -1,0 +1,71 @@
+:host {
+  --theme-navy: #0e2038;
+  --theme-green: #1b6338;
+  --btn-detail-bg: #f0f5ff;
+  --btn-detail-text: #1b6338;
+  --btn-detail-hover-bg: #e3ecfc;
+  display: block;
+  height: 100%;
+}
+
+/* Carte */
+.subject-card {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.subject-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Pastille & statut */
+.badge-status {
+  color: var(--theme-green);
+  font-size: 0.85rem;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--theme-green);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.date-badge {
+  font-size: 0.82rem;
+}
+
+/* Titre */
+.project-title {
+  color: var(--theme-navy);
+  font-size: 1.05rem;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+.project-desc {
+  font-size: 0.86rem;
+  color: #64748b;
+  min-height: 40px;
+}
+
+.capacity-label {
+  font-size: 0.75rem;
+}
+
+/* Bouton Voir le détail */
+.btn-detail {
+  background-color: var(--btn-detail-bg);
+  color: var(--btn-detail-text);
+  font-size: 0.84rem;
+  border: 1px solid transparent;
+  transition: all 0.15s ease-in-out;
+}
+
+.btn-detail:hover {
+  background-color: var(--btn-detail-hover-bg);
+  color: var(--btn-detail-text);
+}

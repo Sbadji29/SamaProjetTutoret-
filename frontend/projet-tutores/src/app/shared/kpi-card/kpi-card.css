@@ -1,0 +1,82 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.kpi-card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.06) !important;
+}
+
+.kpi-label {
+  font-size: 0.83rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.kpi-value {
+  font-size: 2.15rem;
+  color: #0e2038;
+  letter-spacing: -0.03em;
+}
+
+.kpi-badge {
+  font-size: 0.78rem;
+}
+
+.kpi-footer-text {
+  font-size: 0.76rem;
+  color: #64748b !important;
+}
+
+.kpi-icon-wrapper {
+  width: 44px;
+  height: 44px;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+/* Variantes de couleurs d'icônes */
+.icon-green {
+  background-color: #ecfdf5;
+  color: #059669;
+}
+
+.icon-blue {
+  background-color: #eff6ff;
+  color: #3b82f6;
+}
+
+.icon-success {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
+.icon-gray {
+  background-color: #f1f5f9;
+  color: #64748b;
+}
+
+.icon-orange {
+  background-color: #fff7ed;
+  color: #ea580c;
+}
+
+.icon-teal {
+  background-color: #e0f2fe;
+  color: #0284c7;
+}
+
+.icon-purple {
+  background-color: #eff6ff;
+  color: #2563eb;
+}
+
+.icon-red {
+  background-color: #fee2e2;
+  color: #dc2626;
+}

@@ -1,0 +1,163 @@
+<div class="layout-wrapper d-flex flex-column flex-lg-row min-vh-100">
+  <!-- Barre latérale -->
+  <app-sidebar></app-sidebar>
+
+  <!-- Contenu Principal -->
+  <main class="main-content flex-grow-1 bg-page p-3 p-lg-4 overflow-x-hidden">
+
+    <!-- En-tête supérieur : Fil d'Ariane & Actions utilisateur -->
+    <app-header></app-header>
+
+    <!-- Titre et sous-titre -->
+    <section class="mb-4">
+      <h1 class="page-title fw-bold mb-1">
+        Mes candidatures aux projets tutorés
+      </h1>
+      <p class="text-secondary small mb-0">
+        Suivez l'état d'avancement de vos demandes et les décisions d'affectation.
+      </p>
+    </section>
+
+    <!-- Onglets Filtres (Pills) -->
+    <div class="filter-tabs-container d-inline-flex p-1 rounded-3 mb-4">
+      <button
+        type="button"
+        class="filter-tab-btn"
+        [class.active]="activeTab === 'TOUTES'"
+        (click)="setTab('TOUTES')">
+        Toutes
+        <span class="tab-badge ms-1">{{ countTotal }}</span>
+      </button>
+
+      <button
+        type="button"
+        class="filter-tab-btn"
+        [class.active]="activeTab === 'EN_ATTENTE'"
+        (click)="setTab('EN_ATTENTE')">
+        En attente
+        <span class="tab-badge ms-1">{{ countEnAttente }}</span>
+      </button>
+
+      <button
+        type="button"
+        class="filter-tab-btn"
+        [class.active]="activeTab === 'ACCEPTEE'"
+        (click)="setTab('ACCEPTEE')">
+        Acceptées
+        <span class="tab-badge ms-1">{{ countAcceptees }}</span>
+      </button>
+
+      <button
+        type="button"
+        class="filter-tab-btn"
+        [class.active]="activeTab === 'REJETEE'"
+        (click)="setTab('REJETEE')">
+        Rejetées
+        <span class="tab-badge ms-1">{{ countRejetees }}</span>
+      </button>
+    </div>
+
+    <!-- Carte Tableau des Candidatures -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mb-4">
+      <div class="table-responsive">
+        <table class="table align-middle mb-0 custom-table">
+          <thead class="table-header-custom">
+            <tr>
+              <th scope="col" class="ps-4">SUJET DE RECHERCHE / PROJET</th>
+              <th scope="col">ENSEIGNANT RESPONSABLE</th>
+              <th scope="col">DATE DE CANDIDATURE</th>
+              <th scope="col">STATUT</th>
+              <th scope="col" class="text-end pe-4">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of filteredCandidatures; track item.id) {
+              <tr class="table-row-hover">
+                <!-- Sujet & Tags -->
+                <td class="ps-4 py-3" style="max-width: 320px;">
+                  <div class="fw-bold text-dark project-name mb-2">
+                    {{ item.titre }}
+                    @if (item.verifie) {
+                      <i class="bi bi-patch-check-fill text-success ms-1 small" title="Validé"></i>
+                    }
+                  </div>
+                  <div class="d-flex flex-wrap gap-1">
+                    @for (tag of item.technologies; track tag) {
+                      <span class="badge-tech">{{ tag }}</span>
+                    }
+                  </div>
+                </td>
+
+                <!-- Enseignant Responsable -->
+                <td class="py-3">
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="teacher-avatar {{ item.initialesClass }} rounded-3 d-flex align-items-center justify-content-center fw-bold">
+                      {{ item.initiales }}
+                    </div>
+                    <div>
+                      <div class="fw-bold text-dark small lh-sm">{{ item.enseignant }}</div>
+                      <small class="text-muted teacher-role">{{ item.grade }}</small>
+                    </div>
+                  </div>
+                </td>
+
+                <!-- Date de candidature -->
+                <td class="py-3">
+                  <div class="small fw-semibold text-dark">{{ item.date }}</div>
+                  <small class="text-muted text-xs">à {{ item.heure }}</small>
+                </td>
+
+                <!-- Statut -->
+                <td class="py-3">
+                  @if (item.statut === 'EN_ATTENTE') {
+                    <span class="status-pill status-warning d-inline-flex align-items-center gap-1">
+                      <span class="dot-indicator"></span>
+                      EN_ATTENTE
+                    </span>
+                  }
+                  @if (item.statut === 'ACCEPTEE') {
+                    <span class="status-pill status-success d-inline-flex align-items-center gap-1">
+                      <span class="dot-indicator"></span>
+                      ACCEPTEE
+                    </span>
+                  }
+                  @if (item.statut === 'REJETEE') {
+                    <span class="status-pill status-danger d-inline-flex align-items-center gap-1">
+                      <span class="dot-indicator"></span>
+                      REJETEE
+                    </span>
+                  }
+                </td>
+
+                <!-- Actions -->
+                <td class="pe-4 py-3 text-end">
+                  <a href="javascript:void(0)" class="action-btn text-decoration-none d-inline-flex align-items-center gap-1 small fw-medium">
+                    <i class="bi bi-eye"></i>
+                    <span>Voir le sujet</span>
+                  </a>
+                </td>
+              </tr>
+            }
+
+            @if (filteredCandidatures.length === 0) {
+              <tr>
+                <td colspan="5" class="text-center py-5 text-muted">
+                  <i class="bi bi-inbox fs-2 d-block mb-2 opacity-50"></i>
+                  Aucune candidature trouvée pour ce filtre.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pied du tableau -->
+      <div class="table-footer bg-white border-top border-light-subtle py-3 px-4">
+        <span class="text-muted small">
+          Affichage de <strong>{{ filteredCandidatures.length }}</strong> sur <strong>{{ countTotal }}</strong> candidatures
+        </span>
+      </div>
+    </div>
+
+  </main>
+</div>

@@ -1,0 +1,190 @@
+:host {
+  --theme-navy: #0e2038;
+  --theme-green: #1b6338;
+  --theme-green-dark: #14532d;
+  display: block;
+}
+
+/* Fond général */
+.bg-page {
+  background-color: #f8fafc;
+}
+
+/* En-tête & Fil d'Ariane */
+.session-tag {
+  color: var(--theme-green);
+}
+
+.header-avatar {
+  width: 34px;
+  height: 34px;
+  object-fit: cover;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Titre principal */
+.page-title {
+  color: var(--theme-navy);
+  font-size: 1.65rem;
+  letter-spacing: -0.02em;
+}
+
+/* Onglets filtres (Pills) */
+.filter-tabs-container {
+  background-color: #edf2f7;
+  gap: 4px;
+  border: 1px solid #e2e8f0;
+}
+
+.filter-tab-btn {
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  padding: 0.42rem 0.95rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.filter-tab-btn:hover:not(.active) {
+  color: #0f172a;
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.filter-tab-btn.active {
+  background-color: var(--theme-green-dark);
+  color: #ffffff;
+}
+
+.tab-badge {
+  font-size: 0.72rem;
+  padding: 1px 7px;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.08);
+  font-weight: 600;
+}
+
+.filter-tab-btn.active .tab-badge {
+  background-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+/* Tableau */
+.table-header-custom th {
+  background-color: #f8fafc;
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #e2e8f0;
+  padding-top: 0.9rem;
+  padding-bottom: 0.9rem;
+}
+
+.custom-table td {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.table-row-hover:hover {
+  background-color: #fafbfc;
+}
+
+.project-name {
+  font-size: 0.95rem;
+  line-height: 1.35;
+  color: #0f172a;
+}
+
+/* Badges de technologies */
+.badge-tech {
+  background-color: #f1f5f9;
+  color: #475569;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.22rem 0.55rem;
+  border-radius: 6px;
+}
+
+/* Avatars enseignants */
+.teacher-avatar {
+  width: 36px;
+  height: 36px;
+  font-size: 0.82rem;
+  flex-shrink: 0;
+}
+
+.avatar-green {
+  background-color: #d1fae5;
+  color: #059669;
+}
+
+.avatar-blue {
+  background-color: #e0f2fe;
+  color: #0284c7;
+}
+
+.teacher-role {
+  font-size: 0.74rem;
+}
+
+.text-xs {
+  font-size: 0.74rem;
+}
+
+/* Pastilles de statut */
+.status-pill {
+  padding: 0.3rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.dot-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-warning {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+.status-warning .dot-indicator {
+  background-color: #d97706;
+}
+
+.status-success {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+.status-success .dot-indicator {
+  background-color: #16a34a;
+}
+
+.status-danger {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+.status-danger .dot-indicator {
+  background-color: #dc2626;
+}
+
+/* Bouton action */
+.action-btn {
+  color: #334155;
+  font-size: 0.88rem;
+  transition: color 0.15s ease;
+}
+
+.action-btn:hover {
+  color: var(--theme-green);
+}

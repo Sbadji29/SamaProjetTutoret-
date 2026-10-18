@@ -1,0 +1,207 @@
+:host {
+  --theme-navy: #0e2038;
+  --theme-green: #1b6338;
+  --theme-green-dark: #14532d;
+  display: block;
+}
+
+/* Fond général */
+.bg-page {
+  background-color: #f8fafc;
+}
+
+/* Titre principal */
+.page-title {
+  color: var(--theme-navy);
+  font-size: 1.65rem;
+  letter-spacing: -0.02em;
+}
+
+/* Boutons d'action */
+.btn-outline-custom {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  transition: all 0.15s ease;
+}
+
+.btn-outline-custom:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.btn-add-student {
+  background-color: var(--theme-green-dark);
+  border: none;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.btn-add-student:hover {
+  background-color: #0f3d21;
+  transform: translateY(-1px);
+}
+
+/* Filtres */
+.search-filter-input::placeholder {
+  color: #94a3b8;
+  font-size: 0.88rem;
+}
+
+.select-filter {
+  font-size: 0.88rem;
+  color: #334155;
+}
+
+.badge-total-students {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+/* Tableau */
+.table-header-custom th {
+  background-color: #f8fafc;
+  color: #64748b;
+  font-size: 0.71rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #e2e8f0;
+  padding-top: 0.9rem;
+  padding-bottom: 0.9rem;
+}
+
+.students-table td {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.student-row-hover:hover {
+  background-color: #fafbfc;
+}
+
+.student-name {
+  font-size: 0.92rem;
+  color: #0f172a;
+}
+
+.student-num {
+  font-size: 0.75rem;
+}
+
+.email-text {
+  font-size: 0.84rem;
+  color: #475569 !important;
+}
+
+/* Avatars */
+.student-avatar-circle {
+  width: 38px;
+  height: 38px;
+  font-size: 0.82rem;
+  flex-shrink: 0;
+}
+
+.avatar-green {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.avatar-green-bright {
+  background-color: #bbf7d0;
+  color: #166534;
+}
+
+.avatar-blue {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.avatar-gray {
+  background-color: #e2e8f0;
+  color: #475569;
+}
+
+.avatar-navy {
+  background-color: #14532d;
+  color: #ffffff;
+}
+
+/* Badge de parcours */
+.badge-parcours {
+  background-color: #eff6ff;
+  color: #1e40af;
+  font-size: 0.76rem;
+  font-weight: 500;
+  padding: 0.28rem 0.65rem;
+  border-radius: 6px;
+}
+
+/* Pastilles de statut */
+.status-pill-student {
+  padding: 0.28rem 0.65rem;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.dot-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-success {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+.status-success .dot-indicator {
+  background-color: #16a34a;
+}
+
+.status-blue {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+.status-blue .dot-indicator {
+  background-color: #2563eb;
+}
+
+.status-danger {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+.status-danger .dot-indicator {
+  background-color: #dc2626;
+}
+
+/* Compte ENT Actif */
+.badge-ent-active {
+  background-color: #dcfce7;
+  color: #16a34a;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+}
+
+/* Pagination & Boutons */
+.bg-dark-green {
+  background-color: var(--theme-green-dark) !important;
+}
+
+.btn-action-icon {
+  color: #64748b;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  transition: all 0.15s ease;
+}
+
+.btn-action-icon:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}

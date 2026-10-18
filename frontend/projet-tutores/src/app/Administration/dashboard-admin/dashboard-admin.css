@@ -1,0 +1,122 @@
+:host {
+  --theme-navy: #0e2038;
+  --theme-green: #1b6338;
+  --theme-green-dark: #14532d;
+  display: block;
+}
+
+/* Fond général */
+.bg-page {
+  background-color: #f8fafc;
+}
+
+/* Titre principal */
+.page-title {
+  color: var(--theme-navy);
+  font-size: 1.65rem;
+  letter-spacing: -0.02em;
+}
+
+/* Boutons d'action */
+.btn-outline-custom {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  transition: all 0.15s ease;
+}
+
+.btn-outline-custom:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.btn-session-config {
+  background-color: var(--theme-green-dark);
+  border: none;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.btn-session-config:hover {
+  background-color: #0f3d21;
+  transform: translateY(-1px);
+}
+
+/* Titre de section */
+.section-title {
+  font-size: 1.25rem;
+  color: var(--theme-navy);
+  letter-spacing: -0.01em;
+}
+
+.badge-modules-count {
+  background-color: #f1f5f9;
+  color: #64748b;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+}
+
+/* Cartes Modules */
+.module-card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.module-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.75rem 1.25rem rgba(0, 0, 0, 0.06) !important;
+}
+
+.module-icon-box {
+  width: 44px;
+  height: 44px;
+}
+
+.module-icon-blue {
+  background-color: #eff6ff;
+  color: #3b82f6;
+}
+
+.module-icon-purple {
+  background-color: #f5f3ff;
+  color: #7c3aed;
+}
+
+.module-icon-green {
+  background-color: #ecfdf5;
+  color: #059669;
+}
+
+.module-icon-indigo {
+  background-color: #eef2ff;
+  color: #4f46e5;
+}
+
+.module-title {
+  font-size: 1.05rem;
+}
+
+.module-desc {
+  font-size: 0.86rem;
+  color: #64748b;
+  min-height: 45px;
+}
+
+.info-footer {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.btn-module-action {
+  background-color: #f1f5f9;
+  color: #1e293b;
+  font-size: 0.84rem;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.btn-module-action:hover {
+  background-color: #e2e8f0;
+  color: #0f172a;
+}

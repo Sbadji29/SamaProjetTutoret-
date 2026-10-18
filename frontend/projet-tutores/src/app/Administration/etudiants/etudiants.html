@@ -1,0 +1,266 @@
+<div class="layout-wrapper d-flex flex-column flex-lg-row min-vh-100">
+  <!-- Barre latérale en mode Admin -->
+  <app-sidebar role="admin"></app-sidebar>
+
+  <!-- Contenu Principal -->
+  <main class="main-content flex-grow-1 bg-page p-3 p-lg-4 overflow-x-hidden">
+
+    <!-- En-tête global -->
+    <app-header
+      filiere="Administration"
+      module="Gestion globale"
+      session="Session 2024-2025"
+      userName="Marc Le Gall">
+    </app-header>
+
+    <!-- Titre et actions -->
+    <section class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-4">
+      <div>
+        <h1 class="page-title fw-bold mb-1">
+          Gestion des étudiants
+        </h1>
+        <p class="text-secondary small mb-0">
+          Annuaire des étudiants inscrits en Master, suivi des comptes et statut des candidatures.
+        </p>
+      </div>
+
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <button type="button" class="btn btn-outline-custom d-inline-flex align-items-center gap-2 px-3 py-2 rounded-3 fw-semibold small">
+          <i class="bi bi-file-earmark-arrow-up"></i>
+          <span>Importer une liste (CSV)</span>
+        </button>
+
+        <button type="button" class="btn btn-add-student d-inline-flex align-items-center gap-2 px-3 py-2 rounded-3 fw-semibold small text-white">
+          <i class="bi bi-person-plus-fill"></i>
+          <span>+ Inscrire un étudiant</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Grille des 4 KPIs réutilisables -->
+    <section class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 g-3 mb-4">
+      <div class="col">
+        <app-kpi-card
+          label="Total inscrits"
+          [value]="142"
+          badgeText="✓ 100% enregistrés"
+          badgeClass="text-success fw-semibold"
+          icon="bi-people"
+          iconBgClass="icon-teal">
+        </app-kpi-card>
+      </div>
+
+      <div class="col">
+        <app-kpi-card
+          label="Affectations validées"
+          [value]="98"
+          badgeText="69% du total des inscrits"
+          badgeClass="text-secondary"
+          icon="bi-check2-square"
+          iconBgClass="icon-success">
+        </app-kpi-card>
+      </div>
+
+      <div class="col">
+        <app-kpi-card
+          label="Vœux en attente"
+          [value]="36"
+          badgeText="En cours de revue tuteur"
+          badgeClass="text-secondary"
+          icon="bi-hourglass-split"
+          iconBgClass="icon-purple">
+        </app-kpi-card>
+      </div>
+
+      <div class="col">
+        <app-kpi-card
+          label="Sans candidature"
+          [value]="8"
+          valueClass="text-danger"
+          badgeText="⚠ Relance requise"
+          badgeClass="text-danger fw-semibold"
+          icon="bi-person-exclamation"
+          iconBgClass="icon-red">
+        </app-kpi-card>
+      </div>
+    </section>
+
+    <!-- Barre de Recherche & Filtres -->
+    <div class="card border-0 shadow-sm rounded-4 p-3 bg-white mb-4">
+      <div class="row g-2 align-items-center">
+        <!-- Recherche par nom / prénom / numéro -->
+        <div class="col-12 col-md-5 col-lg-5">
+          <div class="input-group search-filter-group rounded-3">
+            <span class="input-group-text bg-light border-0 ps-3 text-muted">
+              <i class="bi bi-search"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control bg-light border-0 py-2 ps-2 shadow-none search-filter-input"
+              placeholder="Rechercher par nom, prénom, n° é..."
+              [(ngModel)]="searchQuery"
+            />
+          </div>
+        </div>
+
+        <!-- Filtre Parcours -->
+        <div class="col-6 col-md-3 col-lg-3">
+          <select class="form-select bg-light border-0 py-2 shadow-none select-filter" [(ngModel)]="selectedParcours">
+            @for (p of parcoursList; track p) {
+              <option [value]="p">{{ p }}</option>
+            }
+          </select>
+        </div>
+
+        <!-- Filtre Statut -->
+        <div class="col-6 col-md-4 col-lg-2">
+          <select class="form-select bg-light border-0 py-2 shadow-none select-filter" [(ngModel)]="selectedStatut">
+            @for (st of statutsList; track st) {
+              <option [value]="st">{{ st }}</option>
+            }
+          </select>
+        </div>
+
+        <!-- Badge compteur total -->
+        <div class="col-12 col-lg-2 text-lg-end mt-2 mt-lg-0">
+          <span class="badge-total-students d-inline-flex align-items-center gap-2 py-2 px-3 rounded-3 small">
+            <i class="bi bi-mortarboard text-secondary"></i>
+            <span><strong>142</strong> étudiants répertoriés</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tableau des Étudiants -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mb-4">
+      <div class="table-responsive">
+        <table class="table align-middle mb-0 students-table">
+          <thead class="table-header-custom">
+            <tr>
+              <th scope="col" class="ps-4">ÉTUDIANT</th>
+              <th scope="col">ADRESSE E-MAIL UNIVERSITAIRE</th>
+              <th scope="col">PARCOURS / PROMOTION</th>
+              <th scope="col">CANDIDATURES / STATUT</th>
+              <th scope="col">COMPTE ENT</th>
+              <th scope="col" class="text-end pe-4">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (etu of filteredEtudiants; track etu.id) {
+              <tr class="student-row-hover">
+                <!-- Nom & Numéro Étudiant -->
+                <td class="ps-4 py-3">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="student-avatar-circle {{ etu.avatarClass }} rounded-circle d-flex align-items-center justify-content-center fw-bold">
+                      {{ etu.initiales }}
+                    </div>
+                    <div>
+                      <div class="fw-bold text-dark student-name lh-sm">{{ etu.nom }}</div>
+                      <small class="text-muted student-num">N° {{ etu.numeroEtudiant }}</small>
+                    </div>
+                  </div>
+                </td>
+
+                <!-- Email universitaire -->
+                <td class="py-3">
+                  <span class="email-text text-secondary">{{ etu.email }}</span>
+                </td>
+
+                <!-- Parcours / Promotion -->
+                <td class="py-3">
+                  <span class="badge-parcours">{{ etu.parcours }}</span>
+                </td>
+
+                <!-- Candidatures / Statut -->
+                <td class="py-3">
+                  @if (etu.statut === 'AFFECTE') {
+                    <span class="status-pill-student status-success d-inline-flex align-items-center gap-1">
+                      <span class="dot-indicator"></span>
+                      {{ etu.statutLabel }}
+                    </span>
+                  }
+                  @if (etu.statut === 'ATTENTE') {
+                    <span class="status-pill-student status-blue d-inline-flex align-items-center gap-1">
+                      <span class="dot-indicator"></span>
+                      {{ etu.statutLabel }}
+                    </span>
+                  }
+                  @if (etu.statut === 'AUCUN_VOEU') {
+                    <span class="status-pill-student status-danger d-inline-flex align-items-center gap-1">
+                      <span class="dot-indicator"></span>
+                      {{ etu.statutLabel }}
+                    </span>
+                  }
+                </td>
+
+                <!-- Compte ENT -->
+                <td class="py-3">
+                  <span class="badge-ent-active d-inline-flex align-items-center gap-1">
+                    <i class="bi bi-check-lg"></i>
+                    Actif
+                  </span>
+                </td>
+
+                <!-- Actions -->
+                <td class="pe-4 py-3 text-end">
+                  <div class="d-inline-flex align-items-center gap-1">
+                    <button type="button" class="btn btn-sm btn-action-icon rounded-circle" title="Consulter le dossier">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-action-icon rounded-circle" title="Options">
+                      <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+
+            @if (filteredEtudiants.length === 0) {
+              <tr>
+                <td colspan="6" class="text-center py-5 text-muted">
+                  <i class="bi bi-person-x fs-2 d-block mb-2 opacity-50"></i>
+                  Aucun étudiant ne correspond aux critères de recherche.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pied de tableau & Pagination -->
+      <div class="table-footer bg-white border-top border-light-subtle py-3 px-4 d-flex flex-column flex-sm-row align-items-center justify-content-between gap-2">
+        <span class="text-muted small">
+          Affichage de <strong>1</strong> à <strong>{{ filteredEtudiants.length }}</strong> sur <strong>142</strong> étudiants
+        </span>
+
+        <!-- Pagination -->
+        <nav aria-label="Pagination étudiants">
+          <ul class="pagination pagination-sm mb-0 gap-1">
+            <li class="page-item disabled">
+              <span class="page-link rounded-2 border-0 bg-light text-muted">‹</span>
+            </li>
+            <li class="page-item active">
+              <span class="page-link rounded-2 border-0 bg-dark-green text-white fw-bold">1</span>
+            </li>
+            <li class="page-item">
+              <a class="page-link rounded-2 border-0 bg-light text-dark" href="javascript:void(0)">2</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link rounded-2 border-0 bg-light text-dark" href="javascript:void(0)">3</a>
+            </li>
+            <li class="page-item disabled">
+              <span class="page-link rounded-2 border-0 bg-light text-muted">...</span>
+            </li>
+            <li class="page-item">
+              <a class="page-link rounded-2 border-0 bg-light text-dark" href="javascript:void(0)">21</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link rounded-2 border-0 bg-light text-dark" href="javascript:void(0)">›</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+  </main>
+</div>

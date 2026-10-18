@@ -1,0 +1,293 @@
+<div class="layout-wrapper d-flex flex-column flex-lg-row min-vh-100">
+  <!-- Barre latérale en mode Affectations -->
+  <app-sidebar role="affectations"></app-sidebar>
+
+  <!-- Contenu Principal -->
+  <main class="main-content flex-grow-1 bg-page p-3 p-lg-4 overflow-x-hidden">
+
+    <!-- En-tête global -->
+    <app-header
+      filiere="Master Informatique"
+      module="Projets Tutorés"
+      session="Commission d'Arbitrage 2024"
+      userName="Dr. Alexandre Fontaine">
+    </app-header>
+
+    <!-- Titre et boutons d'action -->
+    <section class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-4">
+      <div>
+        <h1 class="page-title fw-bold mb-1">
+          Suivi des affectations &amp; Capacités d'accueil
+        </h1>
+        <p class="text-secondary small mb-0">
+          Vue d'ensemble des étudiants affectés par sujet, binômes constitués et saturation des capacités d'encadrement pour la promotion M2 2024-2025.
+        </p>
+      </div>
+
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <button type="button" class="btn btn-outline-custom d-inline-flex align-items-center gap-2 px-3 py-2 rounded-3 fw-semibold small">
+          <i class="bi bi-download"></i>
+          <span>Export CSV</span>
+        </button>
+
+        <button type="button" class="btn btn-generate-pv d-inline-flex align-items-center gap-2 px-3 py-2 rounded-3 fw-semibold small text-white">
+          <i class="bi bi-shield-check"></i>
+          <span>Générer PV officiel &amp; Émargement</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 4 Cartes KPIs réutilisables -->
+    <section class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 g-3 mb-4">
+      <div class="col">
+        <app-kpi-card
+          label="TOTAL INSCRITS"
+          [value]="38"
+          footerText="● Actifs"
+          icon="bi-people"
+          iconBgClass="icon-gray">
+        </app-kpi-card>
+      </div>
+
+      <div class="col">
+        <app-kpi-card
+          label="AFFECTÉS FERMES"
+          [value]="28"
+          badgeText="74%"
+          badgeClass="text-success fw-bold"
+          [progress]="74"
+          progressClass="bg-dark-green"
+          icon="bi-check2-circle"
+          iconBgClass="icon-success">
+        </app-kpi-card>
+      </div>
+
+      <div class="col">
+        <app-kpi-card
+          label="SANS AFFECTATION"
+          [value]="10"
+          valueClass="text-warning"
+          badgeText="26% en attente"
+          badgeClass="badge-orange-pill"
+          footerText="14 voeux en cours d'examen"
+          icon="bi-bell"
+          iconBgClass="icon-orange">
+        </app-kpi-card>
+      </div>
+
+      <div class="col">
+        <app-kpi-card
+          label="SUJETS POURVUS"
+          value="11 / 14"
+          badgeText="85%"
+          badgeClass="text-success fw-bold"
+          [progress]="85"
+          progressClass="bg-dark-green"
+          icon="bi-pie-chart"
+          iconBgClass="icon-success">
+        </app-kpi-card>
+      </div>
+    </section>
+
+    <!-- Barre de Recherche, Filtres & Légende Quotas -->
+    <div class="card border-0 shadow-sm rounded-4 p-3 bg-white mb-4">
+      <div class="row g-2 align-items-center">
+        <!-- Champ Recherche -->
+        <div class="col-12 col-md-4 col-lg-4">
+          <div class="input-group search-filter-group rounded-3">
+            <span class="input-group-text bg-light border-0 ps-3 text-muted">
+              <i class="bi bi-search"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control bg-light border-0 py-2 ps-2 shadow-none search-filter-input"
+              placeholder="Rechercher par sujet, encadrant ou..."
+              [(ngModel)]="searchQuery"
+            />
+          </div>
+        </div>
+
+        <!-- Filtre Laboratoires -->
+        <div class="col-6 col-md-3 col-lg-2">
+          <select class="form-select bg-light border-0 py-2 shadow-none select-filter" [(ngModel)]="selectedLab">
+            @for (lab of laboratoires; track lab) {
+              <option [value]="lab">{{ lab }}</option>
+            }
+          </select>
+        </div>
+
+        <!-- Filtre Statuts -->
+        <div class="col-6 col-md-3 col-lg-2">
+          <select class="form-select bg-light border-0 py-2 shadow-none select-filter" [(ngModel)]="selectedStatut">
+            @for (st of statuts; track st) {
+              <option [value]="st">{{ st }}</option>
+            }
+          </select>
+        </div>
+
+        <!-- Légende des Quotas -->
+        <div class="col-12 col-lg-4 text-lg-end mt-2 mt-lg-0">
+          <div class="d-inline-flex align-items-center gap-3 quota-legend small">
+            <span class="text-uppercase text-secondary fw-semibold legend-title">LÉGENDE QUOTAS :</span>
+            <span class="d-inline-flex align-items-center gap-1">
+              <span class="legend-dot dot-green"></span>
+              Disponible
+            </span>
+            <span class="d-inline-flex align-items-center gap-1">
+              <span class="legend-dot dot-orange"></span>
+              1 Place restante
+            </span>
+            <span class="d-inline-flex align-items-center gap-1">
+              <span class="legend-dot dot-gray"></span>
+              Complet
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tableau du Registre synthétique des affectations -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mb-4">
+      
+      <!-- En-tête de section du tableau -->
+      <div class="table-section-header p-3 px-4 d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-2 border-bottom border-light-subtle">
+        <div class="d-flex align-items-center gap-2">
+          <i class="bi bi-list-task text-dark fs-5"></i>
+          <h5 class="fw-bold text-dark mb-0 table-title">Registre synthétique des affectations</h5>
+          <span class="badge badge-recenses ms-1">6 étudiants recensés</span>
+        </div>
+        <small class="text-muted">Vue consolidée pour l'export et validation du jury</small>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table align-middle mb-0 affectations-table">
+          <thead class="table-header-custom">
+            <tr>
+              <th scope="col" class="ps-4">ÉTUDIANT AFFECTÉ</th>
+              <th scope="col">SUJET DE PROJET</th>
+              <th scope="col">ENSEIGNANT RESPONSABLE</th>
+              <th scope="col">STATUT AFFECTATION</th>
+              <th scope="col" class="pe-4">CAPACITÉ SUJET</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (aff of filteredAffectations; track aff.id) {
+              <tr class="aff-row-hover">
+                <!-- Étudiant affecté -->
+                <td class="ps-4 py-3">
+                  @if (!aff.estNonAffecte) {
+                    <div class="d-flex align-items-center gap-2">
+                      <div class="student-avatar-circle {{ aff.avatarClass }} rounded-circle d-flex align-items-center justify-content-center fw-bold">
+                        {{ aff.etudiantInitiales }}
+                      </div>
+                      <span class="fw-bold text-dark student-name">{{ aff.etudiantNom }}</span>
+                    </div>
+                  } @else {
+                    <div class="d-flex align-items-center gap-2 text-secondary fst-italic small">
+                      <i class="bi bi-person-x fs-5"></i>
+                      <span>Non affecté</span>
+                    </div>
+                  }
+                </td>
+
+                <!-- Sujet de projet -->
+                <td class="py-3" style="max-width: 320px;">
+                  <span class="fw-semibold text-dark project-title small">{{ aff.sujetTitre }}</span>
+                </td>
+
+                <!-- Enseignant responsable & Labo -->
+                <td class="py-3">
+                  <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-person text-secondary"></i>
+                    <div>
+                      <div class="fw-bold text-dark small lh-sm">{{ aff.enseignantNom }}</div>
+                      <small class="text-muted text-xs d-block">{{ aff.laboratoire }}</small>
+                    </div>
+                  </div>
+                </td>
+
+                <!-- Statut affectation -->
+                <td class="py-3">
+                  @if (aff.statut === 'VALIDE') {
+                    <span class="status-pill-aff status-valide d-inline-flex align-items-center gap-1">
+                      <span class="dot-indicator"></span>
+                      Validé ferme
+                    </span>
+                  }
+                  @if (aff.statut === 'ARBITRAGE') {
+                    <span class="status-pill-aff status-arbitrage d-inline-flex align-items-center gap-1">
+                      <span class="dot-indicator"></span>
+                      En attente d'arbitrage
+                    </span>
+                  }
+                  @if (aff.statut === 'VACANT') {
+                    <span class="status-pill-aff status-vacant d-inline-flex align-items-center gap-1">
+                      <span class="dot-indicator"></span>
+                      Sujet Vacant
+                    </span>
+                  }
+                </td>
+
+                <!-- Capacité sujet -->
+                <td class="pe-4 py-3">
+                  @if (aff.placesRestantes === 0) {
+                    <span class="capacity-pill capacity-full d-inline-flex align-items-center gap-1">
+                      <span class="capacity-dot dot-gray"></span>
+                      {{ aff.capacitePrise }}/{{ aff.capaciteTotal }} - Complet
+                    </span>
+                  } @else if (aff.placesRestantes === 1) {
+                    <span class="capacity-pill capacity-one d-inline-flex align-items-center gap-1">
+                      <span class="capacity-dot dot-orange"></span>
+                      {{ aff.capacitePrise }}/{{ aff.capaciteTotal }} - 1 place restante
+                    </span>
+                  } @else {
+                    <span class="capacity-pill capacity-available d-inline-flex align-items-center gap-1">
+                      <span class="capacity-dot dot-green"></span>
+                      {{ aff.capacitePrise }}/{{ aff.capaciteTotal }} - {{ aff.placesRestantes }} places disponibles
+                    </span>
+                  }
+                </td>
+              </tr>
+            }
+
+            @if (filteredAffectations.length === 0) {
+              <tr>
+                <td colspan="5" class="text-center py-5 text-muted">
+                  <i class="bi bi-inbox fs-2 d-block mb-2 opacity-50"></i>
+                  Aucune affectation trouvée pour cette recherche.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pied de tableau & Pagination -->
+      <div class="table-footer bg-white border-top border-light-subtle py-3 px-4 d-flex flex-column flex-sm-row align-items-center justify-content-between gap-2">
+        <span class="text-muted small">
+          Affichage de <strong>1</strong> à <strong>{{ filteredAffectations.length }}</strong> sur <strong>38</strong> affectations
+        </span>
+
+        <!-- Pagination -->
+        <nav aria-label="Pagination affectations">
+          <ul class="pagination pagination-sm mb-0 gap-1">
+            <li class="page-item disabled">
+              <span class="page-link rounded-2 border-0 bg-light text-muted">Précédent</span>
+            </li>
+            <li class="page-item active">
+              <span class="page-link rounded-2 border-0 bg-dark-green text-white fw-bold">1</span>
+            </li>
+            <li class="page-item">
+              <a class="page-link rounded-2 border-0 bg-light text-dark" href="javascript:void(0)">2</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link rounded-2 border-0 bg-light text-dark" href="javascript:void(0)">Suivant</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+    </div>
+
+  </main>
+</div>

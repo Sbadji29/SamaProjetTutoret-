@@ -1,0 +1,312 @@
+<!-- Bouton Burger (visible uniquement sur mobile/tablette : d-lg-none) -->
+<header class="d-lg-none d-flex align-items-center justify-content-between p-3 bg-white border-bottom shadow-sm">
+  <div class="d-flex align-items-center gap-2">
+    <div class="logo-box d-flex align-items-center justify-content-center text-white rounded-3">
+      <i class="bi bi-mortarboard-fill"></i>
+    </div>
+    <span class="fw-bold brand-title">UniProjet</span>
+  </div>
+
+  <button
+    type="button"
+    class="btn btn-outline-secondary d-flex align-items-center justify-content-center p-2"
+    (click)="toggleSidebar()"
+    aria-label="Ouvrir le menu">
+    <i class="bi bi-list fs-4"></i>
+  </button>
+</header>
+
+<!-- Backdrop sombre pour mobile lors de l'ouverture -->
+<div
+  class="offcanvas-backdrop fade show d-lg-none"
+  *ngIf="isSidebarOpen"
+  (click)="closeSidebar()">
+</div>
+
+<!-- Sidebar / Offcanvas Responsive -->
+<aside
+  class="offcanvas-lg offcanvas-start sidebar bg-white border-end vh-100 p-3 d-flex flex-column"
+  [class.show]="isSidebarOpen"
+  tabindex="-1">
+
+  <!-- En-tête : Logo, Titre & Croix de fermeture mobile -->
+  <div class="sidebar-header d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom">
+    <div class="d-flex align-items-center gap-2">
+      <div class="logo-box d-flex align-items-center justify-content-center text-white rounded-3">
+        <i class="bi bi-mortarboard-fill fs-5"></i>
+      </div>
+      <div>
+        <h6 class="fw-bold brand-title mb-0 lh-sm">UniProjet</h6>
+        <span class="text-uppercase text-muted fw-semibold logo-subtitle">
+          {{ role === 'etudiant' ? 'PORTAIL UNIVERSITAIRE' : 'PORTAIL ACADÉMIQUE' }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Bouton fermeture croix (mobile uniquement) -->
+    <button
+      type="button"
+      class="btn-close d-lg-none"
+      (click)="closeSidebar()"
+      aria-label="Fermer">
+    </button>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="sidebar-nav flex-grow-1 overflow-y-auto">
+
+    @if (role === 'affectations') {
+      <!-- NAVIGATION COMMISSION D'ARBITRAGE / SUIVI DES AFFECTATIONS -->
+      <div class="mb-3 p-2 bg-light rounded-3 border">
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <i class="bi bi-list-task text-success fs-5"></i>
+          <div class="fw-bold small text-dark lh-sm">Registre synthétique des affectations</div>
+        </div>
+        <div class="d-flex align-items-center justify-content-between mb-1">
+          <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill" style="font-size: 0.68rem;">6 étudiants recensés</span>
+        </div>
+        <small class="text-muted d-block" style="font-size: 0.68rem; line-height: 1.2;">Vue consolidée pour l'export et validation du jury</small>
+      </div>
+
+      <div class="nav-section-title text-uppercase fw-semibold mb-2">
+        Étudiant Affecté
+      </div>
+      <ul class="nav flex-column gap-1 mb-3">
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center gap-2 py-2" href="javascript:void(0)">
+            <span class="badge rounded-circle d-flex align-items-center justify-content-center" style="width: 26px; height: 26px; background-color: #14532d; color: white; font-size: 0.72rem;">AD</span>
+            <span class="small fw-semibold text-dark">Alexandre Dubois</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center gap-2 py-2" href="javascript:void(0)">
+            <span class="badge rounded-circle d-flex align-items-center justify-content-center" style="width: 26px; height: 26px; background-color: #14532d; color: white; font-size: 0.72rem;">CL</span>
+            <span class="small fw-semibold text-dark">Camille Laurent</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center gap-2 py-2" href="javascript:void(0)">
+            <span class="badge rounded-circle d-flex align-items-center justify-content-center" style="width: 26px; height: 26px; background-color: #334155; color: white; font-size: 0.72rem;">JF</span>
+            <span class="small fw-semibold text-dark">Julien Faure</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center gap-2 py-2" href="javascript:void(0)">
+            <span class="badge rounded-circle d-flex align-items-center justify-content-center" style="width: 26px; height: 26px; background-color: #334155; color: white; font-size: 0.72rem;">TR</span>
+            <span class="small fw-semibold text-dark">Thomas Roux</span>
+          </a>
+        </li>
+      </ul>
+
+      <hr class="sidebar-divider my-2">
+      <ul class="nav flex-column gap-1">
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center gap-2 small" routerLink="/admin/tableau-de-bord">
+            <i class="bi bi-arrow-left"></i>
+            <span>Retour Administration</span>
+          </a>
+        </li>
+      </ul>
+
+    } @else if (role === 'admin') {
+      <!-- NAVIGATION ADMINISTRATION -->
+      <div class="nav-section-title text-uppercase fw-semibold mb-2">
+        Espace Administration
+      </div>
+      <ul class="nav flex-column gap-1 mb-3">
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center gap-2"
+             routerLink="/admin/tableau-de-bord"
+             routerLinkActive="active"
+             (click)="closeSidebar()">
+            <i class="bi bi-grid"></i>
+            <span>Tableau de bord</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center gap-2"
+             routerLink="/admin/etudiants"
+             routerLinkActive="active"
+             (click)="closeSidebar()">
+            <i class="bi bi-person"></i>
+            <span>Gestion des étudiants</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center gap-2"
+             routerLink="/admin/enseignants"
+             routerLinkActive="active"
+             (click)="closeSidebar()">
+            <i class="bi bi-people-fill"></i>
+            <span>Gestion des enseignants</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center gap-2"
+             routerLink="/admin/affectations"
+             routerLinkActive="active"
+             (click)="closeSidebar()">
+            <i class="bi bi-card-checklist"></i>
+            <span>Sujets &amp; Affectations</span>
+          </a>
+        </li>
+      </ul>
+
+      <hr class="sidebar-divider my-3">
+
+      <div class="nav-section-title text-uppercase fw-semibold mb-2">
+        Système &amp; Export
+      </div>
+      <ul class="nav flex-column gap-1">
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center gap-2"
+             routerLink="/admin/logs"
+             routerLinkActive="active"
+             (click)="closeSidebar()">
+            <i class="bi bi-shield-check"></i>
+            <span>Logs &amp; Sécurité</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center gap-2"
+             routerLink="/admin/configuration"
+             routerLinkActive="active"
+             (click)="closeSidebar()">
+            <i class="bi bi-gear"></i>
+            <span>Configuration générale</span>
+          </a>
+        </li>
+      </ul>
+
+    } @else {
+      <!-- NAVIGATION ÉTUDIANT -->
+      <div class="nav-section-title text-uppercase fw-semibold mb-2">
+        Espace Étudiant
+      </div>
+      <ul class="nav flex-column gap-1 mb-3">
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center gap-2"
+             routerLink="/tableau-de-bord"
+             routerLinkActive="active"
+             (click)="closeSidebar()">
+            <i class="bi bi-grid"></i>
+            <span>Tableau de bord</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center gap-2"
+             routerLink="/catalogue"
+             routerLinkActive="active"
+             (click)="closeSidebar()">
+            <i class="bi bi-book"></i>
+            <span>Catalogue des sujets</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center gap-2"
+             routerLink="/candidatures"
+             routerLinkActive="active"
+             (click)="closeSidebar()">
+            <i class="bi bi-check2-square"></i>
+            <span>Mes candidatures</span>
+          </a>
+        </li>
+      </ul>
+
+      <hr class="sidebar-divider my-3">
+
+      <div class="nav-section-title text-uppercase fw-semibold mb-2">
+        Encadrement &amp; Jury
+      </div>
+      <ul class="nav flex-column gap-1">
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center gap-2"
+             routerLink="/enseignant"
+             routerLinkActive="active"
+             (click)="closeSidebar()">
+            <i class="bi bi-mortarboard"></i>
+            <span>Tableau Enseignant</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center gap-2"
+             routerLink="/gestion-sujets"
+             routerLinkActive="active"
+             (click)="closeSidebar()">
+            <i class="bi bi-folder"></i>
+            <span>Gestion des sujets</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center gap-2"
+             routerLink="/suivi"
+             routerLinkActive="active"
+             (click)="closeSidebar()">
+            <i class="bi bi-card-checklist"></i>
+            <span>Suivi Responsable</span>
+          </a>
+        </li>
+      </ul>
+    }
+
+  </nav>
+
+  <!-- Pied de page : Profil utilisateur & Déconnexion -->
+  @if (role === 'affectations') {
+    <div class="sidebar-footer p-2 rounded-3 mt-auto">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center gap-2">
+          <div class="admin-avatar-box d-flex align-items-center justify-content-center text-white rounded-3">
+            <i class="bi bi-person-fill fs-5"></i>
+          </div>
+          <div class="lh-1">
+            <div class="fw-bold text-dark user-name" style="font-size: 0.82rem;">Dr. Alexandre Fontaine</div>
+            <small class="text-muted user-role">Resp. M2 Info</small>
+          </div>
+        </div>
+        <button type="button" class="btn btn-link text-secondary p-1 border-0" (click)="onLogout()" title="Se déconnecter">
+          <i class="bi bi-box-arrow-right fs-5"></i>
+        </button>
+      </div>
+    </div>
+  } @else if (role === 'admin') {
+    <div class="sidebar-footer p-2 rounded-3 mt-auto">
+      <div class="d-flex align-items-center justify-content-between mb-1">
+        <div class="d-flex align-items-center gap-2">
+          <div class="admin-avatar-box d-flex align-items-center justify-content-center text-white rounded-3">
+            <i class="bi bi-person-fill fs-5"></i>
+          </div>
+          <div class="lh-1">
+            <div class="fw-bold text-dark user-name">Marc Le Gall</div>
+            <small class="text-muted user-role">Direction Informatique</small>
+          </div>
+        </div>
+        <button type="button" class="btn btn-link text-secondary p-1 border-0" (click)="onLogout()" title="Se déconnecter">
+          <i class="bi bi-box-arrow-right fs-5"></i>
+        </button>
+      </div>
+      <div class="d-flex align-items-center justify-content-between ps-1 pt-1 border-top border-light-subtle">
+        <small class="text-secondary" style="font-size: 0.72rem;">Statut: Connecté</small>
+        <span class="status-dot-active"></span>
+      </div>
+    </div>
+  } @else {
+    <div class="sidebar-footer d-flex align-items-center justify-content-between p-2 rounded-3 mt-auto">
+      <div class="d-flex align-items-center gap-2">
+        <img
+          src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&h=100&fit=crop&crop=faces"
+          alt="Camille Laurent"
+          class="rounded-circle user-avatar"
+        />
+        <div class="lh-1">
+          <div class="fw-bold text-dark user-name">Camille Laurent</div>
+          <small class="text-muted user-role">Étudiant M2 Informatique</small>
+        </div>
+      </div>
+      <button type="button" class="btn btn-link text-secondary p-1 border-0" (click)="onLogout()" title="Se déconnecter">
+        <i class="bi bi-box-arrow-right fs-5"></i>
+      </button>
+    </div>
+  }
+
+</aside>

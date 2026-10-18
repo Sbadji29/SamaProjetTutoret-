@@ -1,0 +1,135 @@
+<div class="layout-wrapper d-flex flex-column flex-lg-row min-vh-100">
+  <!-- Barre latérale en mode Admin -->
+  <app-sidebar role="admin"></app-sidebar>
+
+  <!-- Contenu Principal -->
+  <main class="main-content flex-grow-1 bg-page p-3 p-lg-4 overflow-x-hidden">
+
+    <!-- En-tête global -->
+    <app-header
+      filiere="Administration"
+      module="Gestion globale"
+      session="Session 2024-2025"
+      userName="Marc Le Gall">
+    </app-header>
+
+    <!-- Titre et actions -->
+    <section class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-4">
+      <div>
+        <h1 class="page-title fw-bold mb-1">
+          Tableau de bord Administrateur
+        </h1>
+        <p class="text-secondary small mb-0">
+          Supervision globale de la campagne de projets tutorés 2024-2025, flux d'utilisateurs et état du système.
+        </p>
+      </div>
+
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <button type="button" class="btn btn-outline-custom d-inline-flex align-items-center gap-2 px-3 py-2 rounded-3 fw-semibold small">
+          <i class="bi bi-download"></i>
+          <span>Exporter les données</span>
+          <i class="bi bi-chevron-down small"></i>
+        </button>
+
+        <button type="button" class="btn btn-session-config d-inline-flex align-items-center gap-2 px-3 py-2 rounded-3 fw-semibold small text-white">
+          <i class="bi bi-gear-fill"></i>
+          <span>Configuration de session</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 4 Cartes KPIs réutilisables -->
+    <section class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 g-3 mb-4 pb-2">
+      <div class="col">
+        <app-kpi-card
+          label="Nombre d'étudiants"
+          [value]="142"
+          badgeText="inscrits"
+          badgeClass="text-secondary"
+          icon="bi-mortarboard"
+          iconBgClass="icon-green">
+        </app-kpi-card>
+      </div>
+
+      <div class="col">
+        <app-kpi-card
+          label="Nombre d'enseignants"
+          [value]="24"
+          badgeText="encadrants"
+          badgeClass="text-secondary"
+          icon="bi-person-badge"
+          iconBgClass="icon-blue">
+        </app-kpi-card>
+      </div>
+
+      <div class="col">
+        <app-kpi-card
+          label="Nombre de sujets"
+          [value]="38"
+          badgeText="déposés"
+          badgeClass="text-secondary"
+          icon="bi-journal-text"
+          iconBgClass="icon-teal">
+        </app-kpi-card>
+      </div>
+
+      <div class="col">
+        <app-kpi-card
+          label="Nombre de candidatures"
+          [value]="94"
+          badgeText="vœux enregistrés"
+          badgeClass="text-secondary"
+          icon="bi-check2-square"
+          iconBgClass="icon-purple">
+        </app-kpi-card>
+      </div>
+    </section>
+
+    <!-- Section : Accès rapides & Gestion des référentiels -->
+    <section class="mb-4">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <div>
+          <h2 class="section-title fw-bold mb-0">Accès rapides &amp; Gestion des référentiels</h2>
+          <small class="text-secondary">Raccourcis administratifs directs pour le pilotage de la campagne</small>
+        </div>
+        <div>
+          <span class="badge-modules-count small">4 modules actifs</span>
+        </div>
+      </div>
+
+      <!-- Grille des 4 modules administratifs (2x2) -->
+      <div class="row row-cols-1 row-cols-md-2 g-4">
+        @for (mod of modules; track mod.id) {
+          <div class="col">
+            <div class="card module-card border-0 shadow-sm rounded-4 p-4 h-100 bg-white d-flex flex-column justify-content-between">
+              <div>
+                <!-- Icône du module -->
+                <div class="module-icon-box rounded-3 d-inline-flex align-items-center justify-content-center mb-3" [ngClass]="mod.iconClass">
+                  <i class="bi fs-5" [ngClass]="mod.icon"></i>
+                </div>
+
+                <!-- Titre -->
+                <h5 class="fw-bold text-dark module-title mb-2">{{ mod.title }}</h5>
+
+                <!-- Description -->
+                <p class="text-secondary small module-desc mb-4 lh-base">
+                  {{ mod.description }}
+                </p>
+              </div>
+
+              <!-- Bas de carte : Info + Bouton lien -->
+              <div class="d-flex align-items-center justify-content-between pt-3 border-top border-light-subtle">
+                <span class="text-secondary small info-footer">{{ mod.infoFooter }}</span>
+
+                <a [routerLink]="mod.link" class="btn btn-module-action d-inline-flex align-items-center gap-1 px-3 py-2 rounded-3 small fw-semibold text-decoration-none">
+                  <span>{{ mod.buttonLabel }}</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+
+  </main>
+</div>

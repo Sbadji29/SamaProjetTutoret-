@@ -1,0 +1,136 @@
+<div class="layout-wrapper d-flex flex-column flex-lg-row min-vh-100">
+  <!-- Barre latérale -->
+  <app-sidebar></app-sidebar>
+
+  <!-- Contenu Principal -->
+  <main class="main-content flex-grow-1 bg-page p-3 p-lg-4 overflow-x-hidden">
+
+    <!-- En-tête global réutilisable -->
+    <app-header></app-header>
+
+    <!-- En-tête de bienvenue & Action principale -->
+    <section class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+      <div>
+        <h1 class="welcome-title fw-bold mb-0">Bonjour, {{ userName }} </h1>
+      </div>
+      <div>
+        <a routerLink="/catalogue"
+          class="btn btn-explore d-inline-flex align-items-center gap-2 px-3 py-2 rounded-3 text-white fw-semibold text-decoration-none">
+          <i class="bi bi-search"></i>
+          <span>Explorer les sujets</span>
+          <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+    </section>
+
+    <!-- Grille des KPIs -->
+    <section class="row row-cols-1 row-cols-md-3 g-3 g-lg-4 mb-4 pb-2">
+      <div class="col">
+        <app-kpi-card label="Sujets disponibles" [value]="24" icon="bi-book" iconBgClass="icon-green">
+        </app-kpi-card>
+      </div>
+
+      <div class="col">
+        <app-kpi-card label="Mes candidatures" [value]="3" icon="bi-folder" iconBgClass="icon-blue">
+        </app-kpi-card>
+      </div>
+
+      <div class="col">
+        <app-kpi-card label="Candidatures acceptées" [value]="1" icon="bi-check2-circle" iconBgClass="icon-success"
+          valueClass="text-success">
+        </app-kpi-card>
+      </div>
+    </section>
+
+    <!-- Section 1 : Sujets récemment proposés -->
+    <section class="mb-5">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="d-flex align-items-center gap-2">
+          <span class="section-indicator"></span>
+          <h2 class="section-heading fw-bold mb-0">Sujets récemment proposés</h2>
+        </div>
+        <a routerLink="/catalogue"
+          class="section-link text-decoration-none fw-semibold small d-inline-flex align-items-center gap-1">
+          <span>Voir tout le catalogue</span>
+          <i class="bi bi-chevron-right small"></i>
+        </a>
+      </div>
+
+      <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+        <div class="list-group list-group-flush">
+          @for (item of recentSujets; track item.id) {
+          <div
+            class="list-group-item p-3 p-lg-3 d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-2 border-light-subtle list-item-hover">
+            <div>
+              <h6 class="fw-bold text-dark item-title mb-1">{{ item.titre }}</h6>
+              <small class="text-muted item-sub">{{ item.auteur }}</small>
+            </div>
+            <div class="d-flex align-items-center gap-3 flex-shrink-0 mt-2 mt-sm-0">
+              <span class="badge-capacity" [class.badge-full]="item.estComplet">
+                {{ item.capacite }}
+              </span>
+              <a routerLink="/catalogue"
+                class="detail-link text-decoration-none small fw-semibold d-inline-flex align-items-center gap-1">
+                <span>Voir le détail</span>
+                <i class="bi bi-arrow-up-right"></i>
+              </a>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2 : Mes dernières candidatures -->
+    <section class="mb-4">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="d-flex align-items-center gap-2">
+          <span class="section-indicator"></span>
+          <h2 class="section-heading fw-bold mb-0">Mes dernières candidatures</h2>
+        </div>
+        <a routerLink="/candidatures"
+          class="section-link text-decoration-none fw-semibold small d-inline-flex align-items-center gap-1">
+          <span>Gérer toutes mes candidatures</span>
+          <i class="bi bi-chevron-right small"></i>
+        </a>
+      </div>
+
+      <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+        <div class="list-group list-group-flush">
+          @for (item of recentCandidatures; track item.id) {
+          <div
+            class="list-group-item p-3 p-lg-3 d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-2 border-light-subtle list-item-hover">
+            <div>
+              <h6 class="fw-bold text-dark item-title mb-1">{{ item.titre }}</h6>
+              <small class="text-muted item-sub">{{ item.voeuInfo }}</small>
+            </div>
+            <div class="d-flex align-items-center gap-3 flex-shrink-0 mt-2 mt-sm-0">
+              <span class="text-muted small">{{ item.date }}</span>
+
+              @if (item.statut === 'EN_ATTENTE') {
+              <span class="status-pill status-warning d-inline-flex align-items-center gap-1">
+                <span class="dot-indicator"></span>
+                EN_ATTENTE
+              </span>
+              }
+              @if (item.statut === 'ACCEPTEE') {
+              <span class="status-pill status-success d-inline-flex align-items-center gap-1">
+                <span class="dot-indicator"></span>
+                ACCEPTEE
+              </span>
+              }
+              @if (item.statut === 'REJETEE') {
+              <span class="status-pill status-danger d-inline-flex align-items-center gap-1">
+                <span class="dot-indicator"></span>
+                REJETEE
+              </span>
+              }
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
