@@ -104,3 +104,16 @@
 .user-role {
   font-size: 0.75rem;
 }
+
+.btn-logout {
+  color: #6c757d;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-logout:hover {
+  color: #dc3545 !important;
+  background-color: #fee2e2;
+  border-radius: 6px;
+}
