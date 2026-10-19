@@ -1,14 +1,9 @@
 <div class="layout-wrapper d-flex flex-column flex-lg-row min-vh-100">
-  
   <app-sidebar></app-sidebar>
 
-  
   <main class="main-content flex-grow-1 bg-page p-3 p-lg-4 overflow-x-hidden">
-    
-    
     <app-header></app-header>
 
-    
     <section class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-4">
       <div>
         <h1 class="page-title fw-bold mb-1">
@@ -19,7 +14,6 @@
         </p>
       </div>
 
-      
       <div class="deadline-banner d-inline-flex align-items-center gap-3 px-3 py-2 rounded-3 text-white">
         <div class="deadline-icon-box d-flex align-items-center justify-content-center rounded-2">
           <i class="bi bi-stopwatch fs-5"></i>
@@ -31,7 +25,11 @@
       </div>
     </section>
 
-    
+    <div *ngIf="messageSucces" class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-3 mb-4" role="alert">
+      <i class="bi bi-check-circle-fill me-2"></i> {{ messageSucces }}
+      <button type="button" class="btn-close" (click)="messageSucces = ''"></button>
+    </div>
+
     <div class="search-wrapper mb-4">
       <div class="input-group search-input-group shadow-sm bg-white rounded-3">
         <span class="input-group-text bg-white border-0 ps-3 text-muted">
@@ -40,44 +38,100 @@
         <input
           type="text"
           class="form-control border-0 py-2 ps-2 shadow-none search-input"
-          placeholder="Rechercher un sujet de projet..."
+          placeholder="Rechercher par titre, enseignant, référence..."
           [(ngModel)]="searchQuery"
           aria-label="Rechercher un sujet"
         />
-        @if (searchQuery) {
-          <button
-            class="btn btn-link text-muted border-0 pe-3 text-decoration-none"
-            type="button"
-            (click)="searchQuery = ''"
-            title="Effacer la recherche">
-            <i class="bi bi-x-circle-fill"></i>
-          </button>
-        }
+        <button
+          *ngIf="searchQuery"
+          class="btn btn-link text-muted border-0 pe-3 text-decoration-none"
+          type="button"
+          (click)="searchQuery = ''"
+          title="Effacer la recherche">
+          <i class="bi bi-x-circle-fill"></i>
+        </button>
       </div>
     </div>
 
-    
     <section>
       <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
-        @for (item of filteredSujets; track item.id) {
-          <div class="col">
-            <app-sujet [data]="item"></app-sujet>
-          </div>
-        }
+        <div *ngFor="let item of filteredSujets" class="col">
+          <app-sujet [data]="item" (selectSujet)="ouvrirModalCandidature($event)"></app-sujet>
+        </div>
       </div>
 
-      
-      @if (filteredSujets.length === 0) {
-        <div class="text-center py-5 bg-white rounded-4 shadow-sm my-4">
-          <i class="bi bi-search text-muted fs-1 mb-2 d-block"></i>
-          <h5 class="fw-bold text-dark">Aucun sujet trouvé</h5>
-          <p class="text-secondary small mb-3">Aucun projet ne correspond à votre recherche "{{ searchQuery }}".</p>
-          <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" (click)="searchQuery = ''">
-            Réinitialiser la recherche
+      <div *ngIf="filteredSujets.length === 0" class="text-center py-5 bg-white rounded-4 shadow-sm my-4">
+        <i class="bi bi-search text-muted fs-1 mb-2 d-block"></i>
+        <h5 class="fw-bold text-dark">Aucun sujet trouvé</h5>
+        <p class="text-secondary small mb-3">Aucun projet ne correspond à votre recherche "{{ searchQuery }}".</p>
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" (click)="searchQuery = ''">
+          Réinitialiser la recherche
+        </button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div *ngIf="selectedSujet" class="modal-backdrop fade show"></div>
+<div *ngIf="selectedSujet" class="modal fade show d-block" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-4">
+      <div class="modal-header border-bottom py-3 px-4">
+        <div>
+          <span *ngIf="selectedSujet.reference" class="badge bg-light text-muted border mb-1">{{ selectedSujet.reference }}</span>
+          <h2 class="modal-title h5 fw-bold text-dark mb-0">Déposer ma candidature</h2>
+        </div>
+        <button type="button" class="btn-close" (click)="fermerModal()"></button>
+      </div>
+
+      <form (ngSubmit)="soumettreCandidature()">
+        <div class="modal-body p-4">
+          <div *ngIf="messageErreur" class="alert alert-danger py-2 px-3 small border-0 rounded-3 mb-3" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-1"></i> {{ messageErreur }}
+          </div>
+
+          <div class="p-3 bg-light rounded-3 mb-3 border">
+            <div class="text-muted small mb-1">Sujet sélectionné</div>
+            <div class="fw-bold text-dark mb-1">{{ selectedSujet.titre }}</div>
+            <div class="text-secondary small">
+              <i class="bi bi-person me-1"></i> {{ selectedSujet.encadrant }}
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-semibold text-secondary">Ordre de priorité du vœu <span class="text-danger">*</span></label>
+            <select class="form-select bg-light" [(ngModel)]="formPriorite" name="priorite" required>
+              <option [value]="1">Vœu n°1 (Priorité haute)</option>
+              <option [value]="2">Vœu n°2 (Priorité moyenne)</option>
+              <option [value]="3">Vœu n°3 (Priorité secondaire)</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-semibold text-secondary">Lettre de motivation & Compétences <span class="text-danger">*</span></label>
+            <textarea
+              rows="4"
+              class="form-control bg-light"
+              [(ngModel)]="formMotivation"
+              name="motivation"
+              placeholder="Expliquez en quelques lignes votre intérêt pour ce sujet et les technologies maîtrisées..."
+              required>
+            </textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer border-top bg-light py-3 px-4 d-flex justify-content-between">
+          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="fermerModal()">Annuler</button>
+          <button
+            type="submit"
+            [disabled]="envoiEnCours || !formMotivation"
+            class="btn btn-success btn-sm px-4 d-flex align-items-center gap-2 text-white"
+            style="background-color: #14532d; border-color: #14532d;">
+            <span *ngIf="envoiEnCours" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span>{{ envoiEnCours ? 'Transmission...' : 'Confirmer ma candidature' }}</span>
           </button>
         </div>
-      }
-    </section>
-
-  </main>
+      </form>
+    </div>
+  </div>
 </div>

@@ -1,17 +1,12 @@
 <div class="layout-wrapper d-flex flex-column flex-lg-row min-vh-100">
-  
   <app-sidebar></app-sidebar>
 
-  
   <main class="main-content flex-grow-1 bg-page p-3 p-lg-4 overflow-x-hidden">
-
-    
     <app-header></app-header>
 
-    
     <section class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
       <div>
-        <h1 class="welcome-title fw-bold mb-0">Bonjour, {{ userName }} </h1>
+        <h1 class="welcome-title fw-bold mb-0">Bonjour, {{ userName }}</h1>
       </div>
       <div>
         <a routerLink="/catalogue"
@@ -23,26 +18,24 @@
       </div>
     </section>
 
-    
     <section class="row row-cols-1 row-cols-md-3 g-3 g-lg-4 mb-4 pb-2">
       <div class="col">
-        <app-kpi-card label="Sujets disponibles" [value]="24" icon="bi-book" iconBgClass="icon-green">
+        <app-kpi-card label="Sujets disponibles" [value]="nbSujetsDispos" icon="bi-book" iconBgClass="icon-green">
         </app-kpi-card>
       </div>
 
       <div class="col">
-        <app-kpi-card label="Mes candidatures" [value]="3" icon="bi-folder" iconBgClass="icon-blue">
+        <app-kpi-card label="Mes candidatures" [value]="nbCandidaturesDeposees" icon="bi-folder" iconBgClass="icon-blue">
         </app-kpi-card>
       </div>
 
       <div class="col">
-        <app-kpi-card label="Candidatures acceptées" [value]="1" icon="bi-check2-circle" iconBgClass="icon-success"
+        <app-kpi-card label="Candidatures acceptées" [value]="nbCandidaturesAcceptees" icon="bi-check2-circle" iconBgClass="icon-success"
           valueClass="text-success">
         </app-kpi-card>
       </div>
     </section>
 
-    
     <section class="mb-5">
       <div class="d-flex align-items-center justify-content-between mb-3">
         <div class="d-flex align-items-center gap-2">
@@ -58,8 +51,8 @@
 
       <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
         <div class="list-group list-group-flush">
-          @for (item of recentSujets; track item.id) {
           <div
+            *ngFor="let item of recentSujets"
             class="list-group-item p-3 p-lg-3 d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-2 border-light-subtle list-item-hover">
             <div>
               <h6 class="fw-bold text-dark item-title mb-1">{{ item.titre }}</h6>
@@ -76,12 +69,10 @@
               </a>
             </div>
           </div>
-          }
         </div>
       </div>
     </section>
 
-    
     <section class="mb-4">
       <div class="d-flex align-items-center justify-content-between mb-3">
         <div class="d-flex align-items-center gap-2">
@@ -97,8 +88,8 @@
 
       <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
         <div class="list-group list-group-flush">
-          @for (item of recentCandidatures; track item.id) {
           <div
+            *ngFor="let item of recentCandidatures"
             class="list-group-item p-3 p-lg-3 d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-2 border-light-subtle list-item-hover">
             <div>
               <h6 class="fw-bold text-dark item-title mb-1">{{ item.titre }}</h6>
@@ -107,30 +98,22 @@
             <div class="d-flex align-items-center gap-3 flex-shrink-0 mt-2 mt-sm-0">
               <span class="text-muted small">{{ item.date }}</span>
 
-              @if (item.statut === 'EN_ATTENTE') {
-              <span class="status-pill status-warning d-inline-flex align-items-center gap-1">
+              <span *ngIf="item.statut === 'EN_ATTENTE'" class="status-pill status-warning d-inline-flex align-items-center gap-1">
                 <span class="dot-indicator"></span>
                 EN_ATTENTE
               </span>
-              }
-              @if (item.statut === 'ACCEPTEE') {
-              <span class="status-pill status-success d-inline-flex align-items-center gap-1">
+              <span *ngIf="item.statut === 'ACCEPTEE'" class="status-pill status-success d-inline-flex align-items-center gap-1">
                 <span class="dot-indicator"></span>
                 ACCEPTEE
               </span>
-              }
-              @if (item.statut === 'REJETEE') {
-              <span class="status-pill status-danger d-inline-flex align-items-center gap-1">
+              <span *ngIf="item.statut === 'REJETEE'" class="status-pill status-danger d-inline-flex align-items-center gap-1">
                 <span class="dot-indicator"></span>
                 REJETEE
               </span>
-              }
             </div>
           </div>
-          }
         </div>
       </div>
     </section>
-
   </main>
 </div>
