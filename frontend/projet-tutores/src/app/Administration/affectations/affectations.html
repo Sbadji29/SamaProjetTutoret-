@@ -42,7 +42,7 @@
       <div class="col">
         <app-kpi-card
           label="TOTAL INSCRITS"
-          [value]="38"
+          [value]="totalInscrits"
           footerText="● Actifs"
           icon="bi-people"
           iconBgClass="icon-gray">
@@ -52,10 +52,10 @@
       <div class="col">
         <app-kpi-card
           label="AFFECTÉS FERMES"
-          [value]="28"
-          badgeText="74%"
+          [value]="affectesFermes"
+          [badgeText]="tauxPourvus + '%'"
           badgeClass="text-success fw-bold"
-          [progress]="74"
+          [progress]="tauxPourvus"
           progressClass="bg-dark-green"
           icon="bi-check2-circle"
           iconBgClass="icon-success">
@@ -65,11 +65,11 @@
       <div class="col">
         <app-kpi-card
           label="SANS AFFECTATION"
-          [value]="10"
+          [value]="sansAffectation"
           valueClass="text-warning"
-          badgeText="26% en attente"
+          badgeText="En attente"
           badgeClass="badge-orange-pill"
-          footerText="14 voeux en cours d'examen"
+          footerText="Vœux en cours"
           icon="bi-bell"
           iconBgClass="icon-orange">
         </app-kpi-card>
@@ -78,10 +78,10 @@
       <div class="col">
         <app-kpi-card
           label="SUJETS POURVUS"
-          value="11 / 14"
-          badgeText="85%"
+          [value]="sujetsPourvus"
+          [badgeText]="tauxSujets + '%'"
           badgeClass="text-success fw-bold"
-          [progress]="85"
+          [progress]="tauxSujets"
           progressClass="bg-dark-green"
           icon="bi-pie-chart"
           iconBgClass="icon-success">
@@ -154,7 +154,7 @@
         <div class="d-flex align-items-center gap-2">
           <i class="bi bi-list-task text-dark fs-5"></i>
           <h5 class="fw-bold text-dark mb-0 table-title">Registre synthétique des affectations</h5>
-          <span class="badge badge-recenses ms-1">6 étudiants recensés</span>
+          <span class="badge badge-recenses ms-1">{{ affectations.length }} affectations recensées</span>
         </div>
         <small class="text-muted">Vue consolidée pour l'export et validation du jury</small>
       </div>
@@ -265,7 +265,7 @@
       
       <div class="table-footer bg-white border-top border-light-subtle py-3 px-4 d-flex flex-column flex-sm-row align-items-center justify-content-between gap-2">
         <span class="text-muted small">
-          Affichage de <strong>1</strong> à <strong>{{ filteredAffectations.length }}</strong> sur <strong>38</strong> affectations
+          Affichage de <strong>1</strong> à <strong>{{ filteredAffectations.length }}</strong> sur <strong>{{ affectations.length }}</strong> affectations
         </span>
 
         

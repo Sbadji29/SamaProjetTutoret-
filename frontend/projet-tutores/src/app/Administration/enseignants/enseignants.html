@@ -48,10 +48,10 @@
       <div class="col">
         <app-kpi-card
           label="Total Enseignants"
-          [value]="24"
+          [value]="totalEnseignants"
           badgeText="100% actifs"
           badgeClass="text-success fw-semibold"
-          footerText="4 départements universitaires"
+          footerText="Départements universitaires"
           icon="bi-people"
           iconBgClass="icon-gray">
         </app-kpi-card>
@@ -60,10 +60,10 @@
       <div class="col">
         <app-kpi-card
           label="Sujets Déposés"
-          [value]="38"
-          badgeText="+6 vs 2023"
+          [value]="totalSujets"
+          badgeText="Session active"
           badgeClass="text-success fw-bold"
-          footerText="Capacité cumulée: 92 places"
+          [footerText]="'Capacité cumulée: ' + capaciteCumulee + ' places'"
           icon="bi-journal-text"
           iconBgClass="icon-gray">
         </app-kpi-card>
@@ -72,10 +72,10 @@
       <div class="col">
         <app-kpi-card
           label="Capacité globale mobilisée"
-          value="76%"
-          badgeText="68 / 89 assignés"
+          [value]="tauxMobilisation"
+          [badgeText]="totalAssignes + ' / ' + capaciteCumulee + ' assignés'"
           badgeClass="text-secondary"
-          [progress]="76"
+          [progress]="progressMobilisation"
           progressClass="bg-dark-green"
           icon="bi-arrow-repeat"
           iconBgClass="icon-gray">
@@ -85,10 +85,10 @@
       <div class="col">
         <app-kpi-card
           label="En attente de dépôt"
-          [value]="4"
-          badgeText="relances programmées"
+          [value]="enAttenteDepot"
+          badgeText="relances"
           badgeClass="text-secondary"
-          footerText="Date limite : 15 Novembre"
+          footerText="À contacter"
           icon="bi-calendar-check"
           iconBgClass="icon-orange">
         </app-kpi-card>
@@ -222,8 +222,8 @@
                     <button type="button" class="btn btn-sm btn-action-icon rounded-circle" title="Contacter">
                       <i class="bi bi-envelope"></i>
                     </button>
-                    <button type="button" class="btn btn-sm btn-action-icon rounded-circle" title="Plus d'actions">
-                      <i class="bi bi-three-dots-vertical"></i>
+                    <button type="button" (click)="supprimer(ens.id)" class="btn btn-sm btn-action-icon rounded-circle text-danger" title="Supprimer">
+                      <i class="bi bi-trash"></i>
                     </button>
                   </div>
                 </td>
@@ -242,10 +242,9 @@
         </table>
       </div>
 
-      
       <div class="table-footer bg-white border-top border-light-subtle py-3 px-4 d-flex flex-column flex-sm-row align-items-center justify-content-between gap-2">
         <span class="text-muted small">
-          Affichage de <strong>1</strong> à <strong>{{ filteredEnseignants.length }}</strong> sur <strong>24</strong> enseignants
+          Affichage de <strong>1</strong> à <strong>{{ filteredEnseignants.length }}</strong> sur <strong>{{ totalEnseignants }}</strong> enseignants
         </span>
 
         

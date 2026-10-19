@@ -42,7 +42,7 @@
       <div class="col">
         <app-kpi-card
           label="Total inscrits"
-          [value]="142"
+          [value]="totalInscrits"
           badgeText="✓ 100% enregistrés"
           badgeClass="text-success fw-semibold"
           icon="bi-people"
@@ -53,8 +53,8 @@
       <div class="col">
         <app-kpi-card
           label="Affectations validées"
-          [value]="98"
-          badgeText="69% du total des inscrits"
+          [value]="affectationsValidees"
+          badgeText="Confirmées"
           badgeClass="text-secondary"
           icon="bi-check2-square"
           iconBgClass="icon-success">
@@ -64,8 +64,8 @@
       <div class="col">
         <app-kpi-card
           label="Vœux en attente"
-          [value]="36"
-          badgeText="En cours de revue tuteur"
+          [value]="voeuxEnAttente"
+          badgeText="En cours de revue"
           badgeClass="text-secondary"
           icon="bi-hourglass-split"
           iconBgClass="icon-purple">
@@ -75,9 +75,9 @@
       <div class="col">
         <app-kpi-card
           label="Sans candidature"
-          [value]="8"
+          [value]="sansCandidature"
           valueClass="text-danger"
-          badgeText="⚠ Relance requise"
+          badgeText="À relancer"
           badgeClass="text-danger fw-semibold"
           icon="bi-person-exclamation"
           iconBgClass="icon-red">
@@ -125,7 +125,7 @@
         <div class="col-12 col-lg-2 text-lg-end mt-2 mt-lg-0">
           <span class="badge-total-students d-inline-flex align-items-center gap-2 py-2 px-3 rounded-3 small">
             <i class="bi bi-mortarboard text-secondary"></i>
-            <span><strong>142</strong> étudiants répertoriés</span>
+            <span><strong>{{ totalInscrits }}</strong> étudiants répertoriés</span>
           </span>
         </div>
       </div>
@@ -207,8 +207,8 @@
                     <button type="button" class="btn btn-sm btn-action-icon rounded-circle" title="Consulter le dossier">
                       <i class="bi bi-eye"></i>
                     </button>
-                    <button type="button" class="btn btn-sm btn-action-icon rounded-circle" title="Options">
-                      <i class="bi bi-three-dots-vertical"></i>
+                    <button type="button" (click)="supprimer(etu.id)" class="btn btn-sm btn-action-icon rounded-circle text-danger" title="Supprimer">
+                      <i class="bi bi-trash"></i>
                     </button>
                   </div>
                 </td>
@@ -227,10 +227,9 @@
         </table>
       </div>
 
-      
       <div class="table-footer bg-white border-top border-light-subtle py-3 px-4 d-flex flex-column flex-sm-row align-items-center justify-content-between gap-2">
         <span class="text-muted small">
-          Affichage de <strong>1</strong> à <strong>{{ filteredEtudiants.length }}</strong> sur <strong>142</strong> étudiants
+          Affichage de <strong>1</strong> à <strong>{{ filteredEtudiants.length }}</strong> sur <strong>{{ totalInscrits }}</strong> étudiants
         </span>
 
         
