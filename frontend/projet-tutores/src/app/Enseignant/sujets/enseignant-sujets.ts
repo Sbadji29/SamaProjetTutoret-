@@ -24,36 +24,24 @@ interface SujetItem {
   styleUrl: './enseignant-sujets.css'
 })
 export class EnseignantSujets implements OnInit {
+  userName = 'Pr. Moussa Diop';
+  userRole = 'Enseignant-Chercheur (UFR SAT)';
+  userInitials = 'MD';
+
   sujets: SujetItem[] = [
     {
       numericId: 1,
-      id: 'SUJ-2024-042',
-      titre: 'Plateforme de télé-médecine sécurisée sur Kubernetes',
-      description: "L'objectif principal est de concevoir et déployer une infrastructure de santé interopérable (norme HL7/FHIR) avec isolation stricte des pods multi-tenants sous Kubernetes. Les étudiants devront implémenter une chaîne d'authentification Zero-Trust (mTLS + OpenID Connect) et auditer les performances en latence sous contraintes de chiffrement au repos.",
+      id: 'SUJ-UGB-01',
+      titre: "Conception d'une plateforme numérique de suivi des activités agricoles au Sénégal",
+      description: "Développement d'une solution informatique permettant de collecter, centraliser et analyser les données agricoles pour faciliter le suivi des exploitations et la prise de décision.",
       capacite: 3,
       disponible: true
     },
     {
       numericId: 2,
-      id: 'SUJ-2024-048',
-      titre: "Détection d'anomalies réseau via Transformer & eBPF",
-      description: "Extraction de métriques réseau en temps réel via des programmes eBPF dans le noyau Linux et inférence légère avec des transformers pour la détection d'intrusions.",
-      capacite: 2,
-      disponible: true
-    },
-    {
-      numericId: 3,
-      id: 'SUJ-2024-039',
-      titre: 'Optimisation de requêtes SQL vectorielles sous DuckDB',
-      description: "Benchmark et amélioration des algorithmes d'indexation HNSW intégrés aux moteurs de bases de données analytiques embarquées.",
-      capacite: 3,
-      disponible: false
-    },
-    {
-      numericId: 4,
-      id: 'SUJ-2024-051',
-      titre: 'Audit automatisé de conformité RGPD en architecture micro-services',
-      description: "Analyse statique et dynamique des flux d'informations personnelles à travers des traces OpenTelemetry pour détecter les fuites non conformes.",
+      id: 'SUJ-UGB-02',
+      titre: "Détection d'anomalies réseau et sécurisation des infrastructures informatiques universitaires",
+      description: "Étude et mise en œuvre d'une solution de surveillance du trafic réseau visant à détecter les comportements anormaux et à renforcer la sécurité des infrastructures informatiques de l'UGB.",
       capacite: 2,
       disponible: true
     }
@@ -71,14 +59,17 @@ export class EnseignantSujets implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const user = this.authService.currentUser();
+    if (user) {
+      this.userName = user.prenom && user.nom ? `Pr. ${user.prenom} ${user.nom}` : user.nom || 'Pr. Moussa Diop';
+      const parts = this.userName.replace(/^Pr\.\s*/, '').trim().split(' ');
+      this.userInitials = parts.map(p => p.charAt(0)).join('').slice(0, 2).toUpperCase() || 'MD';
+    }
     this.chargerSujets();
   }
 
   chargerSujets(): void {
-    const user = this.authService.currentUser();
-    const enseignantId = user?.profilId || 1;
-
-    this.sujetService.getParEnseignant(enseignantId).subscribe({
+    this.sujetService.getTous().subscribe({
       next: (apiSujets) => {
         if (apiSujets && apiSujets.length > 0) {
           this.sujets = apiSujets.map((s) => ({

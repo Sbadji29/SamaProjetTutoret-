@@ -275,13 +275,13 @@ La classe `SecuriteUtilitaire` implémente le standard cryptographique **PBKDF2*
 ### 5.2 Comptes de Démonstration Pré-configurés (UGB)
 *Mot de passe universel : `Passer123!`*
 
-| Rôle | Nom & Prénom | Email Académique UGB |
-| :--- | :--- | :--- |
-| **ETUDIANT** | Badji Alioune Badara | `badji.alioune-badara@ugb.edu.sn` |
-| **ETUDIANT** | Fall Fatou | `fall.fatou@ugb.edu.sn` |
-| **ENSEIGNANT** | Dr. Diop Moussa | `diop.moussa@ugb.edu.sn` |
-| **RESPONSABLE** | Dr. Sow Aminata | `sow.aminata@ugb.edu.sn` |
-| **ADMIN** | Administrateur UGB | `admin.ugb@ugb.edu.sn` |
+| Rôle | Nom & Prénom | Email Académique UGB | Matricule / Profil |
+| :--- | :--- | :--- | :--- |
+| **ADMIN** | Ndiaye Cheikh Tidiane | `cheikh-tidiane.ndiaye@ugb.edu.sn` | Direction Informatique / ENT |
+| **RESPONSABLE** | Dr. Sow Aminata | `aminata.sow@ugb.edu.sn` | Responsable Pédagogique M2 GDIL |
+| **ENSEIGNANT** | Pr. Diop Moussa | `moussa.diop@ugb.edu.sn` | ENS-UGB-042 - Informatique UFR SAT |
+| **ETUDIANT** | Touré Mamadou Alpha | `toure.mamadou-alpha@ugb.edu.sn` | P300001 - M2 Génie Informatique |
+| **ETUDIANT** | Ndiaye Fatou Marie | `ndiaye.fatou-marie@ugb.edu.sn` | P310045 - M2 Génie Informatique |
 
 ---
 

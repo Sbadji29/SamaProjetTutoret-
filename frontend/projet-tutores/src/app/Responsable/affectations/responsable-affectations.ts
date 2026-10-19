@@ -41,47 +41,23 @@ export class ResponsableAffectations implements OnInit {
 
   sujets: SujetAffectationItem[] = [
     {
-      id: 'SUJ-2024-042',
-      titre: 'Plateforme de télé-médecine sécurisée sur Kubernetes',
-      encadrant: 'Pr. Marc Bernard',
+      id: 'SUJ-UGB-01',
+      titre: "Conception d'une plateforme numérique de suivi des activités agricoles au Sénégal",
+      encadrant: 'Pr. Moussa Diop',
       capacite: 3,
-      assignes: 2,
+      assignes: 1,
       etudiants: [
-        { nom: 'Sarah Lemercier', date: '24/10/2024', voeu: 'Vœu 1' },
-        { nom: 'Thomas Roux', date: '22/10/2024', voeu: 'Vœu 2' }
+        { nom: 'Mamadou Alpha Touré', date: '24/10/2026', voeu: 'Vœu 1' }
       ]
     },
     {
-      id: 'SUJ-2024-048',
-      titre: "Détection d'anomalies réseau via Transformer & eBPF",
-      encadrant: 'Pr. Marc Bernard',
-      capacite: 2,
-      assignes: 2,
-      etudiants: [
-        { nom: 'Alexandre Dubois', date: '23/10/2024', voeu: 'Vœu 1' },
-        { nom: 'Lina Benali', date: '21/10/2024', voeu: 'Vœu 1' }
-      ]
-    },
-    {
-      id: 'SUJ-2024-039',
-      titre: 'Optimisation de requêtes SQL vectorielles sous DuckDB',
-      encadrant: 'Dr. Claire Vasseur',
-      capacite: 3,
-      assignes: 3,
-      etudiants: [
-        { nom: 'Julien Faure', date: '19/10/2024', voeu: 'Vœu 1' },
-        { nom: 'Maxime Bertrand', date: '18/10/2024', voeu: 'Vœu 2' },
-        { nom: 'Chloé Martin', date: '17/10/2024', voeu: 'Vœu 1' }
-      ]
-    },
-    {
-      id: 'SUJ-2024-051',
-      titre: 'Audit automatisé de conformité RGPD en architecture micro-services',
-      encadrant: 'Dr. Stéphane Valérie',
+      id: 'SUJ-UGB-02',
+      titre: "Détection d'anomalies réseau et sécurisation des infrastructures informatiques universitaires",
+      encadrant: 'Pr. Moussa Diop',
       capacite: 2,
       assignes: 1,
       etudiants: [
-        { nom: 'Lucas Moreau', date: '20/10/2024', voeu: 'Vœu 2' }
+        { nom: 'Fatou Marie Ndiaye', date: '23/10/2026', voeu: 'Vœu 1' }
       ]
     }
   ];

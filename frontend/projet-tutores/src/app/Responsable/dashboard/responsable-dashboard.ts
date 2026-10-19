@@ -37,38 +37,26 @@ export class ResponsableDashboard implements OnInit {
   candidaturesPrioritaires: CandidaturePrioritaireItem[] = [
     {
       id: 1,
-      initials: 'SL',
-      nom: 'Sarah Lemercier',
-      parcours: 'M2 Génie Logiciel',
-      projet: 'Plateforme de télé-médecine sécurisée',
+      initials: 'MT',
+      nom: 'Mamadou Alpha Touré',
+      parcours: 'Master Génie Informatique (M2 GDIL)',
+      projet: "Plateforme numérique de suivi agricole",
       voeu: 'Vœu n°1',
       avisType: 'favorable',
       avisTexte: 'Favorable',
-      avisEncadrant: 'Pr. M. Bernard',
+      avisEncadrant: 'Pr. M. Diop',
       statut: 'EN_ATTENTE'
     },
     {
       id: 2,
-      initials: 'LM',
-      nom: 'Lucas Moreau',
-      parcours: 'M2 Génie Logiciel',
-      projet: 'Plateforme de télé-médecine',
-      voeu: 'Vœu n°2 • Conflit cap.',
-      avisType: 'reserve',
-      avisTexte: 'Réservé',
-      avisEncadrant: 'Pr. M. Bernard',
-      statut: 'EN_ATTENTE'
-    },
-    {
-      id: 3,
-      initials: 'TR',
-      nom: 'Thomas Roux',
-      parcours: 'M2 Sécurité & Syst.',
-      projet: 'Moteur de Traitement de Flux Évén.',
+      initials: 'FN',
+      nom: 'Fatou Marie Ndiaye',
+      parcours: 'Master Génie Informatique (M2 GDIL)',
+      projet: "Détection d'anomalies réseau UGB",
       voeu: 'Vœu n°1',
       avisType: 'favorable',
       avisTexte: 'Favorable',
-      avisEncadrant: 'Dr. S. Valérie',
+      avisEncadrant: 'Pr. M. Diop',
       statut: 'EN_ATTENTE'
     }
   ];

@@ -3,11 +3,11 @@
 
   <div class="flex-grow-1 d-flex flex-column" style="min-width: 0;">
     <app-header
-      [breadcrumbs]="['Master Informatique', 'Projets Tutorés', 'Session 2024-2025']"
+      [breadcrumbs]="['Master Informatique', 'Projets Tutorés', 'Session 2026-2027']"
       [notificationCount]="4"
-      userName="Pr. Marc Bernard"
-      userRole="Enseignant-Chercheur"
-      userInitials="MB">
+      [userName]="userName"
+      [userRole]="userRole"
+      [userInitials]="userInitials">
     </app-header>
 
     <main class="p-4 flex-grow-1">
@@ -32,7 +32,7 @@
       <div class="card border-0 shadow-sm rounded-3 mb-4">
         <div class="card-header bg-white py-3 px-4 border-bottom">
           <h2 class="h6 fw-bold text-dark mb-1">Liste de vos propositions académiques</h2>
-          <p class="text-muted mb-0 small">Sujets déposés sous l'encadrement du Pr. Marc Bernard</p>
+          <p class="text-muted mb-0 small">Sujets déposés sous l'encadrement de {{ userName }}</p>
         </div>
 
         <div class="table-responsive">

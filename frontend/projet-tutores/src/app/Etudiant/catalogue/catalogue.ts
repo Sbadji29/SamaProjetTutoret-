@@ -30,41 +30,28 @@ export class Catalogue implements OnInit {
   sujets: SujetItem[] = [
     {
       id: 1,
-      reference: 'SUJ-2024-042',
-      titre: 'Plateforme de télé-médecine sécurisée sur Kubernetes',
-      description: "Conception et déploiement d'une architecture multi-tenant conforme RGPD/HDS pour flux vidéo et dossier patient sécurisé.",
-      encadrant: 'Pr. Marc Bernard',
-      laboratoire: 'Laboratoire LIRIS',
-      date: '10 Oct 2024',
+      reference: 'SUJ-UGB-01',
+      titre: "Conception d'une plateforme numérique de suivi des activités agricoles au Sénégal",
+      description: "Développement d'une solution informatique permettant de collecter, centraliser et analyser les données agricoles pour faciliter le suivi des exploitations et la prise de décision.",
+      encadrant: 'Pr. Moussa Diop',
+      laboratoire: "Laboratoire d'informatique - UFR SAT",
+      date: 'Session 2026-2027',
       statut: 'Disponible',
-      placesOccupees: 1,
+      placesOccupees: 0,
       placesTotales: 3,
       sessionId: 1
     },
     {
       id: 2,
-      reference: 'SUJ-2024-048',
-      titre: "Détection d'anomalies réseau via Transformer & eBPF",
-      description: 'Extraction de métriques réseau en temps réel via des programmes eBPF dans le noyau Linux et détection par transformers.',
-      encadrant: 'Pr. Marc Bernard',
-      laboratoire: 'Laboratoire LIRIS',
-      date: '08 Oct 2024',
+      reference: 'SUJ-UGB-02',
+      titre: "Détection d'anomalies réseau et sécurisation des infrastructures informatiques universitaires",
+      description: "Étude et mise en œuvre d'une solution de surveillance du trafic réseau visant à détecter les comportements anormaux et à renforcer la sécurité des infrastructures informatiques de l'UGB.",
+      encadrant: 'Pr. Moussa Diop',
+      laboratoire: "Laboratoire d'informatique - UFR SAT",
+      date: 'Session 2026-2027',
       statut: 'Disponible',
       placesOccupees: 0,
       placesTotales: 2,
-      sessionId: 1
-    },
-    {
-      id: 3,
-      reference: 'SUJ-2024-039',
-      titre: 'Optimisation de requêtes SQL vectorielles sous DuckDB',
-      description: 'Benchmark et amélioration des algorithmes d\'indexation HNSW intégrés aux moteurs de bases de données embarquées.',
-      encadrant: 'Dr. Claire Vasseur',
-      laboratoire: 'Laboratoire CITI',
-      date: '03 Oct 2024',
-      statut: 'Disponible',
-      placesOccupees: 1,
-      placesTotales: 3,
       sessionId: 1
     }
   ];
@@ -81,7 +68,7 @@ export class Catalogue implements OnInit {
 
   chargerSujets(): void {
     this.chargement = true;
-    this.sujetService.getDisponibles().subscribe({
+    this.sujetService.getTous().subscribe({
       next: (apiSujets) => {
         this.chargement = false;
         if (apiSujets && apiSujets.length > 0) {
@@ -90,9 +77,9 @@ export class Catalogue implements OnInit {
             reference: s.reference,
             titre: s.titre,
             description: s.description || '',
-            encadrant: s.enseignant ? `${s.enseignant.utilisateur?.prenom || ''} ${s.enseignant.utilisateur?.nom || ''}`.trim() : 'Enseignant',
-            laboratoire: s.enseignant?.laboratoire || s.enseignant?.departement || 'Université',
-            date: 'Session 2024-2025',
+            encadrant: s.enseignant?.utilisateur ? `Pr. ${s.enseignant.utilisateur.prenom} ${s.enseignant.utilisateur.nom}`.trim() : 'Pr. Moussa Diop',
+            laboratoire: s.enseignant?.laboratoire || s.enseignant?.departement || "Laboratoire d'informatique - UFR SAT",
+            date: s.sessionUniversitaire?.libelle || 'Session 2026-2027',
             statut: s.disponible ? 'Disponible' : 'Complet',
             placesOccupees: 0,
             placesTotales: s.capaciteMax || 3,

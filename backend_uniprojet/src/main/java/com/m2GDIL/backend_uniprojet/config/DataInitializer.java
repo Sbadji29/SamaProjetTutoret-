@@ -15,6 +15,7 @@ import com.m2GDIL.backend_uniprojet.sujet.SujetRepository;
 import com.m2GDIL.backend_uniprojet.utilisateur.Utilisateur;
 import com.m2GDIL.backend_uniprojet.utilisateur.UtilisateurRepository;
 import com.m2GDIL.backend_uniprojet.utilisateur.UtilisateurService;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -42,6 +43,7 @@ public class DataInitializer implements CommandLineRunner {
             EnseignantRepository enseignantRepository,
             EtudiantRepository etudiantRepository,
             SujetRepository sujetRepository) {
+
         this.sessionRepository = sessionRepository;
         this.utilisateurRepository = utilisateurRepository;
         this.utilisateurService = utilisateurService;
@@ -54,103 +56,195 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+
         SessionUniversitaire session;
+
         var sessionsActives = sessionRepository.findByActive(true);
+
         if (!sessionsActives.isEmpty()) {
             session = sessionsActives.get(0);
+
         } else if (sessionRepository.count() > 0) {
             session = sessionRepository.findAll().get(0);
+
         } else {
             SessionUniversitaire nouvelleSession = new SessionUniversitaire();
-            nouvelleSession.setLibelle("Session 2025-2026");
-            nouvelleSession.setDateDebut(LocalDate.of(2025, 9, 1));
-            nouvelleSession.setDateFin(LocalDate.of(2026, 6, 30));
+
+            nouvelleSession.setLibelle("Session 2026-2027");
+            nouvelleSession.setDateDebut(LocalDate.of(2026, 9, 1));
+            nouvelleSession.setDateFin(LocalDate.of(2027, 6, 30));
             nouvelleSession.setActive(true);
-            nouvelleSession.setDateClotureVoeux(LocalDateTime.now().plusMonths(2));
-            nouvelleSession.setDateLimiteEvaluation(LocalDateTime.now().plusMonths(3));
+            nouvelleSession.setDateClotureVoeux(
+                    LocalDateTime.now().plusMonths(2));
+            nouvelleSession.setDateLimiteEvaluation(
+                    LocalDateTime.now().plusMonths(3));
+
             session = sessionRepository.save(nouvelleSession);
         }
 
-        String adminEmail = "admin.ugb@ugb.edu.sn";
+        String adminEmail = "cheikh-tidiane.ndiaye@ugb.edu.sn";
+
         if (!utilisateurRepository.existsByEmailIgnoreCase(adminEmail)) {
-            Utilisateur uAdmin = new Utilisateur("Ndiaye", "Cheikh Tidiane", adminEmail, "Passer123!");
+
+            Utilisateur uAdmin = new Utilisateur(
+                    "Ndiaye",
+                    "Cheikh Tidiane",
+                    adminEmail,
+                    "Passer123!"
+            );
+
             uAdmin = utilisateurService.creer(uAdmin);
+
             Administrateur admin = new Administrateur();
             admin.setUtilisateur(uAdmin);
+
             adminRepository.save(admin);
         }
 
-        String respEmail = "sow.aminata@ugb.edu.sn";
+        String respEmail = "aminata.sow@ugb.edu.sn";
+
         if (!utilisateurRepository.existsByEmailIgnoreCase(respEmail)) {
-            Utilisateur uResp = new Utilisateur("Sow", "Aminata", respEmail, "Passer123!");
+
+            Utilisateur uResp = new Utilisateur(
+                    "Sow",
+                    "Aminata",
+                    respEmail,
+                    "Passer123!"
+            );
+
             uResp = utilisateurService.creer(uResp);
+
             ResponsablePedagogique resp = new ResponsablePedagogique();
             resp.setUtilisateur(uResp);
+
             responsableRepository.save(resp);
         }
 
-        String ensEmail = "diop.moussa@ugb.edu.sn";
+        String ensEmail = "moussa.diop@ugb.edu.sn";
+
         Enseignant ens;
+
         if (!utilisateurRepository.existsByEmailIgnoreCase(ensEmail)) {
-            Utilisateur uEns = new Utilisateur("Diop", "Moussa", ensEmail, "Passer123!");
+
+            Utilisateur uEns = new Utilisateur(
+                    "Diop",
+                    "Moussa",
+                    ensEmail,
+                    "Passer123!"
+            );
+
             uEns = utilisateurService.creer(uEns);
+
             ens = new Enseignant();
+
             ens.setMatricule("ENS-UGB-042");
-            ens.setDepartement("Informatique (UFR SAT)");
-            ens.setSpecialite("Systèmes distribués & Cloud");
-            ens.setLaboratoire("LANI (Labo Analyse Numérique & Info)");
+            ens.setDepartement("Informatique - UFR SAT");
+            ens.setSpecialite("Systèmes distribués et Cloud");
+            ens.setLaboratoire("Laboratoire d'informatique");
             ens.setQuotaEncadrement(6);
             ens.setUtilisateur(uEns);
+
             ens = enseignantRepository.save(ens);
+
         } else {
-            Utilisateur u = utilisateurRepository.findByEmailIgnoreCase(ensEmail).orElseThrow();
-            ens = enseignantRepository.findByUtilisateurId(u.getId()).orElse(null);
+
+            Utilisateur u = utilisateurRepository
+                    .findByEmailIgnoreCase(ensEmail)
+                    .orElseThrow();
+
+            ens = enseignantRepository
+                    .findByUtilisateurId(u.getId())
+                    .orElse(null);
         }
 
-        String etuEmail = "badji.alioune-badara@ugb.edu.sn";
+        String etuEmail = "toure.mamadou-alpha@ugb.edu.sn";
+
         if (!utilisateurRepository.existsByEmailIgnoreCase(etuEmail)) {
-            Utilisateur uEtu = new Utilisateur("Badji", "Alioune Badara", etuEmail, "Passer123!");
+
+            Utilisateur uEtu = new Utilisateur(
+                    "Touré",
+                    "Mamadou Alpha",
+                    etuEmail,
+                    "Passer123!"
+            );
+
             uEtu = utilisateurService.creer(uEtu);
+
             Etudiant etu = new Etudiant();
-            etu.setNumeroEtudiant("P29001");
+
+            etu.setNumeroEtudiant("P300001");
             etu.setFiliere("Master Génie Informatique (M2 GDIL)");
             etu.setNiveau("M2");
             etu.setUtilisateur(uEtu);
+
             etudiantRepository.save(etu);
         }
 
-        String etuEmail2 = "fall.fatou@ugb.edu.sn";
+        String etuEmail2 = "ndiaye.fatou-marie@ugb.edu.sn";
+
         if (!utilisateurRepository.existsByEmailIgnoreCase(etuEmail2)) {
-            Utilisateur uEtu2 = new Utilisateur("Fall", "Fatou", etuEmail2, "Passer123!");
+
+            Utilisateur uEtu2 = new Utilisateur(
+                    "Ndiaye",
+                    "Fatou Marie",
+                    etuEmail2,
+                    "Passer123!"
+            );
+
             uEtu2 = utilisateurService.creer(uEtu2);
+
             Etudiant etu2 = new Etudiant();
-            etu2.setNumeroEtudiant("P29045");
+
+            etu2.setNumeroEtudiant("P310045");
             etu2.setFiliere("Master Génie Informatique (M2 GDIL)");
             etu2.setNiveau("M2");
             etu2.setUtilisateur(uEtu2);
+
             etudiantRepository.save(etu2);
         }
 
-        if (ens != null && sujetRepository.count() == 0) {
-            Sujet s1 = new Sujet();
-            s1.setReference("SUJ-UGB-01");
-            s1.setTitre("Plateforme de télémédecine rurale & suivi épidémiologique sur Kubernetes");
-            s1.setDescription("Architecture multi-tenant sécurisée adaptée aux zones à connectivité intermittente pour les postes de santé au Sénégal.");
-            s1.setCapaciteMax(3);
-            s1.setDisponible(true);
-            s1.setEnseignant(ens);
-            s1.setSessionUniversitaire(session);
-            sujetRepository.save(s1);
+        if (ens != null) {
+            if (!sujetRepository.existsByReferenceAndSessionUniversitaireId("SUJ-UGB-01", session.getId())) {
+                Sujet s1 = new Sujet();
+                s1.setReference("SUJ-UGB-01");
+                s1.setTitre(
+                        "Conception d'une plateforme numérique de suivi " +
+                        "des activités agricoles au Sénégal"
+                );
+                s1.setDescription(
+                        "Développement d'une solution informatique permettant " +
+                        "de collecter, centraliser et analyser les données " +
+                        "agricoles pour faciliter le suivi des exploitations " +
+                        "et la prise de décision."
+                );
+                s1.setCapaciteMax(3);
+                s1.setDisponible(true);
+                s1.setEnseignant(ens);
+                s1.setSessionUniversitaire(session);
 
-            Sujet s2 = new Sujet();
-            s2.setReference("SUJ-UGB-02");
-            s2.setTitre("Détection d'anomalies réseau et sécurisation des passerelles IoT via Transformer & eBPF");
-            s2.setDescription("Surveillance et analyse du trafic réseau pour la détection proactive d'intrusions dans les infrastructures académiques.");
-            s2.setCapaciteMax(2);
-            s2.setDisponible(true);
-            s2.setEnseignant(ens);
-            s2.setSessionUniversitaire(session);
-            sujetRepository.save(s2);
+                sujetRepository.save(s1);
+            }
+
+            if (!sujetRepository.existsByReferenceAndSessionUniversitaireId("SUJ-UGB-02", session.getId())) {
+                Sujet s2 = new Sujet();
+                s2.setReference("SUJ-UGB-02");
+                s2.setTitre(
+                        "Détection d'anomalies réseau et sécurisation " +
+                        "des infrastructures informatiques universitaires"
+                );
+                s2.setDescription(
+                        "Étude et mise en œuvre d'une solution de surveillance " +
+                        "du trafic réseau visant à détecter les comportements " +
+                        "anormaux et à renforcer la sécurité des infrastructures " +
+                        "informatiques de l'UGB."
+                );
+                s2.setCapaciteMax(2);
+                s2.setDisponible(true);
+                s2.setEnseignant(ens);
+                s2.setSessionUniversitaire(session);
+
+                sujetRepository.save(s2);
+            }
         }
     }
 }

@@ -32,57 +32,36 @@ interface RecentCandidature {
   styleUrl: './dashboard.css',
 })
 export class Dashboard implements OnInit {
-  userName = 'Camille';
-  nbSujetsDispos = 3;
-  nbCandidaturesDeposees = 3;
-  nbCandidaturesAcceptees = 1;
+  userName = 'Mamadou Alpha';
+  nbSujetsDispos = 2;
+  nbCandidaturesDeposees = 1;
+  nbCandidaturesAcceptees = 0;
 
   recentSujets: RecentSujet[] = [
     {
       id: 1,
-      titre: 'Plateforme de télé-médecine sécurisée sur Kubernetes',
-      auteur: 'Pr. Marc Bernard (Département Génie Logiciel)',
-      capacite: '2 / 3 places',
+      titre: "Conception d'une plateforme numérique de suivi des activités agricoles au Sénégal",
+      auteur: "Pr. Moussa Diop (Informatique - UFR SAT)",
+      capacite: '3 places au total',
       estComplet: false,
     },
     {
       id: 2,
-      titre: 'Détection d\'anomalies réseau via Transformer & eBPF',
-      auteur: 'Pr. Marc Bernard (Laboratoire LIRIS)',
-      capacite: '1 / 2 places',
+      titre: "Détection d'anomalies réseau et sécurisation des infrastructures informatiques universitaires",
+      auteur: "Pr. Moussa Diop (Informatique - UFR SAT)",
+      capacite: '2 places au total',
       estComplet: false,
-    },
-    {
-      id: 3,
-      titre: 'Optimisation de requêtes SQL vectorielles sous DuckDB',
-      auteur: 'Dr. Claire Vasseur (Systèmes Distribués)',
-      capacite: 'Complet (3/3)',
-      estComplet: true,
-    },
+    }
   ];
 
   recentCandidatures: RecentCandidature[] = [
     {
       id: 1,
-      titre: 'Plateforme de télé-médecine sécurisée sur Kubernetes',
-      voeuInfo: 'Pr. Marc Bernard • Vœu n°1',
-      date: '14 oct. 2024',
+      titre: "Conception d'une plateforme numérique de suivi des activités agricoles au Sénégal",
+      voeuInfo: "Pr. Moussa Diop • Vœu n°1",
+      date: 'Récemment',
       statut: 'EN_ATTENTE',
-    },
-    {
-      id: 2,
-      titre: 'Détection d\'anomalies réseau via Transformer & eBPF',
-      voeuInfo: 'Pr. Marc Bernard • Vœu n°2',
-      date: '12 oct. 2024',
-      statut: 'ACCEPTEE',
-    },
-    {
-      id: 3,
-      titre: 'Optimisation de requêtes SQL vectorielles sous DuckDB',
-      voeuInfo: 'Dr. Claire Vasseur • Vœu n°3',
-      date: '08 oct. 2024',
-      statut: 'REJETEE',
-    },
+    }
   ];
 
   constructor(

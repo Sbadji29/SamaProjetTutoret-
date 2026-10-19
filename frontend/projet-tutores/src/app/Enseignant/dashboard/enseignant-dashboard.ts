@@ -32,54 +32,39 @@ interface EnseignantSujetCard {
   styleUrl: './enseignant-dashboard.css'
 })
 export class EnseignantDashboard implements OnInit {
-  userName = 'Pr. Marc Bernard';
-  nbSujets = 3;
-  nbPlaces = 8;
-  nbCandidatures = 6;
+  userName = 'Pr. Moussa Diop';
+  nbSujets = 2;
+  nbPlaces = 5;
+  nbCandidatures = 2;
 
   sujets: EnseignantSujetCard[] = [
     {
-      id: 'SUJ-2024-042',
-      titre: 'Plateforme de télé-médecine sécurisée sur Kubernetes',
-      description: "Conception d'une architecture multi-tenant conforme RGPD/HDS pour flux vidéo et dossier patient sécurisé avec enclave SGX.",
-      statusLabel: 'DISPONIBLE - 1 PLACE RESTANTE',
+      id: 'SUJ-UGB-01',
+      titre: "Conception d'une plateforme numérique de suivi des activités agricoles au Sénégal",
+      description: "Développement d'une solution informatique permettant de collecter, centraliser et analyser les données agricoles pour faciliter le suivi des exploitations et la prise de décision.",
+      statusLabel: 'DISPONIBLE - 3 PLACES',
       statusClass: 'badge-disponible',
       capacite: 3,
-      candidatures: 4,
-      progression: '2 pré-validés / 3',
+      candidatures: 1,
+      progression: '1 candidature en attente / 3',
       progressionIcon: 'bi-check-circle',
-      tags: ['Cloud Native', 'e-Santé'],
-      candidaturesCount: 4,
+      tags: ['AgriTech', 'Cloud'],
+      candidaturesCount: 1,
       btnClass: 'btn-success-subtle'
     },
     {
-      id: 'SUJ-2024-039',
-      titre: 'Orchestration Cloud Native de Microservices avec Kubernetes & Istio',
-      description: "Mise en place d'un maillage de services (Service Mesh) avec injection automatique de proxy sidecar, mutual TLS et observabilité avancée Jaeger.",
-      statusLabel: 'COMPLET',
-      statusClass: 'badge-complet',
-      capacite: 3,
-      candidatures: 2,
-      progression: 'Équipe au complet (3/3)',
-      progressionIcon: 'bi-check2-all text-success',
-      tags: ['DevOps', 'Networking'],
-      candidaturesCount: 2,
-      btnClass: 'btn-info-subtle'
-    },
-    {
-      id: 'SUJ-2024-051',
-      titre: 'Moteur de Traitement de Flux Événementiels Haute Performance',
-      description: "Étude comparative Rust vs Go pour l'ingestion de millions de métriques de capteurs temps réel sans latence GC.",
-      statusLabel: "EN ATTENTE D'ÉTUDIANTS",
-      statusClass: 'badge-attente',
+      id: 'SUJ-UGB-02',
+      titre: "Détection d'anomalies réseau et sécurisation des infrastructures informatiques universitaires",
+      description: "Étude et mise en œuvre d'une solution de surveillance du trafic réseau visant à détecter les comportements anormaux et à renforcer la sécurité des infrastructures informatiques de l'UGB.",
+      statusLabel: 'DISPONIBLE - 2 PLACES',
+      statusClass: 'badge-disponible',
       capacite: 2,
-      candidatures: 0,
-      progression: '18 consultations',
-      progressionIcon: 'bi-eye',
-      tags: ['Systèmes distribués', 'Rust'],
-      candidaturesCount: 0,
-      btnClass: 'btn-outline-secondary',
-      isEditOnly: true
+      candidatures: 1,
+      progression: '1 candidature validée / 2',
+      progressionIcon: 'bi-check2-all text-success',
+      tags: ['Sécurité', 'Réseau'],
+      candidaturesCount: 1,
+      btnClass: 'btn-info-subtle'
     }
   ];
 
@@ -92,41 +77,40 @@ export class EnseignantDashboard implements OnInit {
   ngOnInit(): void {
     const user = this.authService.currentUser();
     if (user) {
-      this.userName = `${user.prenom} ${user.nom}`;
-      const enseignantId = user.profilId || 1;
-
-      this.sujetService.getParEnseignant(enseignantId).subscribe({
-        next: (apiSujets) => {
-          if (apiSujets && apiSujets.length > 0) {
-            this.nbSujets = apiSujets.length;
-            this.nbPlaces = apiSujets.reduce((acc, s) => acc + (s.capaciteMax || 0), 0);
-            this.sujets = apiSujets.map((s) => ({
-              id: s.reference || `SUJ-${s.id}`,
-              titre: s.titre,
-              description: s.description || '',
-              statusLabel: s.disponible ? 'DISPONIBLE' : 'COMPLET',
-              statusClass: s.disponible ? 'badge-disponible' : 'badge-complet',
-              capacite: s.capaciteMax,
-              candidatures: 0,
-              progression: `Capacité : ${s.capaciteMax} étudiants`,
-              progressionIcon: 'bi-people',
-              tags: [s.niveau || 'Master 2'],
-              candidaturesCount: 0,
-              btnClass: 'btn-success-subtle'
-            }));
-          }
-        },
-        error: () => {}
-      });
-
-      this.candidatureService.compter().subscribe({
-        next: (res) => {
-          if (res && res.nombreCandidatures !== undefined) {
-            this.nbCandidatures = res.nombreCandidatures;
-          }
-        },
-        error: () => {}
-      });
+      this.userName = user.prenom && user.nom ? `Pr. ${user.prenom} ${user.nom}` : user.nom || 'Pr. Moussa Diop';
     }
+
+    this.sujetService.getTous().subscribe({
+      next: (apiSujets) => {
+        if (apiSujets && apiSujets.length > 0) {
+          this.nbSujets = apiSujets.length;
+          this.nbPlaces = apiSujets.reduce((acc, s) => acc + (s.capaciteMax || 0), 0);
+          this.sujets = apiSujets.map((s) => ({
+            id: s.reference || `SUJ-${s.id}`,
+            titre: s.titre,
+            description: s.description || '',
+            statusLabel: s.disponible ? 'DISPONIBLE' : 'COMPLET',
+            statusClass: s.disponible ? 'badge-disponible' : 'badge-complet',
+            capacite: s.capaciteMax,
+            candidatures: 0,
+            progression: `Capacité : ${s.capaciteMax} étudiants`,
+            progressionIcon: 'bi-people',
+            tags: [s.niveau || 'Master 2 GDIL'],
+            candidaturesCount: 0,
+            btnClass: 'btn-success-subtle'
+          }));
+        }
+      },
+      error: () => {}
+    });
+
+    this.candidatureService.compter().subscribe({
+      next: (res) => {
+        if (res && res.nombreCandidatures !== undefined) {
+          this.nbCandidatures = res.nombreCandidatures;
+        }
+      },
+      error: () => {}
+    });
   }
 }

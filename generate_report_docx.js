@@ -467,13 +467,13 @@ async function buildDoc() {
           makeH2("5.2 Comptes de Démonstration Pré-configurés (UGB)"),
           makeP("Afin de permettre une évaluation immédiate par les membres du jury, le système est pré-chargé avec les comptes de test suivants (mot de passe universel : Passer123!) :"),
           makeStyledTable(
-            ["Rôle", "Nom et Prénom", "Adresse Email Académique UGB", "Description du Profil"],
+            ["Rôle", "Nom et Prénom", "Adresse Email Académique UGB", "Matricule / Profil"],
             [
-              ["ETUDIANT", "Badji Alioune Badara", "badji.alioune-badara@ugb.edu.sn", "Étudiant M2 GDIL - Candidat"],
-              ["ETUDIANT", "Fall Fatou", "fall.fatou@ugb.edu.sn", "Étudiante M2 GDIL - Candidate"],
-              ["ENSEIGNANT", "Dr. Diop Moussa", "diop.moussa@ugb.edu.sn", "Enseignant-Chercheur - Proposant"],
-              ["RESPONSABLE", "Dr. Sow Aminata", "sow.aminata@ugb.edu.sn", "Responsable Pédagogique M2 - Arbitrage"],
-              ["ADMIN", "Administrateur UGB", "admin.ugb@ugb.edu.sn", "Administrateur Système / ENT"]
+              ["ADMIN", "Ndiaye Cheikh Tidiane", "cheikh-tidiane.ndiaye@ugb.edu.sn", "Direction Informatique / ENT"],
+              ["RESPONSABLE", "Dr. Sow Aminata", "aminata.sow@ugb.edu.sn", "Responsable Pédagogique M2 GDIL"],
+              ["ENSEIGNANT", "Pr. Diop Moussa", "moussa.diop@ugb.edu.sn", "ENS-UGB-042 - Informatique UFR SAT"],
+              ["ETUDIANT", "Touré Mamadou Alpha", "toure.mamadou-alpha@ugb.edu.sn", "P300001 - M2 Génie Informatique"],
+              ["ETUDIANT", "Ndiaye Fatou Marie", "ndiaye.fatou-marie@ugb.edu.sn", "P310045 - M2 Génie Informatique"]
             ]
           ),
 
