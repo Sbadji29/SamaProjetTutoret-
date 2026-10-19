@@ -33,31 +33,31 @@
       <div class="row g-3 mb-4">
         <div class="col-12 col-md-4">
           <app-kpi-card
-            title="Capacité globale"
-            value="35"
-            subtitle="places offertes"
+            label="Capacité globale"
+            [value]="capaciteTotale"
+            footerText="places offertes"
             icon="bi-box"
-            iconColor="blue">
+            iconBgClass="icon-blue">
           </app-kpi-card>
         </div>
         <div class="col-12 col-md-4">
           <app-kpi-card
-            title="Étudiants assignés"
-            value="28"
-            subtitle="affectations confirmées"
-            badge="80% des places occupées"
+            label="Étudiants assignés"
+            [value]="etudiantsAssignes"
+            footerText="affectations confirmées"
+            badgeText="Places occupées"
             icon="bi-check-circle"
-            iconColor="green">
+            iconBgClass="icon-green">
           </app-kpi-card>
         </div>
         <div class="col-12 col-md-4">
           <app-kpi-card
-            title="Places vacantes"
-            value="7"
-            subtitle="disponibles"
-            badge="Session 2 de repêchage"
+            label="Places vacantes"
+            [value]="placesVacantes"
+            footerText="disponibles"
+            badgeText="Session en cours"
             icon="bi-dash-circle"
-            iconColor="orange">
+            iconBgClass="icon-orange">
           </app-kpi-card>
         </div>
       </div>

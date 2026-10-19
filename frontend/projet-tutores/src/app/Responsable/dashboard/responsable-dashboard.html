@@ -33,42 +33,42 @@
       <div class="row g-3 mb-4">
         <div class="col-12 col-sm-6 col-xl-3">
           <app-kpi-card
-            title="Total candidatures déposées"
-            value="42"
-            subtitle="dossiers"
-            badge="Dossiers enregistrés cette session"
+            label="Total candidatures déposées"
+            [value]="totalCandidatures"
+            footerText="dossiers"
+            badgeText="Dossiers enregistrés"
             icon="bi-folder2-open"
-            iconColor="teal">
+            iconBgClass="icon-blue">
           </app-kpi-card>
         </div>
         <div class="col-12 col-sm-6 col-xl-3">
           <app-kpi-card
-            title="En attente d'arbitrage"
-            value="5"
-            subtitle="dossiers prioritaires"
-            badge="Dossiers en attente d'évaluation"
+            label="En attente d'arbitrage"
+            [value]="enAttenteCount"
+            footerText="dossiers prioritaires"
+            badgeText="À évaluer"
             icon="bi-clipboard-check"
-            iconColor="blue">
+            iconBgClass="icon-orange">
           </app-kpi-card>
         </div>
         <div class="col-12 col-sm-6 col-xl-3">
           <app-kpi-card
-            title="Affectations validées"
-            value="28"
-            subtitle="étudiants affectés"
-            badge="Affectations confirmées"
+            label="Affectations validées"
+            [value]="affectationsCount"
+            footerText="étudiants affectés"
+            badgeText="Confirmées"
             icon="bi-check-circle"
-            iconColor="green">
+            iconBgClass="icon-green">
           </app-kpi-card>
         </div>
         <div class="col-12 col-sm-6 col-xl-3">
           <app-kpi-card
-            title="Candidatures rejetées / réorientées"
-            value="9"
-            subtitle="dossiers"
-            badge="Non retenues ou redirigées"
+            label="Candidatures rejetées"
+            [value]="rejeteesCount"
+            footerText="dossiers"
+            badgeText="Non retenues"
             icon="bi-arrow-left-right"
-            iconColor="red">
+            iconBgClass="icon-gray">
           </app-kpi-card>
         </div>
       </div>
@@ -135,7 +135,7 @@
 
         <div class="card-footer bg-white border-top py-3 px-4 text-center">
           <a routerLink="/responsable/arbitrage" class="text-decoration-none text-forest fw-medium small d-inline-flex align-items-center gap-1">
-            Voir l'ensemble des 5 candidatures en attente <i class="bi bi-arrow-right"></i>
+            Voir l'ensemble des {{ enAttenteCount }} candidatures en attente <i class="bi bi-arrow-right"></i>
           </a>
         </div>
       </div>
