@@ -3,6 +3,17 @@ export interface ConnexionRequete {
   motDePasse: string;
 }
 
+export interface InscriptionRequete {
+  nom: string;
+  prenom: string;
+  email: string;
+  motDePasse: string;
+  role: 'ETUDIANT' | 'ENSEIGNANT' | 'RESPONSABLE';
+  filiere?: string;
+  departement?: string;
+  specialite?: string;
+}
+
 export type RoleUtilisateur = 'ETUDIANT' | 'ENSEIGNANT' | 'RESPONSABLE' | 'ADMIN' | 'UTILISATEUR';
 
 export interface ConnexionReponse {

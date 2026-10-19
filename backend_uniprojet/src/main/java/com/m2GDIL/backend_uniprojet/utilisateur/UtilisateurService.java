@@ -4,7 +4,11 @@ import com.m2GDIL.backend_uniprojet.administrateur.AdministrateurRepository;
 import com.m2GDIL.backend_uniprojet.enseignant.EnseignantRepository;
 import com.m2GDIL.backend_uniprojet.etudiant.EtudiantRepository;
 import com.m2GDIL.backend_uniprojet.responsablepedagogique.ResponsablePedagogiqueRepository;
+import com.m2GDIL.backend_uniprojet.enseignant.Enseignant;
+import com.m2GDIL.backend_uniprojet.etudiant.Etudiant;
+import com.m2GDIL.backend_uniprojet.responsablepedagogique.ResponsablePedagogique;
 import com.m2GDIL.backend_uniprojet.utilisateur.dto.ConnexionReponse;
+import com.m2GDIL.backend_uniprojet.utilisateur.dto.InscriptionRequete;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -136,6 +140,73 @@ public class UtilisateurService {
                     }
                 }
             }
+        }
+
+        return new ConnexionReponse(
+                utilisateur.getId(),
+                utilisateur.getNom(),
+                utilisateur.getPrenom(),
+                utilisateur.getEmail(),
+                role,
+                profilId
+        );
+    }
+
+    @Transactional
+    public ConnexionReponse inscrire(InscriptionRequete requete) {
+        if (utilisateurRepository.existsByEmailIgnoreCase(requete.getEmail())) {
+            throw new IllegalArgumentException("Cette adresse email est deja utilisee.");
+        }
+
+        if (requete.getMotDePasse() == null || requete.getMotDePasse().length() < 8) {
+            throw new IllegalArgumentException("Le mot de passe doit contenir au moins 8 caracteres.");
+        }
+
+        Utilisateur utilisateur = new Utilisateur(
+                requete.getNom().trim(),
+                requete.getPrenom().trim(),
+                requete.getEmail().trim(),
+                requete.getMotDePasse()
+        );
+        utilisateur.setMotDePasse(hacherMotDePasse(utilisateur.getMotDePasse()));
+        utilisateur.setActif(true);
+        utilisateur = utilisateurRepository.save(utilisateur);
+
+        String role = requete.getRole() != null ? requete.getRole().toUpperCase() : "ETUDIANT";
+        Long profilId = null;
+
+        if ("ETUDIANT".equals(role)) {
+            Etudiant etu = new Etudiant();
+            etu.setNumeroEtudiant("P" + (System.currentTimeMillis() % 1000000));
+            etu.setFiliere(requete.getFiliere() != null && !requete.getFiliere().isBlank() ? requete.getFiliere() : "Master Génie Informatique (M2 GI)");
+            etu.setNiveau("M2");
+            etu.setUtilisateur(utilisateur);
+            etu = etudiantRepository.save(etu);
+            profilId = etu.getId();
+        } else if ("ENSEIGNANT".equals(role)) {
+            Enseignant ens = new Enseignant();
+            ens.setMatricule("ENS-" + (System.currentTimeMillis() % 10000));
+            ens.setDepartement(requete.getDepartement() != null && !requete.getDepartement().isBlank() ? requete.getDepartement() : "Informatique (UFR SAT)");
+            ens.setSpecialite(requete.getSpecialite() != null && !requete.getSpecialite().isBlank() ? requete.getSpecialite() : "Systèmes & Réseaux");
+            ens.setLaboratoire("LANI");
+            ens.setQuotaEncadrement(5);
+            ens.setUtilisateur(utilisateur);
+            ens = enseignantRepository.save(ens);
+            profilId = ens.getId();
+        } else if ("RESPONSABLE".equals(role)) {
+            ResponsablePedagogique resp = new ResponsablePedagogique();
+            resp.setUtilisateur(utilisateur);
+            resp = responsableRepository.save(resp);
+            profilId = resp.getId();
+        } else {
+            role = "ETUDIANT";
+            Etudiant etu = new Etudiant();
+            etu.setNumeroEtudiant("P" + (System.currentTimeMillis() % 1000000));
+            etu.setFiliere("Master Génie Informatique (M2 GI)");
+            etu.setNiveau("M2");
+            etu.setUtilisateur(utilisateur);
+            etu = etudiantRepository.save(etu);
+            profilId = etu.getId();
         }
 
         return new ConnexionReponse(

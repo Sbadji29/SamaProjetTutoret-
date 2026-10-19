@@ -2,7 +2,9 @@ package com.m2GDIL.backend_uniprojet.utilisateur;
 
 import com.m2GDIL.backend_uniprojet.utilisateur.dto.ConnexionReponse;
 import com.m2GDIL.backend_uniprojet.utilisateur.dto.ConnexionRequete;
+import com.m2GDIL.backend_uniprojet.utilisateur.dto.InscriptionRequete;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +23,12 @@ public class UtilisateurController {
     @PostMapping("/connexion")
     public ConnexionReponse connexion(@Valid @RequestBody ConnexionRequete requete) {
         return utilisateurService.authentifier(requete.getEmail(), requete.getMotDePasse());
+    }
+
+    @PostMapping("/inscription")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ConnexionReponse inscrire(@Valid @RequestBody InscriptionRequete requete) {
+        return utilisateurService.inscrire(requete);
     }
 
     @PostMapping

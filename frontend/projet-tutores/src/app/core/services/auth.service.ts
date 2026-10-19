@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { ConnexionReponse, ConnexionRequete, RoleUtilisateur } from '../models/auth.model';
+import { ConnexionReponse, ConnexionRequete, InscriptionRequete, RoleUtilisateur } from '../models/auth.model';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +27,15 @@ export class AuthService {
 
   connecter(requete: ConnexionRequete): Observable<ConnexionReponse> {
     return this.http.post<ConnexionReponse>(`${this.apiUrl}/connexion`, requete).pipe(
+      tap((reponse) => {
+        localStorage.setItem(this.storageKey, JSON.stringify(reponse));
+        this.currentUser.set(reponse);
+      })
+    );
+  }
+
+  inscrire(requete: InscriptionRequete): Observable<ConnexionReponse> {
+    return this.http.post<ConnexionReponse>(`${this.apiUrl}/inscription`, requete).pipe(
       tap((reponse) => {
         localStorage.setItem(this.storageKey, JSON.stringify(reponse));
         this.currentUser.set(reponse);

@@ -14,14 +14,31 @@
               <p class="text-muted small">Rejoignez le portail universitaire UniProjet</p>
             </div>
 
-            <form>
+            <div *ngIf="erreur" class="alert alert-danger py-2 px-3 small border-0 rounded-3 mb-3" role="alert">
+              <i class="bi bi-exclamation-circle-fill me-1"></i>
+              {{ erreur }}
+            </div>
+
+            <div *ngIf="succes" class="alert alert-success py-2 px-3 small border-0 rounded-3 mb-3" role="alert">
+              <i class="bi bi-check-circle-fill me-1"></i>
+              {{ succes }}
+            </div>
+
+            <form (ngSubmit)="onSubmit()">
               <div class="mb-3">
                 <label for="registerName" class="form-label small fw-semibold text-secondary">Nom complet</label>
                 <div class="input-group">
                   <span class="input-group-text bg-white border-end-0 text-muted">
                     <i class="bi bi-person"></i>
                   </span>
-                  <input type="text" class="form-control border-start-0 ps-0" id="registerName" placeholder="ex. Camille Laurent" required>
+                  <input
+                    type="text"
+                    class="form-control border-start-0 ps-0"
+                    id="registerName"
+                    name="nomComplet"
+                    [(ngModel)]="nomComplet"
+                    placeholder="ex. Alioune Badara Badji"
+                    required>
                 </div>
               </div>
 
@@ -31,7 +48,14 @@
                   <span class="input-group-text bg-white border-end-0 text-muted">
                     <i class="bi bi-envelope"></i>
                   </span>
-                  <input type="email" class="form-control border-start-0 ps-0" id="registerEmail" placeholder="nom@etudiant.univ.fr" required>
+                  <input
+                    type="email"
+                    class="form-control border-start-0 ps-0"
+                    id="registerEmail"
+                    name="email"
+                    [(ngModel)]="email"
+                    placeholder="badji.alioune-badara@ugb.edu.sn"
+                    required>
                 </div>
               </div>
 
@@ -41,11 +65,16 @@
                   <span class="input-group-text bg-white border-end-0 text-muted">
                     <i class="bi bi-briefcase"></i>
                   </span>
-                  <select class="form-select border-start-0 ps-0 text-secondary" id="registerRole" required>
-                    <option value="" selected disabled>Sélectionnez votre rôle</option>
-                    <option value="student">Étudiant</option>
-                    <option value="teacher">Enseignant / Tuteur</option>
-                    <option value="manager">Responsable pédagogique</option>
+                  <select
+                    class="form-select border-start-0 ps-0 text-secondary"
+                    id="registerRole"
+                    name="roleChoisi"
+                    [(ngModel)]="roleChoisi"
+                    required>
+                    <option value="" disabled>Sélectionnez votre rôle</option>
+                    <option value="ETUDIANT">Étudiant</option>
+                    <option value="ENSEIGNANT">Enseignant / Tuteur</option>
+                    <option value="RESPONSABLE">Responsable pédagogique</option>
                   </select>
                 </div>
               </div>
@@ -57,7 +86,14 @@
                     <span class="input-group-text bg-white border-end-0 text-muted">
                       <i class="bi bi-lock"></i>
                     </span>
-                    <input type="password" class="form-control border-start-0 ps-0" id="registerPassword" placeholder="••••••••" required>
+                    <input
+                      type="password"
+                      class="form-control border-start-0 ps-0"
+                      id="registerPassword"
+                      name="motDePasse"
+                      [(ngModel)]="motDePasse"
+                      placeholder="••••••••"
+                      required>
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -66,20 +102,37 @@
                     <span class="input-group-text bg-white border-end-0 text-muted">
                       <i class="bi bi-shield-check"></i>
                     </span>
-                    <input type="password" class="form-control border-start-0 ps-0" id="registerConfirmPassword" placeholder="••••••••" required>
+                    <input
+                      type="password"
+                      class="form-control border-start-0 ps-0"
+                      id="registerConfirmPassword"
+                      name="confirmationMotDePasse"
+                      [(ngModel)]="confirmationMotDePasse"
+                      placeholder="••••••••"
+                      required>
                   </div>
                 </div>
               </div>
 
               <div class="form-check mb-4">
-                <input class="form-check-input custom-checkbox" type="checkbox" id="terms" required>
+                <input
+                  class="form-check-input custom-checkbox"
+                  type="checkbox"
+                  id="terms"
+                  name="accepteConditions"
+                  [(ngModel)]="accepteConditions"
+                  required>
                 <label class="form-check-label small text-muted" for="terms">
-                  J'accepte les <a href="#" class="custom-link text-decoration-none">conditions générales</a>
+                  J'accepte les conditions générales d'utilisation
                 </label>
               </div>
 
-              <button type="submit" class="btn btn-custom-green w-100 py-2 fw-semibold rounded-3 mb-3">
-                Créer mon compte
+              <button
+                type="submit"
+                [disabled]="chargement"
+                class="btn btn-custom-green w-100 py-2 fw-semibold rounded-3 mb-3 d-flex align-items-center justify-content-center gap-2">
+                <span *ngIf="chargement" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span>{{ chargement ? 'Création en cours...' : 'Créer mon compte' }}</span>
               </button>
             </form>
 
