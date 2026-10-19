@@ -5,7 +5,7 @@
     <app-header
       [breadcrumbs]="['Master Informatique', 'Projets Tutorés', 'Session 2024-2025']"
       [notificationCount]="4"
-      userName="Pr. Marc Bernard"
+      [userName]="userName"
       userRole="Enseignant-Chercheur"
       userInitials="MB">
     </app-header>
@@ -34,7 +34,7 @@
         <div class="col-12 col-md-4">
           <app-kpi-card
             title="Sujets proposés"
-            value="3"
+            [value]="nbSujets"
             subtitle="sujets"
             icon="bi-journal-text"
             iconColor="teal">
@@ -43,7 +43,7 @@
         <div class="col-12 col-md-4">
           <app-kpi-card
             title="Places ouvertes"
-            value="8"
+            [value]="nbPlaces"
             subtitle="places au total"
             icon="bi-people"
             iconColor="blue">
@@ -52,7 +52,7 @@
         <div class="col-12 col-md-4">
           <app-kpi-card
             title="Candidatures reçues"
-            value="6"
+            [value]="nbCandidatures"
             subtitle="dossiers"
             icon="bi-inbox"
             iconColor="orange">

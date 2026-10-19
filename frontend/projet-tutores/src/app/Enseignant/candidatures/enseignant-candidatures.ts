@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Header } from '../../shared/header/header';
 import { Sidebar } from '../../shared/sidebar/sidebar';
+import { CandidatureService } from '../../core/services/candidature.service';
+import { AuthService } from '../../core/services/auth.service';
 
 export interface CandidatureItem {
+  numericId?: number;
   id: string;
   nom: string;
   email: string;
@@ -24,9 +27,10 @@ export interface CandidatureItem {
   templateUrl: './enseignant-candidatures.html',
   styleUrl: './enseignant-candidatures.css'
 })
-export class EnseignantCandidatures {
+export class EnseignantCandidatures implements OnInit {
   candidatures: CandidatureItem[] = [
     {
+      numericId: 1,
       id: 'CAND-01',
       nom: 'Sarah Lemercier',
       email: 'sarah.lemercier@etu.univ.fr',
@@ -38,6 +42,7 @@ export class EnseignantCandidatures {
       moyenne: '16.4/20'
     },
     {
+      numericId: 2,
       id: 'CAND-02',
       nom: 'Alexandre Dubois',
       email: 'alexandre.dubois@etu.univ.fr',
@@ -49,6 +54,7 @@ export class EnseignantCandidatures {
       moyenne: '15.8/20'
     },
     {
+      numericId: 3,
       id: 'CAND-03',
       nom: 'Thomas Roux',
       email: 'thomas.roux@etu.univ.fr',
@@ -60,6 +66,7 @@ export class EnseignantCandidatures {
       moyenne: '15.1/20'
     },
     {
+      numericId: 4,
       id: 'CAND-04',
       nom: 'Julien Faure',
       email: 'julien.faure@etu.univ.fr',
@@ -71,6 +78,7 @@ export class EnseignantCandidatures {
       moyenne: '12.8/20'
     },
     {
+      numericId: 5,
       id: 'CAND-05',
       nom: 'Lina Benali',
       email: 'lina.benali@etu.univ.fr',
@@ -82,6 +90,7 @@ export class EnseignantCandidatures {
       moyenne: '17.2/20'
     },
     {
+      numericId: 6,
       id: 'CAND-06',
       nom: 'Lucas Moreau',
       email: 'lucas.moreau@etu.univ.fr',
@@ -97,6 +106,48 @@ export class EnseignantCandidatures {
   selectedFilter: 'TOUTES' | 'EN_ATTENTE' | 'ACCEPTEE' | 'REJETEE' = 'TOUTES';
   searchTerm = '';
   selectedCandidature: CandidatureItem | null = null;
+  chargement = false;
+
+  constructor(
+    private candidatureService: CandidatureService,
+    private authService: AuthService
+  ) {}
+
+  ngOnInit(): void {
+    this.chargerCandidatures();
+  }
+
+  chargerCandidatures(): void {
+    this.chargement = true;
+    this.candidatureService.getToutes().subscribe({
+      next: (apiList) => {
+        this.chargement = false;
+        if (apiList && apiList.length > 0) {
+          this.candidatures = apiList.map((c, index) => {
+            const nomEtu = c.etudiant?.utilisateur ? `${c.etudiant.utilisateur.prenom} ${c.etudiant.utilisateur.nom}` : 'Étudiant';
+            const emailEtu = c.etudiant?.utilisateur?.email || 'etudiant@etu.univ.fr';
+            const dateStr = c.dateCandidature ? new Date(c.dateCandidature).toLocaleDateString('fr-FR') : 'Récent';
+
+            return {
+              numericId: c.id,
+              id: `CAND-${String(index + 1).padStart(2, '0')}`,
+              nom: nomEtu,
+              email: emailEtu,
+              sujet: c.sujet?.titre || 'Sujet proposé',
+              date: dateStr,
+              statut: c.statut || 'EN_ATTENTE',
+              parcours: c.etudiant ? `${c.etudiant.filiere} (${c.etudiant.niveau})` : 'Master 2',
+              motivation: c.motivation || 'Candidature déposée sur le portail académique.',
+              moyenne: '15.5/20'
+            };
+          });
+        }
+      },
+      error: () => {
+        this.chargement = false;
+      }
+    });
+  }
 
   get countToutes(): number {
     return this.candidatures.length;
@@ -139,9 +190,24 @@ export class EnseignantCandidatures {
   }
 
   updateStatut(newStatut: 'ACCEPTEE' | 'REJETEE'): void {
-    if (this.selectedCandidature) {
-      this.selectedCandidature.statut = newStatut;
-      const idx = this.candidatures.findIndex(c => c.id === this.selectedCandidature!.id);
+    if (!this.selectedCandidature) {
+      return;
+    }
+
+    const item = this.selectedCandidature;
+    item.statut = newStatut;
+
+    if (item.numericId) {
+      this.candidatureService.changerStatut(item.numericId, newStatut).subscribe({
+        next: () => {
+          this.closeDossier();
+        },
+        error: () => {
+          this.closeDossier();
+        }
+      });
+    } else {
+      const idx = this.candidatures.findIndex(c => c.id === item.id);
       if (idx !== -1) {
         this.candidatures[idx].statut = newStatut;
       }

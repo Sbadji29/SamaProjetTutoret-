@@ -1,9 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Header } from '../../shared/header/header';
 import { Sidebar } from '../../shared/sidebar/sidebar';
 import { KpiCard } from '../../shared/kpi-card/kpi-card';
+import { SujetService } from '../../core/services/sujet.service';
+import { CandidatureService } from '../../core/services/candidature.service';
+import { AuthService } from '../../core/services/auth.service';
+
+interface EnseignantSujetCard {
+  id: string;
+  titre: string;
+  description: string;
+  statusLabel: string;
+  statusClass: string;
+  capacite: number;
+  candidatures: number;
+  progression: string;
+  progressionIcon: string;
+  tags: string[];
+  candidaturesCount: number;
+  btnClass: string;
+  isEditOnly?: boolean;
+}
 
 @Component({
   selector: 'app-enseignant-dashboard',
@@ -12,8 +31,13 @@ import { KpiCard } from '../../shared/kpi-card/kpi-card';
   templateUrl: './enseignant-dashboard.html',
   styleUrl: './enseignant-dashboard.css'
 })
-export class EnseignantDashboard {
-  sujets = [
+export class EnseignantDashboard implements OnInit {
+  userName = 'Pr. Marc Bernard';
+  nbSujets = 3;
+  nbPlaces = 8;
+  nbCandidatures = 6;
+
+  sujets: EnseignantSujetCard[] = [
     {
       id: 'SUJ-2024-042',
       titre: 'Plateforme de télé-médecine sécurisée sur Kubernetes',
@@ -58,4 +82,51 @@ export class EnseignantDashboard {
       isEditOnly: true
     }
   ];
+
+  constructor(
+    private authService: AuthService,
+    private sujetService: SujetService,
+    private candidatureService: CandidatureService
+  ) {}
+
+  ngOnInit(): void {
+    const user = this.authService.currentUser();
+    if (user) {
+      this.userName = `${user.prenom} ${user.nom}`;
+      const enseignantId = user.profilId || 1;
+
+      this.sujetService.getParEnseignant(enseignantId).subscribe({
+        next: (apiSujets) => {
+          if (apiSujets && apiSujets.length > 0) {
+            this.nbSujets = apiSujets.length;
+            this.nbPlaces = apiSujets.reduce((acc, s) => acc + (s.capaciteMax || 0), 0);
+            this.sujets = apiSujets.map((s) => ({
+              id: s.reference || `SUJ-${s.id}`,
+              titre: s.titre,
+              description: s.description || '',
+              statusLabel: s.disponible ? 'DISPONIBLE' : 'COMPLET',
+              statusClass: s.disponible ? 'badge-disponible' : 'badge-complet',
+              capacite: s.capaciteMax,
+              candidatures: 0,
+              progression: `Capacité : ${s.capaciteMax} étudiants`,
+              progressionIcon: 'bi-people',
+              tags: [s.niveau || 'Master 2'],
+              candidaturesCount: 0,
+              btnClass: 'btn-success-subtle'
+            }));
+          }
+        },
+        error: () => {}
+      });
+
+      this.candidatureService.compter().subscribe({
+        next: (res) => {
+          if (res && res.nombreCandidatures !== undefined) {
+            this.nbCandidatures = res.nombreCandidatures;
+          }
+        },
+        error: () => {}
+      });
+    }
+  }
 }
