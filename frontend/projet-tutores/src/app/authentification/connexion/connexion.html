@@ -14,14 +14,26 @@
               <p class="text-muted small">Accédez à votre espace UniProjet</p>
             </div>
 
-            <form>
+            <div *ngIf="erreur" class="alert alert-danger py-2 px-3 small border-0 rounded-3 mb-3" role="alert">
+              <i class="bi bi-exclamation-circle-fill me-1"></i>
+              {{ erreur }}
+            </div>
+
+            <form (ngSubmit)="onSubmit()">
               <div class="mb-3">
                 <label for="loginEmail" class="form-label small fw-semibold text-secondary">Adresse email</label>
                 <div class="input-group">
                   <span class="input-group-text bg-white border-end-0 text-muted">
                     <i class="bi bi-envelope"></i>
                   </span>
-                  <input type="email" class="form-control border-start-0 ps-0" id="loginEmail" placeholder="nom@exemple.com" required>
+                  <input
+                    type="email"
+                    class="form-control border-start-0 ps-0"
+                    id="loginEmail"
+                    name="email"
+                    [(ngModel)]="email"
+                    placeholder="nom@exemple.com"
+                    required>
                 </div>
               </div>
 
@@ -33,15 +45,26 @@
                   <span class="input-group-text bg-white border-end-0 text-muted">
                     <i class="bi bi-lock"></i>
                   </span>
-                  <input type="password" class="form-control border-start-0 ps-0" id="loginPassword" placeholder="••••••••" required>
+                  <input
+                    type="password"
+                    class="form-control border-start-0 ps-0"
+                    id="loginPassword"
+                    name="motDePasse"
+                    [(ngModel)]="motDePasse"
+                    placeholder="••••••••"
+                    required>
                 </div>
                 <div class="text-end">
                   <a href="#" class="small text-decoration-none custom-link">Mot de passe oublié ?</a>
                 </div>
               </div>
 
-              <button type="submit" class="btn btn-custom-green w-100 py-2 fw-semibold rounded-3 mb-3">
-                Se connecter
+              <button
+                type="submit"
+                [disabled]="chargement"
+                class="btn btn-custom-green w-100 py-2 fw-semibold rounded-3 mb-3 d-flex align-items-center justify-content-center gap-2">
+                <span *ngIf="chargement" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span>{{ chargement ? 'Connexion en cours...' : 'Se connecter' }}</span>
               </button>
             </form>
 
