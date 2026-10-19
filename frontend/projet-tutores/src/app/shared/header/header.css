@@ -1,0 +1,39 @@
+:host {
+  --theme-green: #1b6338;
+  display: block;
+}
+
+.session-tag {
+  color: var(--theme-green);
+}
+
+.header-avatar {
+  width: 34px;
+  height: 34px;
+  object-fit: cover;
+}
+
+.header-avatar-circle {
+  width: 34px;
+  height: 34px;
+  background-color: var(--theme-green);
+  border-radius: 50%;
+}
+
+.bg-forest {
+  background-color: #14532d !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.btn-icon {
+  background: transparent;
+  border: none;
+  line-height: 1;
+}
+
+.btn-icon:hover {
+  color: #0f172a !important;
+}

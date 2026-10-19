@@ -1,0 +1,115 @@
+<header class="d-lg-none d-flex align-items-center justify-content-between p-3 bg-white border-bottom shadow-sm">
+  <div class="d-flex align-items-center gap-2">
+    <div class="logo-box d-flex align-items-center justify-content-center text-white rounded-3">
+      <i class="bi bi-mortarboard-fill"></i>
+    </div>
+    <span class="fw-bold brand-title">UniProjet</span>
+  </div>
+
+  <button
+    type="button"
+    class="btn btn-outline-secondary d-flex align-items-center justify-content-center p-2"
+    (click)="toggleSidebar()"
+    aria-label="Ouvrir le menu">
+    <i class="bi bi-list fs-4"></i>
+  </button>
+</header>
+
+<div
+  class="offcanvas-backdrop fade show d-lg-none"
+  *ngIf="isSidebarOpen"
+  (click)="closeSidebar()">
+</div>
+
+<aside
+  class="offcanvas-lg offcanvas-start sidebar bg-white border-end vh-100 p-3 d-flex flex-column"
+  [class.show]="isSidebarOpen"
+  tabindex="-1">
+
+  <div class="sidebar-header d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom">
+    <div class="d-flex align-items-center gap-2">
+      <div class="logo-box d-flex align-items-center justify-content-center text-white rounded-3">
+        <i class="bi bi-mortarboard-fill fs-5"></i>
+      </div>
+      <div>
+        <h6 class="fw-bold brand-title mb-0 lh-sm">UniProjet</h6>
+        <span class="text-uppercase text-muted fw-semibold logo-subtitle">
+          {{ config.subtitle }}
+        </span>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="btn-close d-lg-none"
+      (click)="closeSidebar()"
+      aria-label="Fermer">
+    </button>
+  </div>
+
+  <nav class="sidebar-nav flex-grow-1 overflow-y-auto">
+    @for (section of config.sections; track section.title; let last = $last) {
+      <div class="nav-section-title text-uppercase fw-semibold mb-2">
+        {{ section.title }}
+      </div>
+      <ul class="nav flex-column gap-1 mb-3">
+        @for (item of section.items; track item.label) {
+          <li class="nav-item">
+            <a class="nav-link d-flex align-items-center justify-content-between gap-2"
+               [routerLink]="item.route"
+               routerLinkActive="active"
+               (click)="closeSidebar()">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi" [ngClass]="item.icon"></i>
+                <span>{{ item.label }}</span>
+              </div>
+              @if (item.badge) {
+                <span class="badge rounded-pill" [ngClass]="item.badgeClass || 'bg-light text-dark'" style="font-size: 0.72rem;">
+                  {{ item.badge }}
+                </span>
+              }
+            </a>
+          </li>
+        }
+      </ul>
+      @if (!last) {
+        <hr class="sidebar-divider my-3">
+      }
+    }
+  </nav>
+
+  <div class="sidebar-footer p-2 rounded-3 mt-auto">
+    <div class="d-flex align-items-center justify-content-between mb-1">
+      <div class="d-flex align-items-center gap-2">
+        @if (config.user.avatarUrl) {
+          <img
+            [src]="config.user.avatarUrl"
+            [alt]="config.user.name"
+            class="rounded-circle user-avatar"
+          />
+        } @else {
+          <div
+            class="admin-avatar-box d-flex align-items-center justify-content-center text-white rounded-3 fw-bold small"
+            [style.background-color]="config.user.avatarBgColor || '#14532d'">
+            {{ config.user.initials || 'U' }}
+          </div>
+        }
+        <div class="lh-1">
+          <div class="fw-bold text-dark user-name">{{ config.user.name }}</div>
+          <small class="text-muted user-role">{{ config.user.role }}</small>
+        </div>
+      </div>
+      <button type="button" class="btn btn-link text-secondary p-1 border-0" (click)="onLogout()" title="Se déconnecter">
+        <i class="bi bi-box-arrow-right fs-5"></i>
+      </button>
+    </div>
+
+    @if (config.user.showConnectedStatus) {
+      <div class="d-flex align-items-center justify-content-between ps-1 pt-1 border-top border-light-subtle">
+        <small class="text-secondary" style="font-size: 0.72rem;">Statut: Connecté</small>
+        <span class="status-dot-active"></span>
+      </div>
+    }
+  </div>
+
+</aside>

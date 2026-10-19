@@ -1,0 +1,144 @@
+<div class="d-flex min-vh-100 bg-light">
+  <app-sidebar role="responsable"></app-sidebar>
+
+  <div class="flex-grow-1 d-flex flex-column" style="min-width: 0;">
+    <app-header
+      [breadcrumbs]="['Master Informatique', 'Projets Tutorés', 'Commission d\'Arbitrage 2024']"
+      [notificationCount]="3"
+      userName="Dr. Alexandre Fontaine"
+      userRole="Resp. M2 Info"
+      userInitials="AF">
+    </app-header>
+
+    <main class="p-4 flex-grow-1">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+          <h1 class="h3 fw-bold text-dark mb-1">Tableau de bord de la Commission Pédagogique</h1>
+          <p class="text-muted mb-0 small">
+            Arbitrage global des vœux et affectations définitives des projets tutorés Master 2. Suivi en temps réel des quotas pédagogiques.
+          </p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <button class="btn btn-white border btn-sm shadow-sm d-flex align-items-center gap-2">
+            <i class="bi bi-download text-muted"></i>
+            Exporter le PV (PDF/CSV)
+          </button>
+          <a routerLink="/responsable/arbitrage" class="btn btn-forest btn-sm px-3 shadow-sm d-flex align-items-center gap-2 text-white">
+            <i class="bi bi-plus-circle"></i>
+            Traiter les candidatures
+          </a>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-12 col-sm-6 col-xl-3">
+          <app-kpi-card
+            title="Total candidatures déposées"
+            value="42"
+            subtitle="dossiers"
+            badge="Dossiers enregistrés cette session"
+            icon="bi-folder2-open"
+            iconColor="teal">
+          </app-kpi-card>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+          <app-kpi-card
+            title="En attente d'arbitrage"
+            value="5"
+            subtitle="dossiers prioritaires"
+            badge="Dossiers en attente d'évaluation"
+            icon="bi-clipboard-check"
+            iconColor="blue">
+          </app-kpi-card>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+          <app-kpi-card
+            title="Affectations validées"
+            value="28"
+            subtitle="étudiants affectés"
+            badge="Affectations confirmées"
+            icon="bi-check-circle"
+            iconColor="green">
+          </app-kpi-card>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+          <app-kpi-card
+            title="Candidatures rejetées / réorientées"
+            value="9"
+            subtitle="dossiers"
+            badge="Non retenues ou redirigées"
+            icon="bi-arrow-left-right"
+            iconColor="red">
+          </app-kpi-card>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-header bg-white py-3 px-4 border-bottom">
+          <h2 class="h5 fw-bold text-dark mb-1">Dernières candidatures à arbitrer en priorité</h2>
+          <p class="text-muted mb-0 small">Étudiants sans assignation définitive avec avis académique transmis.</p>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table align-middle mb-0">
+            <thead class="bg-light text-secondary small text-uppercase">
+              <tr>
+                <th class="ps-4 py-3" style="font-size: 0.72rem; letter-spacing: 0.05em;">Étudiant & Parcours</th>
+                <th class="py-3" style="font-size: 0.72rem; letter-spacing: 0.05em;">Projet visé</th>
+                <th class="py-3" style="font-size: 0.72rem; letter-spacing: 0.05em;">Avis encadrant</th>
+                <th class="py-3 text-center" style="font-size: 0.72rem; letter-spacing: 0.05em;">Statut</th>
+                <th class="pe-4 py-3 text-end" style="font-size: 0.72rem; letter-spacing: 0.05em;">Décision</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let c of candidaturesPrioritaires">
+                <td class="ps-4 py-3">
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="avatar-circle bg-forest text-white fw-bold d-flex align-items-center justify-content-center">
+                      {{ c.initials }}
+                    </div>
+                    <div>
+                      <div class="fw-bold text-dark">{{ c.nom }}</div>
+                      <div class="text-muted small">{{ c.parcours }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3">
+                  <div class="fw-medium text-dark small">{{ c.projet }}</div>
+                  <div class="text-muted small" style="font-size: 0.75rem;">{{ c.voeu }}</div>
+                </td>
+                <td class="py-3">
+                  <div *ngIf="c.avisType === 'favorable'" class="text-success small fw-medium d-flex align-items-center gap-1">
+                    <i class="bi bi-hand-thumbs-up"></i>
+                    Favorable
+                  </div>
+                  <div *ngIf="c.avisType === 'reserve'" class="text-warning small fw-medium d-flex align-items-center gap-1">
+                    <i class="bi bi-info-circle"></i>
+                    Réservé
+                  </div>
+                  <div class="text-muted small" style="font-size: 0.75rem;">{{ c.avisEncadrant }}</div>
+                </td>
+                <td class="text-center py-3">
+                  <span class="badge badge-attente px-3 py-2 rounded-pill">
+                    ● {{ c.statut }}
+                  </span>
+                </td>
+                <td class="pe-4 py-3 text-end">
+                  <a routerLink="/responsable/arbitrage" class="btn btn-sm btn-forest text-white rounded-pill px-3 py-1 d-inline-flex align-items-center gap-1">
+                    Arbitrer <i class="bi bi-chevron-right"></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-footer bg-white border-top py-3 px-4 text-center">
+          <a routerLink="/responsable/arbitrage" class="text-decoration-none text-forest fw-medium small d-inline-flex align-items-center gap-1">
+            Voir l'ensemble des 5 candidatures en attente <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

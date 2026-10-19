@@ -1,0 +1,54 @@
+.btn-forest {
+  background-color: #14532d;
+  border-color: #14532d;
+}
+.btn-forest:hover {
+  background-color: #0f3e21;
+  border-color: #0f3e21;
+}
+.text-forest {
+  color: #14532d;
+}
+.badge-disponible {
+  background-color: #dcfce7;
+  color: #15803d;
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+}
+.badge-complet {
+  background-color: #e0e7ff;
+  color: #4338ca;
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+}
+.badge-attente {
+  background-color: #fef3c7;
+  color: #b45309;
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+}
+.btn-success-subtle {
+  background-color: #bbf7d0;
+  color: #14532d;
+  border: 1px solid #86efac;
+}
+.btn-success-subtle:hover {
+  background-color: #86efac;
+  color: #0f3e21;
+}
+.btn-info-subtle {
+  background-color: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+.btn-info-subtle:hover {
+  background-color: #bae6fd;
+  color: #075985;
+}
+.subject-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-color: #86efac !important;
+}

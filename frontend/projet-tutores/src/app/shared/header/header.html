@@ -1,0 +1,50 @@
+<header class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle app-header bg-white px-4 pt-3">
+  <nav aria-label="breadcrumb" class="breadcrumb-nav">
+    <ng-container *ngIf="breadcrumbs && breadcrumbs.length > 0; else defaultCrumbs">
+      <ng-container *ngFor="let crumb of breadcrumbs; let last = last">
+        <span [class.session-tag]="last" [class.fw-bold]="last" [class.text-muted]="!last" class="small">{{ crumb }}</span>
+        <span *ngIf="!last" class="text-muted mx-2 small">/</span>
+      </ng-container>
+    </ng-container>
+    <ng-template #defaultCrumbs>
+      <span class="text-muted small">{{ filiere }}</span>
+      <span class="text-muted mx-2 small">/</span>
+      <span class="text-muted small">{{ module }}</span>
+      <span class="text-muted mx-2 small">/</span>
+      <span class="session-tag fw-bold small">{{ session }}</span>
+    </ng-template>
+  </nav>
+
+  <div class="d-flex align-items-center gap-3">
+    <button type="button" class="btn btn-icon position-relative text-secondary p-1" aria-label="Notifications">
+      <i class="bi bi-bell fs-5"></i>
+      <span *ngIf="notificationCount > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger" style="font-size: 0.65rem; padding: 0.25rem 0.4rem;">
+        {{ notificationCount }}
+      </span>
+      <span *ngIf="notificationCount === 0 && hasNotification" class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+        <span class="visually-hidden">Nouvelles notifications</span>
+      </span>
+    </button>
+
+    <div class="vr bg-secondary opacity-25" style="height: 24px;"></div>
+
+    <div class="d-flex align-items-center gap-2 cursor-pointer" [title]="userName">
+      <img
+        *ngIf="userAvatar"
+        [src]="userAvatar"
+        [alt]="userName"
+        class="rounded-circle header-avatar"
+      />
+      <div
+        *ngIf="!userAvatar"
+        class="header-avatar-circle d-flex align-items-center justify-content-center text-white fw-bold small bg-forest">
+        {{ initialDisplay }}
+      </div>
+      <div class="d-none d-md-block text-start" *ngIf="userRole">
+        <div class="fw-semibold text-dark small lh-1">{{ userName }}</div>
+        <div class="text-muted small" style="font-size: 0.72rem;">{{ userRole }}</div>
+      </div>
+      <i class="bi bi-chevron-down text-muted small"></i>
+    </div>
+  </div>
+</header>

@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Sidebar } from '../../sidebar/sidebar';
-import { Header } from '../../header/header';
+import { Sidebar } from '../../shared/sidebar/sidebar';
+import { Header } from '../../shared/header/header';
 import { Sujet } from '../sujet/sujet';
 import { SujetItem } from '../sujet/sujet.model';
 

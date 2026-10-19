@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Sidebar } from '../../sidebar/sidebar';
-import { Header } from '../../header/header';
+import { Sidebar } from '../../shared/sidebar/sidebar';
+import { Header } from '../../shared/header/header';
 import { CandidatureItem, StatutCandidature } from './candidature.model';
 
 @Component({

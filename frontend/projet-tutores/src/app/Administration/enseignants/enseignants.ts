@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { Header } from '../../header/header';
-import { Sidebar } from '../../sidebar/sidebar';
+import { Header } from '../../shared/header/header';
+import { Sidebar } from '../../shared/sidebar/sidebar';
 import { KpiCard } from '../../shared/kpi-card/kpi-card';
 import { EnseignantItem } from './enseignants.model';
 

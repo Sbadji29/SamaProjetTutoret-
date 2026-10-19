@@ -1,0 +1,27 @@
+.btn-forest {
+  background-color: #14532d;
+  border-color: #14532d;
+}
+.btn-forest:hover {
+  background-color: #0f3e21;
+  border-color: #0f3e21;
+}
+.bg-forest {
+  background-color: #14532d !important;
+}
+.text-forest {
+  color: #14532d;
+}
+.avatar-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+.badge-attente {
+  background-color: #fef3c7;
+  color: #b45309;
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+}

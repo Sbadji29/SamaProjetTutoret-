@@ -1,0 +1,135 @@
+<div class="d-flex min-vh-100 bg-light">
+  <app-sidebar role="responsable"></app-sidebar>
+
+  <div class="flex-grow-1 d-flex flex-column" style="min-width: 0;">
+    <app-header
+      [breadcrumbs]="['Master Informatique', 'Projets Tutorés', 'Suivi des affectations']"
+      [notificationCount]="3"
+      userName="Dr. Alexandre Fontaine"
+      userRole="Resp. M2 Info"
+      userInitials="AF">
+    </app-header>
+
+    <main class="p-4 flex-grow-1">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+          <h1 class="h3 fw-bold text-dark mb-1">Suivi des affectations & Quotas</h1>
+          <p class="text-muted mb-0 small">
+            Supervision de la répartition des étudiants par projet et respect des capacités d'accueil.
+          </p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <button class="btn btn-white border btn-sm shadow-sm d-flex align-items-center gap-2">
+            <i class="bi bi-file-earmark-spreadsheet text-muted"></i>
+            Export complet (.xlsx)
+          </button>
+          <a routerLink="/responsable/arbitrage" class="btn btn-forest btn-sm px-3 shadow-sm d-flex align-items-center gap-2 text-white">
+            <i class="bi bi-sliders"></i>
+            Aller à l'arbitrage
+          </a>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-12 col-md-4">
+          <app-kpi-card
+            title="Capacité globale"
+            value="35"
+            subtitle="places offertes"
+            icon="bi-box"
+            iconColor="blue">
+          </app-kpi-card>
+        </div>
+        <div class="col-12 col-md-4">
+          <app-kpi-card
+            title="Étudiants assignés"
+            value="28"
+            subtitle="affectations confirmées"
+            badge="80% des places occupées"
+            icon="bi-check-circle"
+            iconColor="green">
+          </app-kpi-card>
+        </div>
+        <div class="col-12 col-md-4">
+          <app-kpi-card
+            title="Places vacantes"
+            value="7"
+            subtitle="disponibles"
+            badge="Session 2 de repêchage"
+            icon="bi-dash-circle"
+            iconColor="orange">
+          </app-kpi-card>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-header bg-white py-3 px-4 border-bottom">
+          <div class="row g-2 align-items-center">
+            <div class="col-12 col-md-8">
+              <div class="input-group input-group-sm">
+                <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                <input
+                  type="text"
+                  [(ngModel)]="searchTerm"
+                  class="form-control bg-light border-start-0"
+                  placeholder="Filtrer par sujet, encadrant ou code...">
+              </div>
+            </div>
+            <div class="col-12 col-md-4 text-md-end">
+              <span class="badge bg-light text-muted border py-2 px-3">{{ filteredSujets.length }} projets affichés</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table align-middle mb-0">
+            <thead class="bg-light text-secondary small text-uppercase">
+              <tr>
+                <th class="ps-4 py-3" style="font-size: 0.72rem; letter-spacing: 0.05em;">Projet & Code</th>
+                <th class="py-3" style="font-size: 0.72rem; letter-spacing: 0.05em;">Encadrant</th>
+                <th class="py-3 text-center" style="font-size: 0.72rem; letter-spacing: 0.05em;">Remplissage</th>
+                <th class="pe-4 py-3" style="font-size: 0.72rem; letter-spacing: 0.05em;">Étudiants affectés</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let s of filteredSujets">
+                <td class="ps-4 py-3">
+                  <span class="badge bg-light text-muted border mb-1" style="font-size: 0.7rem;">{{ s.id }}</span>
+                  <div class="fw-bold text-dark">{{ s.titre }}</div>
+                </td>
+                <td class="py-3 text-secondary small">
+                  {{ s.encadrant }}
+                </td>
+                <td class="text-center py-3" style="min-width: 150px;">
+                  <div class="d-flex justify-content-between small text-muted mb-1">
+                    <span>{{ s.assignes }} / {{ s.capacite }}</span>
+                    <span [class.text-success]="s.assignes === s.capacite" [class.text-warning]="s.assignes < s.capacite">
+                      {{ s.assignes === s.capacite ? 'Complet' : 'Disponible' }}
+                    </span>
+                  </div>
+                  <div class="progress" style="height: 6px;">
+                    <div
+                      class="progress-bar"
+                      [class.bg-success]="s.assignes === s.capacite"
+                      [class.bg-forest]="s.assignes < s.capacite"
+                      [style.width.%]="(s.assignes / s.capacite) * 100">
+                    </div>
+                  </div>
+                </td>
+                <td class="pe-4 py-3">
+                  <div class="d-flex flex-wrap gap-1">
+                    <span *ngFor="let etu of s.etudiants" class="badge bg-light text-dark border fw-normal py-1 px-2">
+                      <i class="bi bi-person-fill text-muted me-1"></i>
+                      {{ etu.nom }}
+                      <span class="text-muted ms-1" style="font-size: 0.7rem;">({{ etu.voeu }})</span>
+                    </span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

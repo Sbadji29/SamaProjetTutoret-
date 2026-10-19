@@ -1,0 +1,134 @@
+<div class="d-flex min-vh-100 bg-light">
+  <app-sidebar role="enseignant"></app-sidebar>
+
+  <div class="flex-grow-1 d-flex flex-column" style="min-width: 0;">
+    <app-header
+      [breadcrumbs]="['Master Informatique', 'Projets Tutorés', 'Session 2024-2025']"
+      [notificationCount]="4"
+      userName="Pr. Marc Bernard"
+      userRole="Enseignant-Chercheur"
+      userInitials="MB">
+    </app-header>
+
+    <main class="p-4 flex-grow-1">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+          <h1 class="h3 fw-bold text-dark mb-1">Tableau de bord Enseignant</h1>
+          <p class="text-muted mb-0 small">
+            Suivi de vos propositions de projets tutorés et des candidatures étudiantes pour l'année universitaire 2024-2025.
+          </p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <a routerLink="/enseignant/sujets" class="btn btn-outline-secondary btn-sm px-3 shadow-sm d-flex align-items-center gap-2">
+            <i class="bi bi-sliders"></i>
+            Gérer mes sujets
+          </a>
+          <a routerLink="/enseignant/sujets" class="btn btn-forest btn-sm px-3 shadow-sm d-flex align-items-center gap-2 text-white">
+            <i class="bi bi-plus-circle"></i>
+            Proposer un nouveau sujet
+          </a>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-12 col-md-4">
+          <app-kpi-card
+            title="Sujets proposés"
+            value="3"
+            subtitle="sujets"
+            icon="bi-journal-text"
+            iconColor="teal">
+          </app-kpi-card>
+        </div>
+        <div class="col-12 col-md-4">
+          <app-kpi-card
+            title="Places ouvertes"
+            value="8"
+            subtitle="places au total"
+            icon="bi-people"
+            iconColor="blue">
+          </app-kpi-card>
+        </div>
+        <div class="col-12 col-md-4">
+          <app-kpi-card
+            title="Candidatures reçues"
+            value="6"
+            subtitle="dossiers"
+            icon="bi-inbox"
+            iconColor="orange">
+          </app-kpi-card>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-header bg-white py-3 px-4 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+          <div>
+            <h2 class="h5 fw-bold text-dark mb-1">Mes sujets en cours d'attribution</h2>
+            <p class="text-muted mb-0 small">Suivi en temps réel des vœux et affectations par sujet de Master 2</p>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <a routerLink="/enseignant/sujets" class="btn btn-light btn-sm border d-flex align-items-center gap-2">
+              <i class="bi bi-sliders"></i>
+              Gérer mes sujets
+            </a>
+            <a routerLink="/enseignant/sujets" class="btn btn-forest btn-sm text-white d-flex align-items-center gap-2">
+              <i class="bi bi-plus-circle"></i>
+              Proposer un nouveau sujet
+            </a>
+          </div>
+        </div>
+
+        <div class="card-body p-4 d-flex flex-column gap-3">
+          <div *ngFor="let s of sujets" class="p-3 border rounded-3 bg-white subject-item transition-all">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3">
+              <div class="flex-grow-1">
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                  <span class="badge" [ngClass]="s.statusClass">{{ s.statusLabel }}</span>
+                  <span class="badge bg-light text-muted border">{{ s.id }}</span>
+                </div>
+                <h3 class="h6 fw-bold text-dark mb-2">{{ s.titre }}</h3>
+                <p class="text-secondary small mb-3">{{ s.description }}</p>
+
+                <div class="d-flex flex-wrap align-items-center gap-4 text-muted small">
+                  <span class="d-flex align-items-center gap-1">
+                    <i class="bi bi-people"></i> Capacité : <strong>{{ s.capacite }} étudiants</strong>
+                  </span>
+                  <span class="d-flex align-items-center gap-1">
+                    <i class="bi bi-person-lines-fill"></i> Candidatures : <strong>{{ s.candidatures }} reçues</strong>
+                  </span>
+                  <span class="d-flex align-items-center gap-1">
+                    <i class="bi" [ngClass]="s.progressionIcon"></i>
+                    <span>{{ s.progression }}</span>
+                  </span>
+                  <div class="d-flex gap-1 ms-auto">
+                    <span *ngFor="let tag of s.tags" class="badge bg-secondary-subtle text-secondary fw-normal">
+                      {{ tag }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-flex flex-md-column justify-content-end align-items-end gap-2 w-100 w-md-auto mt-2 mt-md-0">
+                <a *ngIf="!s.isEditOnly" routerLink="/enseignant/candidatures" class="btn btn-sm px-3 rounded-pill fw-medium d-flex align-items-center gap-2" [ngClass]="s.btnClass">
+                  <i class="bi bi-people"></i>
+                  Voir candidatures ({{ s.candidaturesCount }})
+                </a>
+                <a *ngIf="s.isEditOnly" routerLink="/enseignant/sujets" class="btn btn-sm btn-light border px-3 rounded-pill fw-medium d-flex align-items-center gap-2">
+                  <i class="bi bi-pencil-square"></i>
+                  Modifier
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer bg-white border-top py-3 px-4 d-flex justify-content-between align-items-center small text-muted">
+          <span>3 sujets présentés pour votre encadrement</span>
+          <a routerLink="/catalogue" class="text-decoration-none text-forest fw-medium d-flex align-items-center gap-1">
+            Ouvrir dans le catalogue public <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

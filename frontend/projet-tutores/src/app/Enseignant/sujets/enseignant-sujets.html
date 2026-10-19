@@ -1,0 +1,146 @@
+<div class="d-flex min-vh-100 bg-light">
+  <app-sidebar role="enseignant"></app-sidebar>
+
+  <div class="flex-grow-1 d-flex flex-column" style="min-width: 0;">
+    <app-header
+      [breadcrumbs]="['Master Informatique', 'Projets Tutorés', 'Session 2024-2025']"
+      [notificationCount]="4"
+      userName="Pr. Marc Bernard"
+      userRole="Enseignant-Chercheur"
+      userInitials="MB">
+    </app-header>
+
+    <main class="p-4 flex-grow-1">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+          <h1 class="h3 fw-bold text-dark mb-1">Mes sujets de projets tutorés</h1>
+          <p class="text-muted mb-0 small">
+            Consultez, éditez ou créez vos sujets d'études pour le Master 2 Informatique. Gérez les quotas d'encadrement et évaluez les candidatures associées.
+          </p>
+        </div>
+        <button (click)="newSujet()" class="btn btn-forest btn-sm px-3 shadow-sm d-flex align-items-center gap-2 text-white">
+          <i class="bi bi-plus-circle"></i>
+          Nouveau sujet
+        </button>
+      </div>
+
+      <div *ngIf="showSuccess" class="alert alert-success alert-dismissible fade show border-0 shadow-sm" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i> Le sujet a bien été enregistré.
+        <button type="button" class="btn-close" (click)="showSuccess = false"></button>
+      </div>
+
+      <div class="card border-0 shadow-sm rounded-3 mb-4">
+        <div class="card-header bg-white py-3 px-4 border-bottom">
+          <h2 class="h6 fw-bold text-dark mb-1">Liste de vos propositions académiques</h2>
+          <p class="text-muted mb-0 small">Sujets déposés sous l'encadrement du Pr. Marc Bernard</p>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table align-middle mb-0">
+            <thead class="bg-light text-secondary small text-uppercase">
+              <tr>
+                <th class="ps-4 py-3" style="font-size: 0.72rem; letter-spacing: 0.05em;">Titre du sujet</th>
+                <th class="py-3 text-center" style="font-size: 0.72rem; letter-spacing: 0.05em;">Capacité maximale</th>
+                <th class="py-3 text-center" style="font-size: 0.72rem; letter-spacing: 0.05em;">Disponibilité</th>
+                <th class="pe-4 py-3 text-end" style="font-size: 0.72rem; letter-spacing: 0.05em;">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let s of sujets" [class.table-active]="s.id === selectedSujet.id">
+                <td class="ps-4 py-3">
+                  <span class="badge bg-light text-muted border mb-1" style="font-size: 0.7rem;">{{ s.id }}</span>
+                  <div class="fw-bold text-dark">{{ s.titre }}</div>
+                </td>
+                <td class="text-center py-3 text-muted small">
+                  <i class="bi bi-people me-1"></i>
+                  {{ s.capacite }} étudiants
+                </td>
+                <td class="text-center py-3">
+                  <span *ngIf="s.disponible" class="badge badge-disponible px-3 py-2 rounded-pill">
+                    ● DISPONIBLE
+                  </span>
+                  <span *ngIf="!s.disponible" class="badge badge-complet px-3 py-2 rounded-pill">
+                    ● COMPLET
+                  </span>
+                </td>
+                <td class="pe-4 py-3 text-end">
+                  <button (click)="selectForEdit(s)" class="btn btn-sm btn-link text-decoration-none text-secondary me-2 p-1">
+                    <i class="bi bi-pencil-square me-1"></i> Modifier
+                  </button>
+                  <button (click)="deleteSujet(s.id)" class="btn btn-sm btn-link text-decoration-none text-danger p-1">
+                    <i class="bi bi-trash me-1"></i> Supprimer
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-footer bg-white border-top py-3 px-4 small text-muted">
+          Affichage de {{ sujets.length }} sujets sur {{ sujets.length }} au total
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-header bg-white py-3 px-4 border-bottom d-flex align-items-center gap-2">
+          <div class="rounded-2 p-2 bg-success-subtle text-success d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+            <i class="bi bi-card-checklist"></i>
+          </div>
+          <div>
+            <div class="text-uppercase text-success fw-bold" style="font-size: 0.7rem; letter-spacing: 0.05em;">Formulaire d'édition</div>
+            <h2 class="h6 fw-bold text-dark mb-0">Édition du sujet : {{ selectedSujet.titre || 'Nouveau sujet' }}</h2>
+          </div>
+        </div>
+
+        <div class="card-body p-4">
+          <form (ngSubmit)="saveEdit()">
+            <div class="mb-3">
+              <label class="form-label small fw-semibold text-secondary">Titre du projet <span class="text-danger">*</span></label>
+              <input type="text" [(ngModel)]="selectedSujet.titre" name="titre" class="form-control bg-light" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-semibold text-secondary">Description du sujet <span class="text-danger">*</span></label>
+              <textarea rows="4" [(ngModel)]="selectedSujet.description" name="description" class="form-control bg-light" required></textarea>
+            </div>
+
+            <div class="row g-3 mb-4">
+              <div class="col-12 col-md-6">
+                <label class="form-label small fw-semibold text-secondary">Capacité maximale (nombre d'étudiants) <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <input type="number" [(ngModel)]="selectedSujet.capacite" name="capacite" min="1" max="10" class="form-control bg-light" required>
+                  <span class="input-group-text bg-light text-muted small">étudiants</span>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label small fw-semibold text-secondary">Disponibilité <span class="text-danger">*</span></label>
+                <div class="d-flex align-items-center gap-4 p-2 bg-light rounded-2 border">
+                  <div class="form-check mb-0">
+                    <input class="form-check-input" type="radio" name="disponibilite" id="disp1" [value]="true" [(ngModel)]="selectedSujet.disponible">
+                    <label class="form-check-label small fw-medium" for="disp1">
+                      <span class="text-success">●</span> Disponible
+                    </label>
+                  </div>
+                  <div class="form-check mb-0">
+                    <input class="form-check-input" type="radio" name="disponibilite" id="disp2" [value]="false" [(ngModel)]="selectedSujet.disponible">
+                    <label class="form-check-label small fw-medium" for="disp2">
+                      <span class="text-primary">●</span> Complet
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end align-items-center gap-2">
+              <button type="button" (click)="resetForm()" class="btn btn-light border px-4">Annuler</button>
+              <button type="submit" class="btn btn-forest text-white px-4 d-flex align-items-center gap-2">
+                <i class="bi bi-save"></i>
+                Enregistrer le sujet
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

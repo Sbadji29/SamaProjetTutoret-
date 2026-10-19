@@ -1,0 +1,219 @@
+<div class="d-flex min-vh-100 bg-light">
+  <app-sidebar role="enseignant"></app-sidebar>
+
+  <div class="flex-grow-1 d-flex flex-column" style="min-width: 0;">
+    <app-header
+      [breadcrumbs]="['Master Informatique', 'Projets Tutorés', 'Session 2024-2025']"
+      [notificationCount]="4"
+      userName="Pr. Marc Bernard"
+      userRole="Enseignant-Chercheur"
+      userInitials="MB">
+    </app-header>
+
+    <main class="p-4 flex-grow-1">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+          <h1 class="h3 fw-bold text-dark mb-1">Candidatures reçues</h1>
+          <p class="text-muted mb-0 small">
+            Examinez les profils étudiants et donnez votre avis d'encadrement pour la commission pédagogique.
+          </p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <div class="dropdown">
+            <button class="btn btn-white border btn-sm dropdown-toggle shadow-sm d-flex align-items-center gap-2" type="button">
+              <i class="bi bi-folder2-open text-muted"></i>
+              Tous mes sujets ({{ countToutes }} candidatures)
+            </button>
+          </div>
+          <button class="btn btn-white border btn-sm shadow-sm d-flex align-items-center gap-2">
+            <i class="bi bi-download text-muted"></i>
+            Exporter
+          </button>
+        </div>
+      </div>
+
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3">
+        <div class="d-flex align-items-center gap-2">
+          <button
+            (click)="setFilter('TOUTES')"
+            class="btn btn-sm rounded-3 px-3 py-1 fw-medium"
+            [ngClass]="selectedFilter === 'TOUTES' ? 'btn-primary-subtle' : 'btn-light border'">
+            Toutes <span class="badge ms-1 rounded-pill" [ngClass]="selectedFilter === 'TOUTES' ? 'bg-primary text-white' : 'bg-secondary text-white'">{{ countToutes }}</span>
+          </button>
+          <button
+            (click)="setFilter('EN_ATTENTE')"
+            class="btn btn-sm rounded-3 px-3 py-1 fw-medium"
+            [ngClass]="selectedFilter === 'EN_ATTENTE' ? 'btn-warning-subtle' : 'btn-light border'">
+            En attente <span class="badge ms-1 rounded-pill bg-warning text-dark">{{ countEnAttente }}</span>
+          </button>
+          <button
+            (click)="setFilter('ACCEPTEE')"
+            class="btn btn-sm rounded-3 px-3 py-1 fw-medium"
+            [ngClass]="selectedFilter === 'ACCEPTEE' ? 'btn-success-subtle' : 'btn-light border'">
+            Acceptées <span class="badge ms-1 rounded-pill bg-success text-white">{{ countAcceptees }}</span>
+          </button>
+          <button
+            (click)="setFilter('REJETEE')"
+            class="btn btn-sm rounded-3 px-3 py-1 fw-medium"
+            [ngClass]="selectedFilter === 'REJETEE' ? 'btn-danger-subtle' : 'btn-light border'">
+            Rejetées <span class="badge ms-1 rounded-pill bg-danger text-white">{{ countRejetees }}</span>
+          </button>
+        </div>
+
+        <div class="text-muted small d-flex align-items-center gap-1">
+          <i class="bi bi-info-circle"></i>
+          Date limite d'évaluation : <strong>24 Octobre 2024</strong>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm rounded-3 mb-4">
+        <div class="card-header bg-white py-3 px-4 border-bottom">
+          <div class="row g-2 align-items-center">
+            <div class="col-12 col-md-8">
+              <div class="input-group input-group-sm">
+                <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                <input
+                  type="text"
+                  [(ngModel)]="searchTerm"
+                  class="form-control bg-light border-start-0"
+                  placeholder="Rechercher par étudiant, n° étudiant...">
+              </div>
+            </div>
+            <div class="col-12 col-md-4 text-md-end">
+              <span class="text-muted small me-2"><i class="bi bi-filter"></i> Tri :</span>
+              <button class="btn btn-light btn-sm border dropdown-toggle">Plus récent</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table align-middle mb-0">
+            <thead class="bg-light text-secondary small text-uppercase">
+              <tr>
+                <th class="ps-4 py-3" style="font-size: 0.72rem; letter-spacing: 0.05em;">Étudiant</th>
+                <th class="py-3" style="font-size: 0.72rem; letter-spacing: 0.05em;">Sujet concerné</th>
+                <th class="py-3 text-center" style="font-size: 0.72rem; letter-spacing: 0.05em;">Date de candidature</th>
+                <th class="py-3 text-center" style="font-size: 0.72rem; letter-spacing: 0.05em;">Statut</th>
+                <th class="pe-4 py-3 text-end" style="font-size: 0.72rem; letter-spacing: 0.05em;">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let c of filteredCandidatures">
+                <td class="ps-4 py-3">
+                  <div class="fw-bold text-dark">{{ c.nom }}</div>
+                  <div class="text-muted small">{{ c.email }}</div>
+                </td>
+                <td class="py-3 text-dark small">
+                  {{ c.sujet }}
+                </td>
+                <td class="text-center py-3 text-muted small">
+                  {{ c.date }}
+                </td>
+                <td class="text-center py-3">
+                  <span *ngIf="c.statut === 'EN_ATTENTE'" class="badge badge-statut-attente px-3 py-2 rounded-pill">
+                    ● EN_ATTENTE
+                  </span>
+                  <span *ngIf="c.statut === 'ACCEPTEE'" class="badge badge-statut-accepte px-3 py-2 rounded-pill">
+                    ● ACCEPTEE
+                  </span>
+                  <span *ngIf="c.statut === 'REJETEE'" class="badge badge-statut-rejete px-3 py-2 rounded-pill">
+                    ● REJETEE
+                  </span>
+                </td>
+                <td class="pe-4 py-3 text-end">
+                  <button (click)="openDossier(c)" class="btn btn-sm btn-outline-forest rounded-pill px-3 py-1 d-inline-flex align-items-center gap-1">
+                    <i class="bi bi-eye"></i>
+                    Voir le dossier
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="filteredCandidatures.length === 0">
+                <td colspan="5" class="text-center py-5 text-muted">
+                  <i class="bi bi-inbox fs-3 d-block mb-2 text-secondary"></i>
+                  Aucune candidature trouvée.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-footer bg-white border-top py-3 px-4 d-flex justify-content-between align-items-center small text-muted">
+          <span>Affichage de {{ filteredCandidatures.length }} candidatures sur {{ candidatures.length }}</span>
+          <nav>
+            <ul class="pagination pagination-sm mb-0">
+              <li class="page-item disabled"><span class="page-link">Précédent</span></li>
+              <li class="page-item active"><span class="page-link bg-forest border-forest">1</span></li>
+              <li class="page-item disabled"><span class="page-link">Suivant</span></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div *ngIf="selectedCandidature" class="modal-backdrop fade show"></div>
+<div *ngIf="selectedCandidature" class="modal fade show d-block" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow-lg rounded-4">
+      <div class="modal-header border-bottom py-3 px-4">
+        <div>
+          <span class="badge bg-light text-muted border mb-1">{{ selectedCandidature.id }}</span>
+          <h2 class="modal-title h5 fw-bold text-dark mb-0">Dossier de candidature : {{ selectedCandidature.nom }}</h2>
+        </div>
+        <button type="button" class="btn-close" (click)="closeDossier()"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded-3">
+              <div class="text-muted small mb-1">Étudiant & Parcours</div>
+              <div class="fw-bold text-dark fs-6">{{ selectedCandidature.nom }}</div>
+              <div class="text-secondary small">{{ selectedCandidature.email }}</div>
+              <div class="badge bg-white border text-dark mt-2">{{ selectedCandidature.parcours }}</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded-3">
+              <div class="text-muted small mb-1">Évaluation académique</div>
+              <div class="d-flex justify-content-between align-items-center mt-1">
+                <span class="text-secondary small">Moyenne générale :</span>
+                <span class="badge bg-success-subtle text-success fw-bold">{{ selectedCandidature.moyenne }}</span>
+              </div>
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <span class="text-secondary small">Date de soumission :</span>
+                <span class="small fw-medium">{{ selectedCandidature.date }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label small fw-semibold text-secondary">Sujet visé</label>
+          <div class="p-3 border rounded-3 bg-white fw-medium text-dark">
+            <i class="bi bi-journal-code text-forest me-2"></i>
+            {{ selectedCandidature.sujet }}
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label small fw-semibold text-secondary">Lettre de motivation</label>
+          <div class="p-3 bg-light rounded-3 small text-secondary lh-base">
+            "{{ selectedCandidature.motivation }}"
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-top bg-light py-3 px-4 d-flex justify-content-between">
+        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="closeDossier()">Fermer</button>
+        <div class="d-flex gap-2">
+          <button type="button" (click)="updateStatut('REJETEE')" class="btn btn-outline-danger btn-sm px-3">
+            <i class="bi bi-x-circle me-1"></i> Avis défavorable
+          </button>
+          <button type="button" (click)="updateStatut('ACCEPTEE')" class="btn btn-forest text-white btn-sm px-3">
+            <i class="bi bi-check-circle me-1"></i> Avis favorable / Pré-valider
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

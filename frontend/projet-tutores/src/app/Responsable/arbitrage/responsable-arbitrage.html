@@ -1,0 +1,205 @@
+<div class="d-flex min-vh-100 bg-light">
+  <app-sidebar role="responsable"></app-sidebar>
+
+  <div class="flex-grow-1 d-flex flex-column" style="min-width: 0;">
+    <app-header
+      [breadcrumbs]="['Master Informatique', 'Projets Tutorés', 'Commission d\'Arbitrage 2024']"
+      [notificationCount]="3"
+      userName="Dr. Alexandre Fontaine"
+      userRole="Resp. M2 Info"
+      userInitials="AF">
+    </app-header>
+
+    <main class="p-4 flex-grow-1">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+          <h1 class="h3 fw-bold text-dark mb-1">Traitement des vœux & Arbitrage</h1>
+          <p class="text-muted mb-0 small">
+            Validation collégiale des candidatures avec respect strict des capacités maximales par sujet.
+          </p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge badge-kpi-green px-3 py-2 rounded-3 d-flex align-items-center gap-2">
+            <i class="bi bi-people-fill"></i>
+            Affectés : 28/42
+          </span>
+          <span class="badge badge-kpi-pink px-3 py-2 rounded-3 d-flex align-items-center gap-2">
+            <i class="bi bi-hourglass-split"></i>
+            En attente : {{ countEnAttente }}
+          </span>
+        </div>
+      </div>
+
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3">
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+          <button
+            (click)="activeTab = 'TOUTES'"
+            class="btn btn-sm rounded-3 px-3 py-1 fw-medium"
+            [ngClass]="activeTab === 'TOUTES' ? 'btn-secondary text-white' : 'btn-light border'">
+            Toutes ({{ countToutes }})
+          </button>
+          <button
+            (click)="activeTab = 'EN_ATTENTE'"
+            class="btn btn-sm rounded-3 px-3 py-1 fw-medium"
+            [ngClass]="activeTab === 'EN_ATTENTE' ? 'btn-white border text-dark shadow-sm' : 'btn-light border'">
+            <span class="text-success me-1">●</span> En attente de décision <span class="badge bg-light text-dark border ms-1">{{ countEnAttente }}</span>
+          </button>
+          <button
+            (click)="activeTab = 'VALIDEE'"
+            class="btn btn-sm rounded-3 px-3 py-1 fw-medium"
+            [ngClass]="activeTab === 'VALIDEE' ? 'btn-white border text-dark shadow-sm' : 'btn-light border'">
+            Validées ({{ countValidees }})
+          </button>
+          <button
+            (click)="activeTab = 'REJETEE'"
+            class="btn btn-sm rounded-3 px-3 py-1 fw-medium"
+            [ngClass]="activeTab === 'REJETEE' ? 'btn-white border text-dark shadow-sm' : 'btn-light border'">
+            Rejetées ({{ countRejetees }})
+          </button>
+        </div>
+
+        <div class="d-flex align-items-center gap-2 w-100 w-md-auto">
+          <div class="input-group input-group-sm">
+            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+            <input type="text" [(ngModel)]="searchTerm" class="form-control border-start-0" placeholder="Rechercher...">
+          </div>
+          <select [(ngModel)]="selectedParcours" class="form-select form-select-sm bg-white" style="min-width: 180px;">
+            <option>Tous les parcours M2</option>
+            <option>M2 Génie Logiciel</option>
+            <option>M2 Sécurité & Systèmes</option>
+            <option>M2 Données & IA</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-12 col-lg-7 col-xl-8">
+          <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-header bg-white py-3 px-4 border-bottom d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center gap-2">
+                <h2 class="h6 fw-bold text-dark mb-0">Candidatures à arbitrer</h2>
+                <span class="badge bg-light text-secondary border">Session 1</span>
+              </div>
+              <div class="d-flex align-items-center gap-3 small">
+                <span class="text-success small"><i class="bi bi-circle-fill" style="font-size: 0.5rem;"></i> Capacité disponible</span>
+                <span class="text-danger small"><i class="bi bi-circle-fill" style="font-size: 0.5rem;"></i> Complet</span>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light text-secondary small text-uppercase">
+                  <tr>
+                    <th class="ps-4 py-3" style="font-size: 0.72rem; letter-spacing: 0.05em;">Étudiant</th>
+                    <th class="py-3" style="font-size: 0.72rem; letter-spacing: 0.05em;">Sujet demandé</th>
+                    <th class="py-3" style="font-size: 0.72rem; letter-spacing: 0.05em;">Enseignant</th>
+                    <th class="py-3 text-center" style="font-size: 0.72rem; letter-spacing: 0.05em;">Date</th>
+                    <th class="pe-4 py-3 text-center" style="font-size: 0.72rem; letter-spacing: 0.05em;">Statut</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let c of filteredList"
+                    (click)="select(c)"
+                    [class.table-active]="c.id === selectedCandidature.id"
+                    style="cursor: pointer;">
+                    <td class="ps-4 py-3">
+                      <div class="d-flex align-items-center gap-2">
+                        <div
+                          class="avatar-circle fw-bold text-white d-flex align-items-center justify-content-center"
+                          [ngClass]="c.avatarClass">
+                          {{ c.initials }}
+                        </div>
+                        <div class="fw-bold text-dark">{{ c.nom }}</div>
+                      </div>
+                    </td>
+                    <td class="py-3 text-dark small">
+                      <div class="text-truncate" style="max-width: 220px;" [title]="c.sujet">{{ c.sujet }}</div>
+                    </td>
+                    <td class="py-3 text-secondary small">
+                      {{ c.enseignant }}
+                    </td>
+                    <td class="text-center py-3 text-muted small">
+                      {{ c.date }}
+                    </td>
+                    <td class="pe-4 py-3 text-center">
+                      <i class="bi bi-circle-fill text-success" style="font-size: 0.6rem;"></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="card-footer bg-white border-top py-3 px-4 d-flex justify-content-between align-items-center small text-muted">
+              <span>Affichage de {{ filteredList.length }} candidatures prioritaires sur {{ countEnAttente }} en attente</span>
+              <div class="d-flex align-items-center gap-1">
+                <button class="btn btn-sm btn-light border p-1" style="line-height: 1;"><i class="bi bi-chevron-left"></i></button>
+                <span class="px-2 small fw-medium">1 / 1</span>
+                <button class="btn btn-sm btn-light border p-1" style="line-height: 1;"><i class="bi bi-chevron-right"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-5 col-xl-4">
+          <div class="card border-0 shadow-sm rounded-3" *ngIf="selectedCandidature">
+            <div class="card-header bg-white py-3 px-4 border-bottom d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center gap-2">
+                <span class="text-success small">●</span>
+                <span class="fw-bold text-dark small">Détail du dossier • Arbitrage</span>
+              </div>
+              <span class="badge bg-primary-subtle text-primary fw-medium small">
+                {{ selectedCandidature.voeuPriorite }}
+              </span>
+            </div>
+
+            <div class="card-body p-4">
+              <div class="d-flex align-items-center justify-content-between mb-4">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="avatar-large bg-forest text-white fw-bold d-flex align-items-center justify-content-center">
+                    {{ selectedCandidature.initials }}
+                  </div>
+                  <div>
+                    <h3 class="h6 fw-bold text-dark mb-0">{{ selectedCandidature.nom }}</h3>
+                    <div class="text-muted small">{{ selectedCandidature.parcours }}</div>
+                  </div>
+                </div>
+                <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-bold">
+                  {{ selectedCandidature.voeu }}
+                </span>
+              </div>
+
+              <div class="p-3 rounded-3 bg-light border mb-4">
+                <div class="text-uppercase text-muted fw-bold mb-1" style="font-size: 0.68rem; letter-spacing: 0.05em;">Sujet ciblé</div>
+                <h4 class="h6 fw-bold text-dark mb-2">{{ selectedCandidature.sujet }}</h4>
+                <div class="text-secondary small mb-2 d-flex align-items-center gap-1">
+                  <i class="bi bi-person text-muted"></i>
+                  Encadrant : <strong>{{ selectedCandidature.enseignant }}</strong>
+                </div>
+                <div class="text-success small fw-medium d-flex align-items-center gap-1">
+                  <i class="bi bi-circle-fill" style="font-size: 0.5rem;"></i>
+                  {{ selectedCandidature.placesRestantes }}
+                </div>
+              </div>
+
+              <div class="row g-2">
+                <div class="col-6">
+                  <button (click)="rejeter()" class="btn btn-rejet w-100 py-2 d-flex align-items-center justify-content-center gap-2">
+                    <i class="bi bi-x-lg"></i>
+                    Rejeter
+                  </button>
+                </div>
+                <div class="col-6">
+                  <button (click)="accepter()" class="btn btn-forest text-white w-100 py-2 d-flex align-items-center justify-content-center gap-2">
+                    <i class="bi bi-check-circle"></i>
+                    Accepter
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

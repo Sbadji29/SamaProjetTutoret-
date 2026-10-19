@@ -1,0 +1,46 @@
+.btn-forest {
+  background-color: #14532d;
+  border-color: #14532d;
+}
+.btn-forest:hover {
+  background-color: #0f3e21;
+  border-color: #0f3e21;
+}
+.bg-forest {
+  background-color: #14532d !important;
+}
+.badge-kpi-green {
+  background-color: #dcfce7;
+  color: #166534;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+.badge-kpi-pink {
+  background-color: #fee2e2;
+  color: #991b1b;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+.avatar-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+}
+.avatar-large {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+.btn-rejet {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  font-weight: 600;
+  border-radius: 8px;
+}
+.btn-rejet:hover {
+  background-color: #fecaca;
+  color: #991b1b;
+}
