@@ -62,9 +62,9 @@ public class DataInitializer implements CommandLineRunner {
             session = sessionRepository.findAll().get(0);
         } else {
             SessionUniversitaire nouvelleSession = new SessionUniversitaire();
-            nouvelleSession.setLibelle("Session 2024-2025");
-            nouvelleSession.setDateDebut(LocalDate.of(2024, 9, 1));
-            nouvelleSession.setDateFin(LocalDate.of(2025, 6, 30));
+            nouvelleSession.setLibelle("Session 2025-2026");
+            nouvelleSession.setDateDebut(LocalDate.of(2025, 9, 1));
+            nouvelleSession.setDateFin(LocalDate.of(2026, 6, 30));
             nouvelleSession.setActive(true);
             nouvelleSession.setDateClotureVoeux(LocalDateTime.now().plusMonths(2));
             nouvelleSession.setDateLimiteEvaluation(LocalDateTime.now().plusMonths(3));
@@ -113,7 +113,7 @@ public class DataInitializer implements CommandLineRunner {
             uEtu = utilisateurService.creer(uEtu);
             Etudiant etu = new Etudiant();
             etu.setNumeroEtudiant("P29001");
-            etu.setFiliere("Master Génie Informatique (M2 GI)");
+            etu.setFiliere("Master Génie Informatique (M2 GDIL)");
             etu.setNiveau("M2");
             etu.setUtilisateur(uEtu);
             etudiantRepository.save(etu);
@@ -125,7 +125,7 @@ public class DataInitializer implements CommandLineRunner {
             uEtu2 = utilisateurService.creer(uEtu2);
             Etudiant etu2 = new Etudiant();
             etu2.setNumeroEtudiant("P29045");
-            etu2.setFiliere("Master Génie Informatique (M2 GI)");
+            etu2.setFiliere("Master Génie Informatique (M2 GDIL)");
             etu2.setNiveau("M2");
             etu2.setUtilisateur(uEtu2);
             etudiantRepository.save(etu2);
