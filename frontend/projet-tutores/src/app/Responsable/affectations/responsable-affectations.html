@@ -3,11 +3,8 @@
 
   <div class="flex-grow-1 d-flex flex-column" style="min-width: 0;">
     <app-header
-      [breadcrumbs]="['Master Informatique', 'Projets Tutorés', 'Suivi des affectations 2026-2027']"
-      [notificationCount]="3"
-      userName="Dr. Aminata Sow"
-      userRole="Resp. Pédagogique M2 GDIL"
-      userInitials="AS">
+      [breadcrumbs]="['Master Informatique', 'Projets Tutorés', 'Session 2026-2027']"
+      [notificationCount]="0">
     </app-header>
 
     <main class="p-4 flex-grow-1">
@@ -15,7 +12,7 @@
         <div>
           <h1 class="h3 fw-bold text-dark mb-1">Suivi des affectations & Quotas</h1>
           <p class="text-muted mb-0 small">
-            Supervision de la répartition des étudiants par projet et respect des capacités d'accueil.
+            Supervision de la répartition des étudiants par projet et respect des capacités d'accueil (Session 2026-2027).
           </p>
         </div>
         <div class="d-flex align-items-center gap-2">
@@ -124,6 +121,12 @@
                       <span class="text-muted ms-1" style="font-size: 0.7rem;">({{ etu.voeu }})</span>
                     </span>
                   </div>
+                </td>
+              </tr>
+              <tr *ngIf="filteredSujets.length === 0">
+                <td colspan="4" class="text-center py-4 text-muted">
+                  <i class="bi bi-inbox fs-3 d-block mb-2 opacity-50"></i>
+                  Aucun sujet répertorié pour le moment.
                 </td>
               </tr>
             </tbody>

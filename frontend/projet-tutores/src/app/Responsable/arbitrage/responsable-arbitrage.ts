@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Header } from '../../shared/header/header';
 import { Sidebar } from '../../shared/sidebar/sidebar';
 import { CandidatureService } from '../../core/services/candidature.service';
@@ -32,50 +34,18 @@ export interface ArbitrageItem {
   styleUrl: './responsable-arbitrage.css'
 })
 export class ResponsableArbitrage implements OnInit {
-  candidatures: ArbitrageItem[] = [
-    {
-      numericId: 1,
-      id: 'ARB-01',
-      initials: 'MT',
-      avatarClass: 'bg-forest',
-      nom: 'Mamadou Alpha Touré',
-      sujet: "Conception d'une plateforme numérique de suivi des activités agricoles au Sénégal",
-      enseignant: 'Pr. Moussa Diop',
-      date: '24/10/2026',
-      capaciteStatus: 'disponible',
-      statut: 'EN_ATTENTE',
-      voeu: 'Vœu n°1',
-      voeuPriorite: 'Vœu n°1 (Priorité haute)',
-      placesRestantes: '3 places disponibles (0/3 retenus)',
-      parcours: 'Master Génie Informatique (M2 GDIL)'
-    },
-    {
-      numericId: 2,
-      id: 'ARB-02',
-      initials: 'FN',
-      avatarClass: 'bg-primary-subtle text-primary',
-      nom: 'Fatou Marie Ndiaye',
-      sujet: "Détection d'anomalies réseau et sécurisation des infrastructures informatiques universitaires",
-      enseignant: 'Pr. Moussa Diop',
-      date: '23/10/2026',
-      capaciteStatus: 'disponible',
-      statut: 'EN_ATTENTE',
-      voeu: 'Vœu n°1',
-      voeuPriorite: 'Vœu n°1 (Priorité haute)',
-      placesRestantes: '2 places disponibles (0/2 retenus)',
-      parcours: 'Master Génie Informatique (M2 GDIL)'
-    }
-  ];
-
-  selectedCandidature: ArbitrageItem = this.candidatures[0];
+  candidatures: ArbitrageItem[] = [];
+  selectedCandidature: ArbitrageItem | null = null;
   activeTab: 'TOUTES' | 'EN_ATTENTE' | 'VALIDEE' | 'REJETEE' = 'EN_ATTENTE';
   searchTerm = '';
   selectedParcours = 'Tous les parcours M2';
   chargement = false;
+  countAffectes = 0;
 
   constructor(
     private candidatureService: CandidatureService,
-    private affectationService: AffectationService
+    private affectationService: AffectationService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -84,40 +54,46 @@ export class ResponsableArbitrage implements OnInit {
 
   chargerCandidatures(): void {
     this.chargement = true;
-    this.candidatureService.getToutes().subscribe({
-      next: (apiList) => {
+
+    forkJoin({
+      candidatures: this.candidatureService.getToutes().pipe(catchError(() => of([]))),
+      affectations: this.affectationService.getToutes().pipe(catchError(() => of([])))
+    }).subscribe({
+      next: (res) => {
+        const list = res.candidatures || [];
+        this.candidatures = list.map((c, index) => {
+          const nomEtu = c.etudiant?.utilisateur ? `${c.etudiant.utilisateur.prenom} ${c.etudiant.utilisateur.nom}` : 'Étudiant';
+          const initials = nomEtu.split(' ').map(p => p.charAt(0)).join('').slice(0, 2).toUpperCase() || 'ET';
+          const ensNom = c.sujet?.enseignant ? `${c.sujet.enseignant.utilisateur?.prenom || ''} ${c.sujet.enseignant.utilisateur?.nom || ''}`.trim() : 'Enseignant';
+          const dateStr = c.dateCandidature ? new Date(c.dateCandidature).toLocaleDateString('fr-FR') : 'Récent';
+
+          return {
+            numericId: c.id,
+            id: `ARB-${String(index + 1).padStart(2, '0')}`,
+            initials: initials,
+            avatarClass: index === 0 ? 'bg-forest' : 'bg-primary-subtle text-primary',
+            nom: nomEtu,
+            sujet: c.sujet?.titre || 'Sujet proposé',
+            enseignant: ensNom,
+            date: dateStr,
+            capaciteStatus: c.sujet?.disponible ? 'disponible' : 'complet',
+            statut: c.statut === 'ACCEPTEE' ? 'VALIDEE' : (c.statut as any),
+            voeu: `Vœu n°${c.priorite}`,
+            voeuPriorite: `Vœu n°${c.priorite} (${c.priorite === 1 ? 'Priorité haute' : 'Priorité standard'})`,
+            placesRestantes: `${c.sujet?.capaciteMax || 2} places offertes`,
+            parcours: c.etudiant ? `${c.etudiant.filiere} (${c.etudiant.niveau})` : 'Master 2 Informatique'
+          };
+        });
+
+        const pending = this.candidatures.find(c => c.statut === 'EN_ATTENTE');
+        this.selectedCandidature = pending || (this.candidatures.length > 0 ? this.candidatures[0] : null);
+        this.countAffectes = (res.affectations || []).length;
         this.chargement = false;
-        if (apiList && apiList.length > 0) {
-          this.candidatures = apiList.map((c, index) => {
-            const nomEtu = c.etudiant?.utilisateur ? `${c.etudiant.utilisateur.prenom} ${c.etudiant.utilisateur.nom}` : 'Étudiant';
-            const initials = nomEtu.split(' ').map(p => p.charAt(0)).join('').slice(0, 2).toUpperCase() || 'ET';
-            const ensNom = c.sujet?.enseignant ? `${c.sujet.enseignant.utilisateur?.prenom || ''} ${c.sujet.enseignant.utilisateur?.nom || ''}`.trim() : 'Enseignant';
-            const dateStr = c.dateCandidature ? new Date(c.dateCandidature).toLocaleDateString('fr-FR') : 'Récent';
-
-            return {
-              numericId: c.id,
-              id: `ARB-${String(index + 1).padStart(2, '0')}`,
-              initials: initials,
-              avatarClass: index === 0 ? 'bg-forest' : 'bg-primary-subtle text-primary',
-              nom: nomEtu,
-              sujet: c.sujet?.titre || 'Sujet proposé',
-              enseignant: ensNom,
-              date: dateStr,
-              capaciteStatus: c.sujet?.disponible ? 'disponible' : 'complet',
-              statut: c.statut === 'ACCEPTEE' ? 'VALIDEE' : (c.statut as any),
-              voeu: `Vœu n°${c.priorite}`,
-              voeuPriorite: `Vœu n°${c.priorite} (${c.priorite === 1 ? 'Priorité haute' : 'Priorité standard'})`,
-              placesRestantes: `${c.sujet?.capaciteMax || 2} places offertes`,
-              parcours: c.etudiant ? `${c.etudiant.filiere} (${c.etudiant.niveau})` : 'Master 2 Informatique'
-            };
-          });
-
-          const pending = this.candidatures.find(c => c.statut === 'EN_ATTENTE');
-          this.selectedCandidature = pending || this.candidatures[0];
-        }
+        this.cdr.detectChanges();
       },
       error: () => {
         this.chargement = false;
+        this.cdr.detectChanges();
       }
     });
   }

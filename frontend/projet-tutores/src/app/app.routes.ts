@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { inject } from '@angular/core';
 import { Candidature } from './Etudiant/candidature/candidature';
 import { Catalogue } from './Etudiant/catalogue/catalogue';
 import { Dashboard } from './Etudiant/dashboard/dashboard';
@@ -14,36 +15,66 @@ import { EnseignantCandidatures } from './Enseignant/candidatures/enseignant-can
 import { ResponsableDashboard } from './Responsable/dashboard/responsable-dashboard';
 import { ResponsableArbitrage } from './Responsable/arbitrage/responsable-arbitrage';
 import { ResponsableAffectations } from './Responsable/affectations/responsable-affectations';
+import { AuthService } from './core/services/auth.service';
+import { authGuard, guestGuard, roleGuard } from './core/guards/auth.guard';
+
+const redirectBasedOnRole = () => {
+  const authService = inject(AuthService);
+  if (!authService.isAuthenticated()) {
+    return '/connexion';
+  }
+  const user = authService.currentUser();
+  switch (user?.role) {
+    case 'ADMIN':
+      return '/admin/tableau-de-bord';
+    case 'ENSEIGNANT':
+      return '/enseignant/dashboard';
+    case 'RESPONSABLE':
+      return '/responsable/dashboard';
+    case 'ETUDIANT':
+    default:
+      return '/tableau-de-bord';
+  }
+};
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'tableau-de-bord', pathMatch: 'full' },
-  { path: 'tableau-de-bord', component: Dashboard },
-  { path: 'dashboard', component: Dashboard },
-  { path: 'catalogue', component: Catalogue },
-  { path: 'candidatures', component: Candidature },
-  { path: 'candidature', component: Candidature },
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: redirectBasedOnRole
+  },
+
+  { path: 'tableau-de-bord', component: Dashboard, canActivate: [roleGuard(['ETUDIANT'])] },
+  { path: 'dashboard', component: Dashboard, canActivate: [roleGuard(['ETUDIANT'])] },
+  { path: 'catalogue', component: Catalogue, canActivate: [roleGuard(['ETUDIANT'])] },
+  { path: 'candidatures', component: Candidature, canActivate: [roleGuard(['ETUDIANT'])] },
+  { path: 'candidature', component: Candidature, canActivate: [roleGuard(['ETUDIANT'])] },
 
   { path: 'enseignant', redirectTo: 'enseignant/dashboard', pathMatch: 'full' },
-  { path: 'enseignant/dashboard', component: EnseignantDashboard },
-  { path: 'enseignant/sujets', component: EnseignantSujets },
-  { path: 'enseignant/candidatures', component: EnseignantCandidatures },
+  { path: 'enseignant/dashboard', component: EnseignantDashboard, canActivate: [roleGuard(['ENSEIGNANT'])] },
+  { path: 'enseignant/sujets', component: EnseignantSujets, canActivate: [roleGuard(['ENSEIGNANT'])] },
+  { path: 'enseignant/candidatures', component: EnseignantCandidatures, canActivate: [roleGuard(['ENSEIGNANT'])] },
 
   { path: 'responsable', redirectTo: 'responsable/dashboard', pathMatch: 'full' },
-  { path: 'responsable/dashboard', component: ResponsableDashboard },
-  { path: 'responsable/arbitrage', component: ResponsableArbitrage },
-  { path: 'responsable/affectations', component: ResponsableAffectations },
+  { path: 'responsable/dashboard', component: ResponsableDashboard, canActivate: [roleGuard(['RESPONSABLE'])] },
+  { path: 'responsable/arbitrage', component: ResponsableArbitrage, canActivate: [roleGuard(['RESPONSABLE'])] },
+  { path: 'responsable/affectations', component: ResponsableAffectations, canActivate: [roleGuard(['RESPONSABLE'])] },
 
   { path: 'admin', redirectTo: 'admin/tableau-de-bord', pathMatch: 'full' },
-  { path: 'admin/tableau-de-bord', component: DashboardAdmin },
-  { path: 'admin/dashboard', component: DashboardAdmin },
-  { path: 'admin/etudiants', component: Etudiants },
-  { path: 'admin/enseignants', component: Enseignants },
-  { path: 'admin/affectations', component: Affectations },
-  { path: 'gestion-etudiants', component: Etudiants },
-  { path: 'gestion-enseignants', component: Enseignants },
-  { path: 'suivi-affectations', component: Affectations },
+  { path: 'admin/tableau-de-bord', component: DashboardAdmin, canActivate: [roleGuard(['ADMIN'])] },
+  { path: 'admin/dashboard', component: DashboardAdmin, canActivate: [roleGuard(['ADMIN'])] },
+  { path: 'admin/etudiants', component: Etudiants, canActivate: [roleGuard(['ADMIN'])] },
+  { path: 'admin/enseignants', component: Enseignants, canActivate: [roleGuard(['ADMIN'])] },
+  { path: 'admin/affectations', component: Affectations, canActivate: [roleGuard(['ADMIN'])] },
+  { path: 'gestion-etudiants', component: Etudiants, canActivate: [roleGuard(['ADMIN'])] },
+  { path: 'gestion-enseignants', component: Enseignants, canActivate: [roleGuard(['ADMIN'])] },
+  { path: 'suivi-affectations', component: Affectations, canActivate: [roleGuard(['ADMIN'])] },
 
-  { path: 'connexion', component: Connexion },
-  { path: 'inscription', component: Inscription },
-  { path: '**', redirectTo: 'tableau-de-bord' }
+  { path: 'connexion', component: Connexion, canActivate: [guestGuard] },
+  { path: 'inscription', component: Inscription, canActivate: [guestGuard] },
+
+  {
+    path: '**',
+    redirectTo: redirectBasedOnRole
+  }
 ];

@@ -14,11 +14,15 @@ export class AuthService {
 
   currentUser = signal<ConnexionReponse | null>(this.getStoredUser());
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {
+    try {
+      localStorage.removeItem(this.storageKey);
+    } catch {}
+  }
 
   private getStoredUser(): ConnexionReponse | null {
     try {
-      const item = localStorage.getItem(this.storageKey);
+      const item = sessionStorage.getItem(this.storageKey);
       return item ? JSON.parse(item) : null;
     } catch {
       return null;
@@ -28,7 +32,7 @@ export class AuthService {
   connecter(requete: ConnexionRequete): Observable<ConnexionReponse> {
     return this.http.post<ConnexionReponse>(`${this.apiUrl}/connexion`, requete).pipe(
       tap((reponse) => {
-        localStorage.setItem(this.storageKey, JSON.stringify(reponse));
+        sessionStorage.setItem(this.storageKey, JSON.stringify(reponse));
         this.currentUser.set(reponse);
       })
     );
@@ -37,13 +41,14 @@ export class AuthService {
   inscrire(requete: InscriptionRequete): Observable<ConnexionReponse> {
     return this.http.post<ConnexionReponse>(`${this.apiUrl}/inscription`, requete).pipe(
       tap((reponse) => {
-        localStorage.setItem(this.storageKey, JSON.stringify(reponse));
+        sessionStorage.setItem(this.storageKey, JSON.stringify(reponse));
         this.currentUser.set(reponse);
       })
     );
   }
 
   deconnecter(): void {
+    sessionStorage.removeItem(this.storageKey);
     localStorage.removeItem(this.storageKey);
     this.currentUser.set(null);
     this.router.navigate(['/connexion']);

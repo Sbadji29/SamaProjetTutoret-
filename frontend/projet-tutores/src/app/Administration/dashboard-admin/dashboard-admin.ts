@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Header } from '../../shared/header/header';
 import { Sidebar } from '../../shared/sidebar/sidebar';
 import { KpiCard } from '../../shared/kpi-card/kpi-card';
@@ -8,6 +10,7 @@ import { EtudiantService } from '../../core/services/etudiant.service';
 import { EnseignantService } from '../../core/services/enseignant.service';
 import { SujetService } from '../../core/services/sujet.service';
 import { CandidatureService } from '../../core/services/candidature.service';
+import { AffectationService } from '../../core/services/affectation.service';
 
 interface AdminModuleCard {
   id: number;
@@ -27,10 +30,10 @@ interface AdminModuleCard {
   styleUrl: './dashboard-admin.css',
 })
 export class DashboardAdmin implements OnInit {
-  totalEtudiants: number = 142;
-  totalEnseignants: number = 24;
-  totalSujets: number = 38;
-  totalCandidatures: number = 94;
+  totalEtudiants: number = 0;
+  totalEnseignants: number = 0;
+  totalSujets: number = 0;
+  totalCandidatures: number = 0;
   chargement: boolean = false;
 
   modules: AdminModuleCard[] = [
@@ -41,7 +44,7 @@ export class DashboardAdmin implements OnInit {
       title: 'Gestion des étudiants',
       description:
         "Accéder à l'annuaire complet, importer des listes d'inscrits ENT via fichier CSV et gérer la réinitialisation de comptes.",
-      infoFooter: '142 profils actifs',
+      infoFooter: '0 profil actif',
       buttonLabel: 'Gérer les étudiants →',
       link: '/admin/etudiants',
     },
@@ -52,7 +55,7 @@ export class DashboardAdmin implements OnInit {
       title: 'Gestion des enseignants',
       description:
         "Liste des enseignants-chercheurs, affectation aux départements pédagogiques et équilibrage des quotas horaires d'encadrement.",
-      infoFooter: 'Capacité: 48 binômes',
+      infoFooter: '0 enseignant actif',
       buttonLabel: 'Gérer les enseignants →',
       link: '/admin/enseignants',
     },
@@ -63,7 +66,7 @@ export class DashboardAdmin implements OnInit {
       title: 'Sujets & candidatures',
       description:
         'Supervision des fiches de projets tutorés soumises, validation collégiale de la commission et suivi des vœux étudiants.',
-      infoFooter: '32 sujets éligibles',
+      infoFooter: '0 sujet répertorié',
       buttonLabel: 'Consulter les sujets →',
       link: '/catalogue',
     },
@@ -74,7 +77,7 @@ export class DashboardAdmin implements OnInit {
       title: 'Consultation des affectations',
       description:
         "Matrice des binômes formés, saturation des capacités d'accueil laboratoires et publication des procès-verbaux officiels.",
-      infoFooter: 'Arbitrage: 87% finalisé',
+      infoFooter: '0 affectation finalisée',
       buttonLabel: 'Voir les affectations →',
       link: '/admin/affectations',
     },
@@ -84,7 +87,9 @@ export class DashboardAdmin implements OnInit {
     private etudiantService: EtudiantService,
     private enseignantService: EnseignantService,
     private sujetService: SujetService,
-    private candidatureService: CandidatureService
+    private candidatureService: CandidatureService,
+    private affectationService: AffectationService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -94,45 +99,30 @@ export class DashboardAdmin implements OnInit {
   chargerStatistiques(): void {
     this.chargement = true;
 
-    this.etudiantService.obtenirTous().subscribe({
-      next: (etudiants) => {
-        if (etudiants && etudiants.length > 0) {
-          this.totalEtudiants = etudiants.length;
-          this.modules[0].infoFooter = `${etudiants.length} profils actifs`;
-        }
-      },
-      error: () => {}
-    });
+    forkJoin({
+      etudiants: this.etudiantService.obtenirTous().pipe(catchError(() => of([]))),
+      enseignants: this.enseignantService.obtenirTous().pipe(catchError(() => of([]))),
+      sujets: this.sujetService.getTous().pipe(catchError(() => of([]))),
+      candidatures: this.candidatureService.getToutes().pipe(catchError(() => of([]))),
+      affectations: this.affectationService.getToutes().pipe(catchError(() => of([])))
+    }).subscribe({
+      next: (res) => {
+        this.totalEtudiants = res.etudiants.length;
+        this.totalEnseignants = res.enseignants.length;
+        this.totalSujets = res.sujets.length;
+        this.totalCandidatures = res.candidatures.length;
 
-    this.enseignantService.obtenirTous().subscribe({
-      next: (enseignants) => {
-        if (enseignants && enseignants.length > 0) {
-          this.totalEnseignants = enseignants.length;
-          this.modules[1].infoFooter = `${enseignants.length} enseignants actifs`;
-        }
-      },
-      error: () => {}
-    });
+        this.modules[0].infoFooter = `${this.totalEtudiants} profil${this.totalEtudiants > 1 ? 's' : ''} actif${this.totalEtudiants > 1 ? 's' : ''}`;
+        this.modules[1].infoFooter = `${this.totalEnseignants} enseignant${this.totalEnseignants > 1 ? 's' : ''} actif${this.totalEnseignants > 1 ? 's' : ''}`;
+        this.modules[2].infoFooter = `${this.totalSujets} sujet${this.totalSujets > 1 ? 's' : ''} répertorié${this.totalSujets > 1 ? 's' : ''}`;
+        this.modules[3].infoFooter = `${res.affectations.length} affectation${res.affectations.length > 1 ? 's' : ''} finalisée${res.affectations.length > 1 ? 's' : ''}`;
 
-    this.sujetService.getTous().subscribe({
-      next: (sujets) => {
-        if (sujets && sujets.length > 0) {
-          this.totalSujets = sujets.length;
-          this.modules[2].infoFooter = `${sujets.length} sujets répertoriés`;
-        }
-      },
-      error: () => {}
-    });
-
-    this.candidatureService.getToutes().subscribe({
-      next: (cands) => {
-        if (cands && cands.length > 0) {
-          this.totalCandidatures = cands.length;
-        }
         this.chargement = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.chargement = false;
+        this.cdr.detectChanges();
       }
     });
   }

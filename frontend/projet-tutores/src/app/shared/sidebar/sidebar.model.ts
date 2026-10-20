@@ -57,7 +57,7 @@ export const ROLE_CONFIGS: Record<UserRole, RoleConfig> = {
         items: [
           { label: 'Tableau de bord', icon: 'bi-grid-1x2', route: '/enseignant/dashboard' },
           { label: 'Mes Sujets proposés', icon: 'bi-journal-text', route: '/enseignant/sujets' },
-          { label: 'Candidatures reçues', icon: 'bi-inbox', route: '/enseignant/candidatures', badge: 4, badgeClass: 'bg-success-subtle text-success' },
+          { label: 'Candidatures reçues', icon: 'bi-inbox', route: '/enseignant/candidatures', badgeClass: 'bg-success-subtle text-success' },
         ],
       },
     ],
@@ -76,7 +76,7 @@ export const ROLE_CONFIGS: Record<UserRole, RoleConfig> = {
         title: 'Espace Responsable',
         items: [
           { label: 'Tableau de bord', icon: 'bi-grid', route: '/responsable/dashboard' },
-          { label: 'Traitement des vœux', icon: 'bi-clipboard-check', route: '/responsable/arbitrage', badge: '5 en attente', badgeClass: 'bg-primary-subtle text-primary' },
+          { label: 'Traitement des vœux', icon: 'bi-clipboard-check', route: '/responsable/arbitrage', badgeClass: 'bg-primary-subtle text-primary' },
           { label: 'Suivi des affectations', icon: 'bi-people', route: '/responsable/affectations' },
         ],
       },

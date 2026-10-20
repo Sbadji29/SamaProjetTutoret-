@@ -3,11 +3,8 @@
 
   <div class="flex-grow-1 d-flex flex-column" style="min-width: 0;">
     <app-header
-      [breadcrumbs]="['Master Informatique', 'Projets Tutorés', 'Commission d\'Arbitrage 2026']"
-      [notificationCount]="3"
-      userName="Dr. Aminata Sow"
-      userRole="Resp. Pédagogique M2 GDIL"
-      userInitials="AS">
+      [breadcrumbs]="['Master Informatique', 'Projets Tutorés', 'Session 2026-2027']"
+      [notificationCount]="countEnAttente">
     </app-header>
 
     <main class="p-4 flex-grow-1">
@@ -15,13 +12,13 @@
         <div>
           <h1 class="h3 fw-bold text-dark mb-1">Traitement des vœux & Arbitrage</h1>
           <p class="text-muted mb-0 small">
-            Validation collégiale des candidatures avec respect strict des capacités maximales par sujet.
+            Validation collégiale des candidatures avec respect strict des capacités maximales par sujet (Session 2026-2027).
           </p>
         </div>
         <div class="d-flex align-items-center gap-2">
           <span class="badge badge-kpi-green px-3 py-2 rounded-3 d-flex align-items-center gap-2">
             <i class="bi bi-people-fill"></i>
-            Affectés : 28/42
+            Affectés : {{ countAffectes }}/{{ countToutes }}
           </span>
           <span class="badge badge-kpi-pink px-3 py-2 rounded-3 d-flex align-items-center gap-2">
             <i class="bi bi-hourglass-split"></i>
@@ -101,7 +98,7 @@
                   <tr
                     *ngFor="let c of filteredList"
                     (click)="select(c)"
-                    [class.table-active]="c.id === selectedCandidature.id"
+                    [class.table-active]="selectedCandidature && c.id === selectedCandidature.id"
                     style="cursor: pointer;">
                     <td class="ps-4 py-3">
                       <div class="d-flex align-items-center gap-2">
@@ -124,6 +121,12 @@
                     </td>
                     <td class="pe-4 py-3 text-center">
                       <i class="bi bi-circle-fill text-success" style="font-size: 0.6rem;"></i>
+                    </td>
+                  </tr>
+                  <tr *ngIf="filteredList.length === 0">
+                    <td colspan="5" class="text-center py-4 text-muted">
+                      <i class="bi bi-inbox fs-3 d-block mb-2 opacity-50"></i>
+                      Aucune candidature ne correspond aux critères.
                     </td>
                   </tr>
                 </tbody>
@@ -197,6 +200,12 @@
                 </div>
               </div>
             </div>
+          </div>
+
+          <div class="card border-0 shadow-sm rounded-3 p-5 text-center bg-white" *ngIf="!selectedCandidature">
+            <i class="bi bi-cursor text-muted fs-1 mb-2 opacity-50"></i>
+            <h5 class="fw-bold text-dark mb-1">Aucun dossier sélectionné</h5>
+            <p class="text-muted small mb-0">Cliquez sur une candidature dans la liste de gauche pour examiner son dossier et procéder à l'arbitrage.</p>
           </div>
         </div>
       </div>

@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Header } from '../../shared/header/header';
 import { Sidebar } from '../../shared/sidebar/sidebar';
 import { KpiCard } from '../../shared/kpi-card/kpi-card';
@@ -22,18 +24,17 @@ export class Affectations implements OnInit {
   selectedStatut: string = 'Tous les statuts';
   chargement: boolean = false;
 
-  totalInscrits: number = 38;
-  affectesFermes: number = 28;
-  sansAffectation: number = 10;
-  sujetsPourvus: string = '11 / 14';
-  tauxPourvus: number = 74;
-  tauxSujets: number = 85;
+  totalInscrits: number = 0;
+  affectesFermes: number = 0;
+  sansAffectation: number = 0;
+  sujetsPourvus: string = '0 / 0';
+  tauxPourvus: number = 0;
+  tauxSujets: number = 0;
 
   laboratoires: string[] = [
     'Tous les laboratoires',
-    'Laboratoire LIRIS',
-    'Laboratoire CRAN',
-    'Laboratoire LORIA',
+    'Laboratoire LANI',
+    "Laboratoire d'Informatique",
   ];
 
   statuts: string[] = [
@@ -43,68 +44,13 @@ export class Affectations implements OnInit {
     'Sujet Vacant',
   ];
 
-  affectations: AffectationItem[] = [
-    {
-      id: 1,
-      etudiantNom: 'Mamadou Alpha Touré',
-      etudiantInitiales: 'MT',
-      avatarClass: 'avatar-green',
-      sujetTitre: "Conception d'une plateforme numérique de suivi des activités agricoles au Sénégal",
-      enseignantNom: 'Pr. Moussa Diop',
-      laboratoire: "Laboratoire d'informatique",
-      statut: 'VALIDE',
-      statutLabel: 'Validé ferme',
-      capacitePrise: 1,
-      capaciteTotal: 3,
-      placesRestantes: 2,
-    },
-    {
-      id: 2,
-      etudiantNom: 'Fatou Marie Ndiaye',
-      etudiantInitiales: 'FN',
-      avatarClass: 'avatar-green',
-      sujetTitre: "Détection d'anomalies réseau et sécurisation des infrastructures informatiques universitaires",
-      enseignantNom: 'Pr. Moussa Diop',
-      laboratoire: "Laboratoire d'informatique",
-      statut: 'VALIDE',
-      statutLabel: 'Validé ferme',
-      capacitePrise: 1,
-      capaciteTotal: 2,
-      placesRestantes: 1,
-    },
-    {
-      id: 3,
-      etudiantNom: 'Alioune Badara Badji',
-      etudiantInitiales: 'AB',
-      avatarClass: 'avatar-yellow',
-      sujetTitre: "Conception d'une plateforme numérique de suivi des activités agricoles au Sénégal",
-      enseignantNom: 'Pr. Moussa Diop',
-      laboratoire: "Laboratoire d'informatique",
-      statut: 'ARBITRAGE',
-      statutLabel: "En attente d'arbitrage",
-      capacitePrise: 1,
-      capaciteTotal: 3,
-      placesRestantes: 2,
-    },
-    {
-      id: 4,
-      etudiantNom: 'Non affecté',
-      estNonAffecte: true,
-      sujetTitre: "Détection d'anomalies réseau et sécurisation des infrastructures informatiques universitaires",
-      enseignantNom: 'Pr. Moussa Diop',
-      laboratoire: "Laboratoire d'informatique",
-      statut: 'VACANT',
-      statutLabel: 'Places disponibles',
-      capacitePrise: 1,
-      capaciteTotal: 2,
-      placesRestantes: 1,
-    }
-  ];
+  affectations: AffectationItem[] = [];
 
   constructor(
     private affectationService: AffectationService,
     private sujetService: SujetService,
-    private etudiantService: EtudiantService
+    private etudiantService: EtudiantService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -113,95 +59,87 @@ export class Affectations implements OnInit {
 
   chargerDonnees(): void {
     this.chargement = true;
-    this.affectationService.getToutes().subscribe({
-      next: (apiAffectations) => {
-        this.sujetService.getTous().subscribe({
-          next: (apiSujets) => {
-            this.etudiantService.obtenirTous().subscribe({
-              next: (apiEtudiants) => {
-                this.chargement = false;
-                const subjects = apiSujets || [];
-                const assigns = apiAffectations || [];
-                const students = apiEtudiants || [];
 
-                if (assigns.length > 0) {
-                  const avatarColors = ['avatar-green', 'avatar-dark', 'avatar-yellow', 'avatar-blue'];
+    forkJoin({
+      affectations: this.affectationService.getToutes().pipe(catchError(() => of([]))),
+      sujets: this.sujetService.getTous().pipe(catchError(() => of([]))),
+      etudiants: this.etudiantService.obtenirTous().pipe(catchError(() => of([])))
+    }).subscribe({
+      next: (res) => {
+        const assigns = res.affectations || [];
+        const subjects = res.sujets || [];
+        const students = res.etudiants || [];
 
-                  const affItems: AffectationItem[] = assigns.map((a, index) => {
-                    const prenom = a.etudiant?.utilisateur?.prenom || '';
-                    const nom = a.etudiant?.utilisateur?.nom || '';
-                    const initials = `${prenom.charAt(0)}${nom.charAt(0)}`.toUpperCase() || 'ET';
-                    const ensNom = a.sujet?.enseignant ? `${a.sujet.enseignant.utilisateur?.prenom || ''} ${a.sujet.enseignant.utilisateur?.nom || ''}`.trim() : 'Enseignant';
-                    const labo = a.sujet?.enseignant?.laboratoire || a.sujet?.enseignant?.departement || 'Laboratoire Universitaire';
-                    const capTotal = a.sujet?.capaciteMax || 2;
-                    const capPrise = assigns.filter(other => other.sujet?.id === a.sujet?.id).length;
+        const avatarColors = ['avatar-green', 'avatar-dark', 'avatar-yellow', 'avatar-blue'];
 
-                    return {
-                      id: a.id || index + 1,
-                      etudiantNom: `${prenom} ${nom}`.trim() || 'Étudiant',
-                      etudiantInitiales: initials,
-                      avatarClass: avatarColors[index % avatarColors.length],
-                      sujetTitre: a.sujet?.titre || 'Sujet de projet',
-                      enseignantNom: ensNom,
-                      laboratoire: labo,
-                      statut: 'VALIDE',
-                      statutLabel: 'Validé ferme',
-                      capacitePrise: capPrise,
-                      capaciteTotal: capTotal,
-                      placesRestantes: Math.max(0, capTotal - capPrise),
-                    };
-                  });
+        const affItems: AffectationItem[] = assigns.map((a, index) => {
+          const prenom = a.etudiant?.utilisateur?.prenom || '';
+          const nom = a.etudiant?.utilisateur?.nom || '';
+          const initials = `${prenom.charAt(0)}${nom.charAt(0)}`.toUpperCase() || 'ET';
+          const ensNom = a.sujet?.enseignant ? `${a.sujet.enseignant.utilisateur?.prenom || ''} ${a.sujet.enseignant.utilisateur?.nom || ''}`.trim() : 'Enseignant';
+          const labo = a.sujet?.enseignant?.laboratoire || a.sujet?.enseignant?.departement || 'Laboratoire LANI';
+          const capTotal = a.sujet?.capaciteMax || 2;
+          const capPrise = assigns.filter(other => other.sujet?.id === a.sujet?.id).length;
 
-                  const assignedSubjectIds = new Set(assigns.map(a => a.sujet?.id));
-                  const vacantSubjects = subjects.filter(s => !assignedSubjectIds.has(s.id));
-
-                  vacantSubjects.forEach((vs, idx) => {
-                    const ensNom = vs.enseignant ? `${vs.enseignant.utilisateur?.prenom || ''} ${vs.enseignant.utilisateur?.nom || ''}`.trim() : 'Enseignant';
-                    affItems.push({
-                      id: 1000 + (vs.id || idx),
-                      etudiantNom: 'Non affecté',
-                      estNonAffecte: true,
-                      sujetTitre: vs.titre,
-                      enseignantNom: ensNom,
-                      laboratoire: vs.enseignant?.laboratoire || vs.enseignant?.departement || 'Laboratoire Universitaire',
-                      statut: 'VACANT',
-                      statutLabel: 'Sujet Vacant',
-                      capacitePrise: 0,
-                      capaciteTotal: vs.capaciteMax || 2,
-                      placesRestantes: vs.capaciteMax || 2,
-                    });
-                  });
-
-                  this.affectations = affItems;
-                }
-
-                if (students.length > 0) {
-                  this.totalInscrits = students.length;
-                }
-                this.affectesFermes = assigns.length;
-                this.sansAffectation = Math.max(0, this.totalInscrits - this.affectesFermes);
-                if (this.totalInscrits > 0) {
-                  this.tauxPourvus = Math.min(100, Math.round((this.affectesFermes / this.totalInscrits) * 100));
-                }
-
-                if (subjects.length > 0) {
-                  const assignedSubjectCount = new Set(assigns.map(a => a.sujet?.id)).size;
-                  this.sujetsPourvus = `${assignedSubjectCount} / ${subjects.length}`;
-                  this.tauxSujets = Math.min(100, Math.round((assignedSubjectCount / subjects.length) * 100));
-                }
-              },
-              error: () => {
-                this.chargement = false;
-              }
-            });
-          },
-          error: () => {
-            this.chargement = false;
-          }
+          return {
+            id: a.id || index + 1,
+            etudiantNom: `${prenom} ${nom}`.trim() || 'Étudiant',
+            etudiantInitiales: initials,
+            avatarClass: avatarColors[index % avatarColors.length],
+            sujetTitre: a.sujet?.titre || 'Sujet de projet',
+            enseignantNom: ensNom,
+            laboratoire: labo,
+            statut: 'VALIDE',
+            statutLabel: 'Validé ferme',
+            capacitePrise: capPrise,
+            capaciteTotal: capTotal,
+            placesRestantes: Math.max(0, capTotal - capPrise),
+          };
         });
+
+        const assignedSubjectIds = new Set(assigns.map(a => a.sujet?.id));
+        const vacantSubjects = subjects.filter(s => !assignedSubjectIds.has(s.id));
+
+        vacantSubjects.forEach((vs, idx) => {
+          const ensNom = vs.enseignant ? `${vs.enseignant.utilisateur?.prenom || ''} ${vs.enseignant.utilisateur?.nom || ''}`.trim() : 'Enseignant';
+          affItems.push({
+            id: 1000 + (vs.id || idx),
+            etudiantNom: 'Non affecté',
+            estNonAffecte: true,
+            sujetTitre: vs.titre,
+            enseignantNom: ensNom,
+            laboratoire: vs.enseignant?.laboratoire || vs.enseignant?.departement || 'Laboratoire Universitaire',
+            statut: 'VACANT',
+            statutLabel: 'Sujet Vacant',
+            capacitePrise: 0,
+            capaciteTotal: vs.capaciteMax || 2,
+            placesRestantes: vs.capaciteMax || 2,
+          });
+        });
+
+        this.affectations = affItems;
+
+        if (students.length > 0) {
+          this.totalInscrits = students.length;
+        }
+        this.affectesFermes = assigns.length;
+        this.sansAffectation = Math.max(0, this.totalInscrits - this.affectesFermes);
+        if (this.totalInscrits > 0) {
+          this.tauxPourvus = Math.min(100, Math.round((this.affectesFermes / this.totalInscrits) * 100));
+        }
+
+        if (subjects.length > 0) {
+          const assignedSubjectCount = new Set(assigns.map(a => a.sujet?.id)).size;
+          this.sujetsPourvus = `${assignedSubjectCount} / ${subjects.length}`;
+          this.tauxSujets = Math.min(100, Math.round((assignedSubjectCount / subjects.length) * 100));
+        }
+
+        this.chargement = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.chargement = false;
+        this.cdr.detectChanges();
       }
     });
   }

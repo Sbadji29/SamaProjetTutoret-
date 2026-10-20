@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Header } from '../../shared/header/header';
 import { Sidebar } from '../../shared/sidebar/sidebar';
 import { KpiCard } from '../../shared/kpi-card/kpi-card';
@@ -28,42 +30,18 @@ interface CandidaturePrioritaireItem {
   styleUrl: './responsable-dashboard.css'
 })
 export class ResponsableDashboard implements OnInit {
-  totalCandidatures = 42;
-  enAttenteCount = 5;
-  affectationsCount = 28;
-  rejeteesCount = 9;
+  totalCandidatures = 0;
+  enAttenteCount = 0;
+  affectationsCount = 0;
+  rejeteesCount = 0;
   chargement = false;
 
-  candidaturesPrioritaires: CandidaturePrioritaireItem[] = [
-    {
-      id: 1,
-      initials: 'MT',
-      nom: 'Mamadou Alpha Touré',
-      parcours: 'Master Génie Informatique (M2 GDIL)',
-      projet: "Plateforme numérique de suivi agricole",
-      voeu: 'Vœu n°1',
-      avisType: 'favorable',
-      avisTexte: 'Favorable',
-      avisEncadrant: 'Pr. M. Diop',
-      statut: 'EN_ATTENTE'
-    },
-    {
-      id: 2,
-      initials: 'FN',
-      nom: 'Fatou Marie Ndiaye',
-      parcours: 'Master Génie Informatique (M2 GDIL)',
-      projet: "Détection d'anomalies réseau UGB",
-      voeu: 'Vœu n°1',
-      avisType: 'favorable',
-      avisTexte: 'Favorable',
-      avisEncadrant: 'Pr. M. Diop',
-      statut: 'EN_ATTENTE'
-    }
-  ];
+  candidaturesPrioritaires: CandidaturePrioritaireItem[] = [];
 
   constructor(
     private candidatureService: CandidatureService,
-    private affectationService: AffectationService
+    private affectationService: AffectationService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -73,49 +51,44 @@ export class ResponsableDashboard implements OnInit {
   chargerDonnees(): void {
     this.chargement = true;
 
-    this.candidatureService.getToutes().subscribe({
-      next: (apiList) => {
-        if (apiList && apiList.length > 0) {
-          this.totalCandidatures = apiList.length;
-          const pending = apiList.filter(c => c.statut === 'EN_ATTENTE');
-          this.enAttenteCount = pending.length;
-          this.rejeteesCount = apiList.filter(c => c.statut === 'REJETEE').length;
+    forkJoin({
+      candidatures: this.candidatureService.getToutes().pipe(catchError(() => of([]))),
+      affectations: this.affectationService.getToutes().pipe(catchError(() => of([])))
+    }).subscribe({
+      next: (res) => {
+        const cands = res.candidatures || [];
+        this.totalCandidatures = cands.length;
+        const pending = cands.filter(c => c.statut === 'EN_ATTENTE');
+        this.enAttenteCount = pending.length;
+        this.rejeteesCount = cands.filter(c => c.statut === 'REJETEE').length;
+        this.affectationsCount = (res.affectations || []).length;
 
-          if (pending.length > 0) {
-            this.candidaturesPrioritaires = pending.slice(0, 5).map(c => {
-              const nomEtu = c.etudiant?.utilisateur ? `${c.etudiant.utilisateur.prenom} ${c.etudiant.utilisateur.nom}` : 'Étudiant';
-              const initials = nomEtu.split(' ').map(p => p.charAt(0)).join('').slice(0, 2).toUpperCase() || 'ET';
-              const ensNom = c.sujet?.enseignant ? `${c.sujet.enseignant.utilisateur?.prenom || ''} ${c.sujet.enseignant.utilisateur?.nom || ''}`.trim() : 'Enseignant';
+        this.candidaturesPrioritaires = pending.slice(0, 5).map(c => {
+          const nomEtu = c.etudiant?.utilisateur ? `${c.etudiant.utilisateur.prenom} ${c.etudiant.utilisateur.nom}` : 'Étudiant';
+          const initials = nomEtu.split(' ').map(p => p.charAt(0)).join('').slice(0, 2).toUpperCase() || 'ET';
+          const ensNom = c.sujet?.enseignant ? `${c.sujet.enseignant.utilisateur?.prenom || ''} ${c.sujet.enseignant.utilisateur?.nom || ''}`.trim() : 'Enseignant';
 
-              return {
-                id: c.id,
-                initials: initials,
-                nom: nomEtu,
-                parcours: c.etudiant ? `${c.etudiant.filiere} (${c.etudiant.niveau})` : 'M2 Informatique',
-                projet: c.sujet?.titre || 'Sujet proposé',
-                voeu: `Vœu n°${c.priorite}`,
-                avisType: c.priorite === 1 ? 'favorable' : 'reserve',
-                avisTexte: c.priorite === 1 ? 'Favorable' : 'À arbitrer',
-                avisEncadrant: ensNom,
-                statut: c.statut || 'EN_ATTENTE'
-              };
-            });
-          }
-        }
+          return {
+            id: c.id,
+            initials: initials,
+            nom: nomEtu,
+            parcours: c.etudiant ? `${c.etudiant.filiere} (${c.etudiant.niveau})` : 'M2 Informatique',
+            projet: c.sujet?.titre || 'Sujet proposé',
+            voeu: `Vœu n°${c.priorite}`,
+            avisType: c.priorite === 1 ? 'favorable' : 'reserve',
+            avisTexte: c.priorite === 1 ? 'Favorable' : 'À arbitrer',
+            avisEncadrant: ensNom,
+            statut: c.statut || 'EN_ATTENTE'
+          };
+        });
+
         this.chargement = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.chargement = false;
+        this.cdr.detectChanges();
       }
-    });
-
-    this.affectationService.getToutes().subscribe({
-      next: (affList) => {
-        if (affList) {
-          this.affectationsCount = affList.length;
-        }
-      },
-      error: () => {}
     });
   }
 }
